@@ -1,5 +1,6 @@
-1. install rabbitmq on ubuntu-14.04:
+#1. install rabbitmq on ubuntu-14.04:
 
+1.
 http://www.rabbitmq.com/install-debian.html
 (1) echo 'deb http://www.rabbitmq.com/debian/ testing main' |
      sudo tee /etc/apt/sources.list.d/rabbitmq.list
@@ -176,9 +177,110 @@ Applying plugin configuration to rabbit@mjh-Vostro-260... started 6 plugins.
 
 http://[your-server]:15672/
 
-(7)
 
 
+#2. install rabbitmq on windows-10:
+1. 
+http://www.rabbitmq.com/install-windows.html
+install erl otp_win64_R15B01.exe
+ERLANG_HOME C:\Program Files (x86)\erl5.9
+add to PATH  %ERLANG_HOME%\bin;
+
+2.
+install http://www.rabbitmq.com/releases/rabbitmq-server/v2.8.1/rabbitmq-server-windows-2.8.1.zip
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin 的目录
+
+2017/04/26  14:25    <DIR>          .
+2017/04/26  14:25    <DIR>          ..
+2017/03/29  18:37             1,660 rabbitmq-defaults.bat
+2017/03/29  18:37             1,065 rabbitmq-echopid.bat
+2017/03/29  18:37            15,581 rabbitmq-env.bat
+2017/03/29  18:37             1,888 rabbitmq-plugins.bat
+2017/03/29  18:37             4,936 rabbitmq-server.bat
+2017/03/29  18:37             7,879 rabbitmq-service.bat
+2017/03/29  18:37             1,903 rabbitmqctl.bat
+               7 个文件         34,912 字节
+               2 个目录 47,960,723,456 可用字节
+
+3.
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>rabbitmqctl status
+Status of node 'rabbit@DESKTOP-4T5KT7O' ...
+[{pid,7884},
+ {running_applications,
+     [{rabbit,"RabbitMQ","3.6.9"},
+      {mnesia,"MNESIA  CXC 138 12","4.14.3"},
+      {ranch,"Socket acceptor pool for TCP protocols.","1.3.0"},
+      {ssl,"Erlang/OTP SSL application","8.1.1"},
+      {public_key,"Public key infrastructure","1.4"},
+      {os_mon,"CPO  CXC 138 46","2.4.2"},
+      {rabbit_common,
+          "Modules shared by rabbitmq-server and rabbitmq-erlang-client",
+          "3.6.9"},
+      {compiler,"ERTS  CXC 138 10","7.0.4"},
+      {asn1,"The Erlang ASN1 compiler version 4.0.4","4.0.4"},
+      {syntax_tools,"Syntax tools","2.1.1"},
+      {crypto,"CRYPTO","3.7.3"},
+      {xmerl,"XML parser","1.3.13"},
+      {sasl,"SASL  CXC 138 11","3.0.3"},
+      {stdlib,"ERTS  CXC 138 10","3.3"},
+      {kernel,"ERTS  CXC 138 10","5.2"}]},
+ {os,{win32,nt}},
+ {erlang_version,"Erlang/OTP 19 [erts-8.3] [smp:4:4] [async-threads:64]\n"},
+ {memory,
+     [{total,31038544},
+      {connection_readers,0},
+      {connection_writers,0},
+      {connection_channels,0},
+      {connection_other,0},
+      {queue_procs,1420},
+      {queue_slave_procs,0},
+      {plugins,0},
+      {other_proc,12725820},
+      {mnesia,32536},
+      {metrics,93324},
+      {mgmt_db,0},
+      {msg_index,22572},
+      {other_ets,1100352},
+      {binary,91168},
+      {code,11496096},
+      {atom,691713},
+      {other_system,4875447}]},
+ {alarms,[]},
+ {listeners,[{clustering,25672,"::"},{amqp,5672,"::"},{amqp,5672,"0.0.0.0"}]},
+ {vm_memory_high_watermark,0.4},
+ {vm_memory_limit,851712409},
+ {disk_free_limit,50000000},
+ {disk_free,43501617152},
+ {file_descriptors,
+     [{total_limit,8092},
+      {total_used,2},
+      {sockets_limit,7280},
+      {sockets_used,0}]},
+ {processes,[{limit,1048576},{used,173}]},
+ {run_queue,0},
+ {uptime,3374},
+ {kernel,{net_ticktime,60}}]
+
+4.
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>rabbitmq-server.bat
+ERROR: node with name "rabbit" already running on "DESKTOP-4T5KT7O"
+
+5.
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin> rabbitmq-plugins.bat enable rabbitmq_management
+The following plugins have been enabled:
+  amqp_client
+  cowlib
+  cowboy
+  rabbitmq_web_dispatch
+  rabbitmq_management_agent
+  rabbitmq_management
+
+Applying plugin configuration to rabbit@DESKTOP-4T5KT7O... started 6 plugins.
+
+http://localhost:15672  account: guest  pwd: guest
+
+ 
+			 
 
 
 
