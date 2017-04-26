@@ -1,0 +1,1 @@
+1. install rabbitmq on ubuntu-14.04
