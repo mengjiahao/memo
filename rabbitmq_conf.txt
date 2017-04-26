@@ -1,1 +1,184 @@
-1. install rabbitmq on ubuntu-14.04
+1. install rabbitmq on ubuntu-14.04:
+
+http://www.rabbitmq.com/install-debian.html
+(1) echo 'deb http://www.rabbitmq.com/debian/ testing main' |
+     sudo tee /etc/apt/sources.list.d/rabbitmq.list
+(2) wget -O- https://www.rabbitmq.com/rabbitmq-release-signing-key.asc |
+     sudo apt-key add -
+(3) sudo apt-get update
+(4) sudo apt-get install rabbitmq-server
+
+then u can see:
+root@mjh-Vostro-260:/etc/apt/sources.list.d# ps -ef | grep rabbit
+mjh       8326  1533  0 12:57 ?        00:00:01 /opt/sublime_text/sublime_text /home/mjh/Documents/docs/memo/rabbitmq_conf.txt
+rabbitmq 11939  1533  0 13:12 ?        00:00:00 /usr/lib/erlang/erts-5.10.4/bin/epmd -daemon
+rabbitmq 11968  1533  0 13:12 ?        00:00:00 /bin/sh -e /usr/lib/rabbitmq/bin/rabbitmq-server
+rabbitmq 12238 11968  8 13:12 ?        00:00:02 /usr/lib/erlang/erts-5.10.4/bin/beam.smp -W w -A 64 -P 1048576 -t 5000000 -stbt db -zdbbl 32000 -K true -B i -- -root /usr/lib/erlang -progname erl -- -home /var/lib/rabbitmq -- -pa /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/ebin -noshell -noinput -s rabbit boot -sname rabbit@mjh-Vostro-260 -boot start_sasl -kernel inet_default_connect_options [{nodelay,true}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit error_logger {file,"/var/log/rabbitmq/rabbit@mjh-Vostro-260.log"} -rabbit sasl_error_logger {file,"/var/log/rabbitmq/rabbit@mjh-Vostro-260-sasl.log"} -rabbit enabled_plugins_file "/etc/rabbitmq/enabled_plugins" -rabbit plugins_dir "/usr/lib/rabbitmq/plugins:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/plugins" -rabbit plugins_expand_dir "/var/lib/rabbitmq/mnesia/rabbit@mjh-Vostro-260-plugins-expand" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir "/var/lib/rabbitmq/mnesia/rabbit@mjh-Vostro-260" -kernel inet_dist_listen_min 25672 -kernel inet_dist_listen_max 25672
+rabbitmq 12403 12238  0 13:12 ?        00:00:00 inet_gethost 4
+rabbitmq 12404 12403  0 13:12 ?        00:00:00 inet_gethost 4
+root     12505  9989  0 13:12 pts/10   00:00:00 grep --color=auto rabbit
+
+2.
+root@mjh-Vostro-260:/usr/lib/rabbitmq/bin# ls
+rabbitmqctl  rabbitmq-defaults  rabbitmq-env  rabbitmq-plugins  rabbitmq-server
+root@mjh-Vostro-260:/usr/local/lib# ls
+python2.7  python3.4  site_ruby
+root@mjh-Vostro-260:/usr/lib/x86_64-linux-gnu# ls
+libnotify.so.4                              update-accounts
+libnotify.so.4.0.0                          valgrind
+libnsl.a                                    webaccounts-browser-extension
+libnsl.so                                   xorg
+libnspr4.so                                 zeitgeist-fts
+... ...
+root@mjh-Vostro-260:/usr/lib/rabbitmq/bin# ll
+total 8
+drwxr-xr-x 2 root root 4096  4月 26 13:12 ./
+drwxr-xr-x 4 root root 4096  4月 26 13:12 ../
+lrwxrwxrwx 1 root root   45  3月 29 18:32 rabbitmqctl -> ../lib/rabbitmq_server-3.6.9/sbin/rabbitmqctl*
+lrwxrwxrwx 1 root root   51  3月 29 18:32 rabbitmq-defaults -> ../lib/rabbitmq_server-3.6.9/sbin/rabbitmq-defaults*
+lrwxrwxrwx 1 root root   46  3月 29 18:32 rabbitmq-env -> ../lib/rabbitmq_server-3.6.9/sbin/rabbitmq-env*
+lrwxrwxrwx 1 root root   50  3月 29 18:32 rabbitmq-plugins -> ../lib/rabbitmq_server-3.6.9/sbin/rabbitmq-plugins*
+lrwxrwxrwx 1 root root   49  3月 29 18:32 rabbitmq-server -> ../lib/rabbitmq_server-3.6.9/sbin/rabbitmq-server*
+
+
+3. run rabbitmq
+http://blog.csdn.net/sharetop/article/details/50523081
+(1)
+root@mjh-Vostro-260:/usr/lib/rabbitmq/bin# ./rabbitmqctl status
+Status of node 'rabbit@mjh-Vostro-260' ...
+Error: unable to connect to node 'rabbit@mjh-Vostro-260': nodedown
+
+DIAGNOSTICS
+===========
+
+attempted to contact: ['rabbit@mjh-Vostro-260']
+
+rabbit@mjh-Vostro-260:
+  * connected to epmd (port 4369) on mjh-Vostro-260
+  * epmd reports node 'rabbit' running on port 25672
+  * TCP connection succeeded but Erlang distribution failed
+  * suggestion: hostname mismatch?
+  * suggestion: is the cookie set correctly?
+  * suggestion: is the Erlang distribution using TLS?
+
+current node details:
+- node name: 'rabbitmq-cli-68@mjh-Vostro-260'
+- home dir: /root
+- cookie hash: 2WOpY7qrHl/rjNDFQlW95Q==
+
+Note: The server is set up to run as system user  rabbitmq. If you change the location of the Mnesia database or the logs, you must ensure the files are owned by this user (and also update the environment variables).
+
+(2)
+As an administrator, start and stop the server as usual for Debian using:
+invoke-rc.d rabbitmq-server stop/start/etc.
+root@mjh-Vostro-260:/usr/lib/rabbitmq/bin# invoke-rc.d rabbitmq-server stop
+ * Stopping message broker rabbitmq-server 
+
+(3)
+root@mjh-Vostro-260:/usr/lib/rabbitmq/bin# cat /etc/init.d/rabbitmq-server 
+#!/bin/sh
+#
+# rabbitmq-server RabbitMQ broker
+#
+# chkconfig: - 80 05
+# description: Manages RabbitMQ server
+#
+
+### BEGIN INIT INFO
+... ...
+
+(4)
+root@mjh-Vostro-260:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin# ps -ef | grep rabbitmq
+mjh       8326  1533  0 12:57 ?        00:00:11 /opt/sublime_text/sublime_text /home/mjh/Documents/docs/memo/rabbitmq_conf.txt
+rabbitmq 11939  1533  0 13:12 ?        00:00:00 /usr/lib/erlang/erts-5.10.4/bin/epmd -daemon
+rabbitmq 17661  1533  0 13:37 ?        00:00:00 /bin/sh -e /usr/lib/rabbitmq/bin/rabbitmq-server
+rabbitmq 17949 17661  1 13:37 ?        00:00:02 /usr/lib/erlang/erts-5.10.4/bin/beam.smp -W w -A 64 -P 1048576 -t 5000000 -stbt db -zdbbl 32000 -K true -B i -- -root /usr/lib/erlang -progname erl -- -home /var/lib/rabbitmq -- -pa /usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/ebin -noshell -noinput -s rabbit boot -sname rabbit@mjh-Vostro-260 -boot start_sasl -kernel inet_default_connect_options [{nodelay,true}] -sasl errlog_type error -sasl sasl_error_logger false -rabbit error_logger {file,"/var/log/rabbitmq/rabbit@mjh-Vostro-260.log"} -rabbit sasl_error_logger {file,"/var/log/rabbitmq/rabbit@mjh-Vostro-260-sasl.log"} -rabbit enabled_plugins_file "/etc/rabbitmq/enabled_plugins" -rabbit plugins_dir "/usr/lib/rabbitmq/plugins:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/plugins" -rabbit plugins_expand_dir "/var/lib/rabbitmq/mnesia/rabbit@mjh-Vostro-260-plugins-expand" -os_mon start_cpu_sup false -os_mon start_disksup false -os_mon start_memsup false -mnesia dir "/var/lib/rabbitmq/mnesia/rabbit@mjh-Vostro-260" -kernel inet_dist_listen_min 25672 -kernel inet_dist_listen_max 25672
+rabbitmq 18094 17949  0 13:37 ?        00:00:00 inet_gethost 4
+rabbitmq 18095 18094  0 13:37 ?        00:00:00 inet_gethost 4
+root     18889 17254  0 13:39 pts/10   00:00:00 grep --color=auto rabbitmq
+
+root@mjh-Vostro-260:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin# ./rabbitmq-server restart
+ERROR: node with name "rabbit" already running on "mjh-Vostro-260"
+
+
+(5) use these cmds:
+root@mjh-Vostro-260:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin# service rabbitmq-server stop
+ * Stopping message broker rabbitmq-server                               [ OK ] 
+root@mjh-Vostro-260:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin# service rabbitmq-server start
+ * Starting message broker rabbitmq-server                               [ OK ] 
+root@mjh-Vostro-260:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin# rabbitmqctl status
+Status of node 'rabbit@mjh-Vostro-260' ...
+[{pid,21156},
+ {running_applications,
+     [{rabbit,"RabbitMQ","3.6.9"},
+      {os_mon,"CPO  CXC 138 46","2.2.14"},
+      {ranch,"Socket acceptor pool for TCP protocols.","1.3.0"},
+      {ssl,"Erlang/OTP SSL application","5.3.2"},
+      {public_key,"Public key infrastructure","0.21"},
+      {crypto,"CRYPTO version 2","3.2"},
+      {rabbit_common,
+          "Modules shared by rabbitmq-server and rabbitmq-erlang-client",
+          "3.6.9"},
+      {mnesia,"MNESIA  CXC 138 12","4.11"},
+      {compiler,"ERTS  CXC 138 10","4.9.4"},
+      {xmerl,"XML parser","1.3.5"},
+      {syntax_tools,"Syntax tools","1.6.12"},
+      {asn1,"The Erlang ASN1 compiler version 2.0.4","2.0.4"},
+      {sasl,"SASL  CXC 138 11","2.3.4"},
+      {stdlib,"ERTS  CXC 138 10","1.19.4"},
+      {kernel,"ERTS  CXC 138 10","2.16.4"}]},
+ {os,{unix,linux}},
+ {erlang_version,
+     "Erlang R16B03 (erts-5.10.4) [source] [64-bit] [smp:4:4] [async-threads:64] [kernel-poll:true]\n"},
+ {memory,
+     [{total,53234352},
+      {connection_readers,0},
+      {connection_writers,0},
+      {connection_channels,0},
+      {connection_other,0},
+      {queue_procs,2704},
+      {queue_slave_procs,0},
+      {plugins,0},
+      {other_proc,22385848},
+      {mnesia,60592},
+      {metrics,131976},
+      {mgmt_db,0},
+      {msg_index,40888},
+      {other_ets,2039968},
+      {binary,115024},
+      {code,22750319},
+      {atom,842665},
+      {other_system,4993640}]},
+ {alarms,[]},
+ {listeners,[{clustering,25672,"::"},{amqp,5672,"::"}]},
+ {vm_memory_high_watermark,0.4},
+ {vm_memory_limit,832456294},
+ {disk_free_limit,50000000},
+ {disk_free,152506765312},
+ {file_descriptors,
+     [{total_limit,924},{total_used,2},{sockets_limit,829},{sockets_used,0}]},
+ {processes,[{limit,1048576},{used,152}]},
+ {run_queue,0},
+ {uptime,12},
+ {kernel,{net_ticktime,60}}]
+
+ (6)
+ root@mjh-Vostro-260:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin# rabbitmq-plugins enable rabbitmq_management
+The following plugins have been enabled:
+  amqp_client
+  cowlib
+  cowboy
+  rabbitmq_web_dispatch
+  rabbitmq_management_agent
+  rabbitmq_management
+
+Applying plugin configuration to rabbit@mjh-Vostro-260... started 6 plugins.
+
+http://[your-server]:15672/
+
+(7)
+
+
+
+
+
