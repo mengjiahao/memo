@@ -85,3 +85,31 @@ remote: Total 9 (delta 0), reused 9 (delta 0), pack-reused 0
 Receiving objects: 100% (9/9), done.
 Checking connectivity... done.
 
+MJH@DESKTOP-4T5KT7O MINGW32 /k/doc/memo (master)
+$ git commit -m "add git_config.txt"
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+MJH@DESKTOP-4T5KT7O MINGW32 /k/doc/memo (master)
+$ git commit -m "add git_config.txt"
+[master 8e9a960] add git_config.txt
+ 1 file changed, 87 insertions(+)
+ create mode 100644 git_conf.txt
+
+MJH@DESKTOP-4T5KT7O MINGW32 /k/doc/memo (master)
+$ git push origin master
+Counting objects: 3, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 1.38 KiB | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+To git@github.com:mengjiahao/memo.git
+   6177955..8e9a960  master -> master
