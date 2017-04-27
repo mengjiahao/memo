@@ -113,3 +113,177 @@ Writing objects: 100% (3/3), 1.38 KiB | 0 bytes/s, done.
 Total 3 (delta 0), reused 0 (delta 0)
 To git@github.com:mengjiahao/memo.git
    6177955..8e9a960  master -> master
+
+(6)
+Note: git@github.com:mengjiahao/rpc.git is deleted. Change it!
+if we delete remote orgin/branch, then:
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git branch -avv
+* master                e189b34 [origin/master] rm sunrpc/rpcsvc/*
+  remotes/origin/HEAD   -> origin/master
+  remotes/origin/master e189b34 rm sunrpc/rpcsvc/*
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git remote show origin
+ERROR: Repository not found.
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git fetch
+ERROR: Repository not found.
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/remotes/origin$ cat master 
+e189b34b380b17c78a6a871a5c20c52bfa500e64
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/remotes/origin$ git config list
+error: key does not contain a section: list
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/remotes/origin$ git config --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@github.com:mengjiahao/rpc.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/remotes/origin$ git remote prune origin 
+ERROR: Repository not found.
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git remote add origin git@github.com:mengjiahao/test.git
+fatal: remote origin already exists.
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git remote rm origin
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ 
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git remote show 
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git remote show origin
+fatal: 'origin' does not appear to be a git repository
+fatal: Could not read from remote repository.
+Please make sure you have the correct access rights
+and the repository exists.
+mjh@mjh-Vostro-260:~/Documents/code/rpc$ git config --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/remotes/origin$ ls
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/remotes/origin$ cd ..
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/heads$ ls
+master
+mjh@mjh-Vostro-260:~/Documents/code/rpc/.git/refs/heads$ cat master 
+e189b34b380b17c78a6a871a5c20c52bfa500e64
+
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git remote add origin git@github.com:mengjiahao/test.git
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git config --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@github.com:mengjiahao/test.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git push -u origin master 
+Counting objects: 176, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (173/173), done.
+Writing objects: 100% (176/176), 261.25 KiB | 0 bytes/s, done.
+Total 176 (delta 56), reused 4 (delta 0)
+remote: Resolving deltas: 100% (56/56), done.
+To git@github.com:mengjiahao/test.git
+ * [new branch]      master -> master
+Branch master set up to track remote branch master from origin.
+
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git config --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@github.com:mengjiahao/test.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git fetch
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git rebase
+Cannot rebase: You have unstaged changes.
+Please commit or stash them.
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git branch -avv
+* master                e189b34 [origin/master] rm sunrpc/rpcsvc/*
+  remotes/origin/master e189b34 rm sunrpc/rpcsvc/*
+
+(7)
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git reset --hard e189b34b3
+HEAD is now at e189b34 rm sunrpc/rpcsvc/*
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+nothing to commit, working directory clean
+
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+Changes to be committed:
+  (use "git reset HEAD <file>..." to unstage)
+
+	modified:   README.md
+	renamed:    rpcgen/proto.h -> rpcgen/gen/proto.h
+	renamed:    rpcgen/proto_clnt.c -> rpcgen/gen/proto_clnt.c
+	renamed:    rpcgen/proto_svc.c -> rpcgen/gen/proto_svc.c
+	renamed:    rpcgen/proto_xdr.c -> rpcgen/gen/proto_xdr.c
+
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git commit -m "add test"
+[master 96e5e1d] add test
+ 5 files changed, 2 insertions(+), 2 deletions(-)
+ rename rpcgen/{ => gen}/proto.h (100%)
+ rename rpcgen/{ => gen}/proto_clnt.c (100%)
+ rename rpcgen/{ => gen}/proto_svc.c (100%)
+ rename rpcgen/{ => gen}/proto_xdr.c (100%)
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git commit --amend 
+[master d89fcf9] init test
+ 5 files changed, 2 insertions(+), 2 deletions(-)
+ rename rpcgen/{ => gen}/proto.h (100%)
+ rename rpcgen/{ => gen}/proto_clnt.c (100%)
+ rename rpcgen/{ => gen}/proto_svc.c (100%)
+ rename rpcgen/{ => gen}/proto_xdr.c (100%)
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+nothing to commit, working directory clean
+
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git rebase
+Current branch master is up to date.
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ gitk
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git push origin master 
+Counting objects: 8, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (5/5), 440 bytes | 0 bytes/s, done.
+Total 5 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 1 local object.
+To git@github.com:mengjiahao/test.git
+   e189b34..d89fcf9  master -> master
+mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git branch -avv
+* master                d89fcf9 [origin/master] init test
+  remotes/origin/master d89fcf9 init test
+
+
+
+
+
