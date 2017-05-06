@@ -42,6 +42,8 @@ $ ssh-add ~/.ssh/f103
 Enter passphrase for /c/Users/MJH/.ssh/f103:
 Identity added: /c/Users/MJH/.ssh/f103 (/c/Users/MJH/.ssh/f103)
 
+add key to github
+
 (3)
 MJH@DESKTOP-4T5KT7O MINGW32 ~/.ssh
 $ ssh -T git@github.com

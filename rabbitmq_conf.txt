@@ -279,6 +279,21 @@ Applying plugin configuration to rabbit@DESKTOP-4T5KT7O... started 6 plugins.
 
 http://localhost:15672  account: guest  pwd: guest
 
+6. delete queues
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>rabbitmqctl reset
+Resetting node 'rabbit@MJH-PC' ...
+Error:  Mnesia is still running on node 'rabbit@MJH-PC'.
+        Please stop the node with rabbitmqctl stop_app first.
+
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>rabbitmqctl stop_app
+Stopping rabbit application on node 'rabbit@MJH-PC' ...
+
+C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>rabbitmqctl start_app
+Starting node 'rabbit@MJH-PC' ...
+
+
+
  
 			 
 
