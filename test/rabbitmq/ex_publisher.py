@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """To do
 """
+import json
 import logging
 import pika
 
@@ -91,25 +92,31 @@ class ExPublisher(object):
         self._user = user
         self._passwd = passwd
 
-    def _res_callback(self, channel, method, properties, body):
-        print(" [x] Received %r" % body)
-        self._render_res = body
+    def _gen_json_data(self):
+        json_data = {"reply_to": self.RENDER_RES_QUEUE, "xpath": "c:/footage/文件名.aepx"}
+        print(json_data)
+        self._render_req = json.dumps(obj=json_data, ensure_ascii=False)
+        logging.info("[gen req] %r", self._render_req)
 
     def run(self):
         """To do
         """
         LOGGER.info('[run]')
         self._connect()
-        self._render_req = 'Hellow world!'
         LOGGER.info('[publish]')
+        self._gen_json_data()
         self._channel.basic_publish(exchange=self.SERVER_EXCHANGE,
                                     routing_key=self.RENDER_REQ_ROUTING_KEY,
-                                    body=self._render_req)
+                                    body=self._render_req.encode('utf-8'))
         LOGGER.info('[consume]')
-        self._channel.basic_consume(self._res_callback,
-                                    queue=self.RENDER_RES_QUEUE,
-                                    no_ack=True)
-        self._channel.start_consuming()
+        result_body = None
+        while result_body is None:
+            method_frame, header_frame, result_body = \
+                self._channel.basic_get(queue=self.RENDER_RES_QUEUE, no_ack=True)
+            if (method_frame is not None) and \
+               (header_frame is not None) and (result_body is not None):
+                self._render_res = json.loads(s=result_body, encoding='utf-8')
+                logging.info("[received] %r", self._render_res)
 
     def stop(self):
         """To do

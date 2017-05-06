@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 """To do
 """
+import json
 import logging
 import time
 import pika
@@ -35,6 +36,7 @@ class ExConsumer(object):
         self._user = None
         self._passwd = None
         self._url = None
+        self._render_res_routing_key = None
         self._render_req = None
         self._render_res = None
 
@@ -87,15 +89,21 @@ class ExConsumer(object):
         method_frame, header_frame, body = self._channel.basic_get(queue=self.RENDER_REQ_QUEUE,
                                                                    no_ack=True)
         if (method_frame is not None) and (header_frame is not None) and (body is not None):
-            LOGGER.info('[consume] %r', body)
-            self._render_req = body
+            self._render_req = json.loads(s=body, encoding='utf-8')
+            LOGGER.info('[consume] %r', self._render_req)
+            self._render_res_routing_key = self._render_req['reply_to']
             return True
         return False
 
+    def _do_work(self):
+        json_data = {"status": "OK", "xpath": "c:/output/视频.mov"}
+        self._render_res = json.dumps(json_data, ensure_ascii=False)
+        LOGGER.info('[work result] %r', self._render_res)
+        time.sleep(5)
+
     def _rendering(self):
         LOGGER.info('[rendering begin]')
-        time.sleep(5)
-        self._render_res = 'It is OK!'
+        self._do_work()
         LOGGER.info('[rendering end]')
         return True
 
@@ -103,7 +111,7 @@ class ExConsumer(object):
         LOGGER.info('[publish] %r', self._render_res)
         self._channel.basic_publish(exchange=self.SERVER_EXCHANGE,
                                     routing_key=self.RENDER_RES_ROUTING_KEY,
-                                    body=self._render_res)
+                                    body=self._render_res.encode('utf-8'))
         return True
 
     def setup_with_connect_params(self, host, port, virtual_host, user, passwd):
