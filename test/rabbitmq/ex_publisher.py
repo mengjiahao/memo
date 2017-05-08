@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """To do
 """
@@ -13,120 +13,108 @@ LOGGER = logging.getLogger(__name__)
 class ExPublisher(object):
     """To do
     """
-    SERVER_EXCHANGE = 'server_exchange'
-    SERVER_EXCHANGE_TYPE = 'direct'
-    RENDER_REQ_QUEUE = 'render_req_queue'
-    RENDER_REQ_ROUTING_KEY = 'render_req_routing_key'
-    RENDER_RES_QUEUE = 'render_res_queue'
-    RENDER_RES_ROUTING_KEY = 'render_res_routing_key'
-
     def __init__(self):
+        self._config = {}
+        self._config['render_ex'] = 'render_ex'
+        self._config['render_ex_type'] = 'direct'
+        self._config['render_request_q'] = 'render_request_q'
+        self._config['render_request_rk'] = 'render_request_rk'
+        self._config['render_response_q'] = 'render_response_q'
+        self._config['render_response_rk'] = 'render_response_rk'
+        self._config['host'] = 'localhost'
+        self._config['port'] = 'port'
+        self._config['virtual_host'] = '/'
+        self._config['username'] = 'guest'
+        self._config['password'] = 'guest'
+        self._closing = None
         self._connection = None
         self._channel = None
-        self._host = None
-        self._port = None
-        self._virtual_host = None
-        self._user = None
-        self._passwd = None
-        self._url = None
-        self._render_req = None
-        self._render_res = None
+        self._render_request = None
+        self._render_response = None
 
-    def _declare_server_exchange(self):
-        self._channel.exchange_declare(exchange=self.SERVER_EXCHANGE,
-                                       exchange_type=self.SERVER_EXCHANGE_TYPE,
+    def _build_render_ex_and_q(self):
+        self._channel.exchange_declare(exchange=self._config['render_ex'],
+                                       exchange_type=self._config['render_ex_type'],
                                        passive=False,
                                        durable=False,
                                        auto_delete=False,
                                        internal=False,
                                        arguments=None)
-
-    def _declare_render_req_queue(self):
-        self._channel.queue_declare(queue=self.RENDER_REQ_QUEUE,
+        self._channel.queue_declare(queue=self._config['render_request_q'],
                                     passive=False,
                                     durable=False,
                                     exclusive=False,
                                     auto_delete=False,
                                     arguments=None)
-
-    def _declare_render_res_queue(self):
-        self._channel.queue_declare(queue=self.RENDER_RES_QUEUE,
+        self._channel.queue_declare(queue=self._config['render_response_q'],
                                     passive=False,
                                     durable=False,
                                     exclusive=False,
                                     auto_delete=False,
                                     arguments=None)
-
-    def _bind_render_req_queue(self):
-        self._channel.queue_bind(queue=self.RENDER_REQ_QUEUE,
-                                 exchange=self.SERVER_EXCHANGE,
-                                 routing_key=self.RENDER_REQ_ROUTING_KEY)
-
-    def _bind_render_res_queue(self):
-        self._channel.queue_bind(queue=self.RENDER_RES_QUEUE,
-                                 exchange=self.SERVER_EXCHANGE,
-                                 routing_key=self.RENDER_RES_ROUTING_KEY)
+        self._channel.queue_bind(queue=self._config['render_request_q'],
+                                 exchange=self._config['render_ex'],
+                                 routing_key=self._config['render_request_rk'])
+        self._channel.queue_bind(queue=self._config['render_response_q'],
+                                 exchange=self._config['render_ex'],
+                                 routing_key=self._config['render_response_rk'])
 
     def _connect(self):
         LOGGER.info('[connect]')
-        cred = pika.PlainCredentials(self._user, self._passwd)
-        connect_params = pika.ConnectionParameters(host=self._host,
-                                                   port=self._port,
-                                                   virtual_host=self._virtual_host,
+        cred = pika.PlainCredentials(self._config['username'],
+                                     self._config['password'])
+        connect_params = pika.ConnectionParameters(self._config['host'],
+                                                   self._config['port'],
+                                                   virtual_host=self._config['virtual_host'],
                                                    credentials=cred)
         self._connection = pika.BlockingConnection(connect_params)
         self._channel = self._connection.channel()
-        self._declare_server_exchange()
-        self._declare_render_req_queue()
-        self._bind_render_req_queue()
-        self._declare_render_res_queue()
-        self._bind_render_res_queue()
+        self._build_render_ex_and_q()
 
-    def setup_with_connect_params(self, host, port, virtual_host, user, passwd):
+    def setup_with_connect_params(self, host, port, virtual_host, username, password):
         """To do
         """
         LOGGER.info('[setup]')
-        self._host = host
-        self._port = port
-        self._virtual_host = virtual_host
-        self._user = user
-        self._passwd = passwd
+        self._config['host'] = host
+        self._config['port'] = port
+        self._config['virtual_host'] = virtual_host
+        self._config['username'] = username
+        self._config['password'] = password
 
     def _gen_json_data(self):
-        json_data = {"reply_to": self.RENDER_RES_QUEUE, "xpath": "c:/footage/文件名.aepx"}
-        print(json_data)
-        self._render_req = json.dumps(obj=json_data, ensure_ascii=False)
-        logging.info("[gen req] %r", self._render_req)
+        json_data = {"reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
+        self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
+        logging.info("[gen req] %r", self._render_request)
 
     def run(self):
         """To do
         """
         LOGGER.info('[run]')
         self._connect()
-        LOGGER.info('[publish]')
         self._gen_json_data()
-        self._channel.basic_publish(exchange=self.SERVER_EXCHANGE,
-                                    routing_key=self.RENDER_REQ_ROUTING_KEY,
-                                    body=self._render_req.encode('utf-8'))
-        LOGGER.info('[consume]')
-        result_body = None
-        while result_body is None:
-            method_frame, header_frame, result_body = \
-                self._channel.basic_get(queue=self.RENDER_RES_QUEUE, no_ack=True)
+        pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
+                                                routing_key=self._config['render_request_rk'],
+                                                body=self._render_request.encode('utf-8'))
+        LOGGER.info('[publish] %r', pb_result)
+        LOGGER.info('[wait response]')
+        body = None
+        while body is None:
+            (method_frame, header_frame, body) = \
+                self._channel.basic_get(queue=self._config['render_response_q'], no_ack=True)
             if (method_frame is not None) and \
-               (header_frame is not None) and (result_body is not None):
-                self._render_res = json.loads(s=result_body, encoding='utf-8')
-                logging.info("[received] %r", self._render_res)
+               (header_frame is not None) and (body is not None):
+                self._render_response = json.loads(s=body.decode('utf-8'), encoding='utf-8')
+                logging.info("[received] %r", self._render_response)
 
     def stop(self):
         """To do
         """
         LOGGER.info('[stop]')
-        LOGGER.info('[stop]')
-        if self._channel is not None:
+        self._closing = True
+        if self._channel is not None and self._channel.is_open:
             self._channel.close()
             self._channel = None
-        if self._connection is not None:
+        if self._connection is not None and self._connection.is_open:
             self._connection.close()
             self._connection = None
 
@@ -138,8 +126,8 @@ def main():
     ex.setup_with_connect_params(host='localhost',
                                  port=5672,
                                  virtual_host='/',
-                                 user='guest',
-                                 passwd='guest')
+                                 username='guest',
+                                 password='guest')
     try:
         ex.run()
         ex.stop()

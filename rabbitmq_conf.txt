@@ -279,7 +279,7 @@ Applying plugin configuration to rabbit@DESKTOP-4T5KT7O... started 6 plugins.
 
 http://localhost:15672  account: guest  pwd: guest
 
-6. delete queues
+6. Delete queues
 C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>rabbitmqctl reset
 Resetting node 'rabbit@MJH-PC' ...
 Error:  Mnesia is still running on node 'rabbit@MJH-PC'.
@@ -291,6 +291,28 @@ Stopping rabbit application on node 'rabbit@MJH-PC' ...
 
 C:\Program Files\RabbitMQ Server\rabbitmq_server-3.6.9\sbin>rabbitmqctl start_app
 Starting node 'rabbit@MJH-PC' ...
+
+7. 
+INFO       2017-05-08 21:11:11,062 pika.adapters.base_connection _create_and_connect_to_socket   212 : Connecting to 127.0.0.1:5672
+INFO       2017-05-08 21:11:11,244 pika.adapters.blocking_connection __init__                        1099: Created channel=1
+INFO       2017-05-08 21:11:11,360 pika.channel         _on_close                       938 : <METHOD(['channel_number=1', 'frame_type=1', 'method=<Channel.Close([\'class_id=50\', \'method_id=20\', \'reply_code=404\', "reply_text=NOT_FOUND - no queue \'render_response_q\' in vhost \'/\'"])>'])>
+WARNING    2017-05-08 21:11:11,361 pika.channel         _on_close                       941 : Received remote Channel.Close (404): NOT_FOUND - no queue 'render_response_q' in vhost '/'
+Traceback (most recent call last):
+  File "./ex_publisher.py", line 146, in <module>
+    main()
+  File "./ex_publisher.py", line 140, in main
+    ex.run()
+  File "./ex_publisher.py", line 101, in run
+    self._connect()
+  File "./ex_publisher.py", line 80, in _connect
+    self._bind_render_queues()
+  File "./ex_publisher.py", line 66, in _bind_render_queues
+    routing_key=self._config['render_response_rk'])
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 2402, in queue_bind
+    self._flush_output(bind_ok_result.is_ready)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 1181, in _flush_output
+    raise exceptions.ChannelClosed(method.reply_code, method.reply_text)
+pika.exceptions.ChannelClosed: (404, "NOT_FOUND - no queue 'render_response_q' in vhost '/'")
 
 
 

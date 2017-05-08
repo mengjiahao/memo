@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """To do
 """
@@ -14,70 +14,55 @@ LOGGER = logging.getLogger(__name__)
 class ExConsumer(object):
     """To do
     """
-    SERVER_EXCHANGE = 'server_exchange'
-    SERVER_EXCHANGE_TYPE = 'direct'
-    RENDER_REQ_QUEUE = 'render_req_queue'
-    RENDER_REQ_ROUTING_KEY = 'render_req_routing_key'
-    RENDER_RES_QUEUE = 'render_res_queue'
-    RENDER_RES_ROUTING_KEY = 'render_res_routing_key'
-    STATE_INVALID = 0
-    STATE_IDLE = 1
-    STATE_RENDERING = 2
-    STATE_PUBLISH_RENDER_RES = 3
-
     def __init__(self):
-        self._closing = True
+        self._config = {}
+        self._config['render_ex'] = 'render_ex'
+        self._config['render_ex_type'] = 'direct'
+        self._config['render_request_q'] = 'render_request_q'
+        self._config['render_request_rk'] = 'render_request_rk'
+        self._config['render_response_q'] = 'render_response_q'
+        self._config['render_response_rk'] = 'render_response_rk'
+        self._config['host'] = 'localhost'
+        self._config['port'] = 'port'
+        self._config['virtual_host'] = '/'
+        self._config['username'] = 'guest'
+        self._config['password'] = 'guest'
+        self._closing = None
         self._connection = None
         self._channel = None
-        self._state = self.STATE_INVALID
-        self._host = None
-        self._port = None
-        self._virtual_host = None
-        self._user = None
-        self._passwd = None
-        self._url = None
-        self._render_res_routing_key = None
-        self._render_req = None
-        self._render_res = None
+        self._render_request = None
+        self._render_response = None
+        self._render_reply_to = None
 
-    def _change_state(self, state):
-        LOGGER.info('[change state %d -> %d]', self._state, state)
-        self._state = state
-
-    def _declare_server_exchange(self):
-        self._channel.exchange_declare(exchange=self.SERVER_EXCHANGE,
-                                       exchange_type=self.SERVER_EXCHANGE_TYPE,
+    def _build_render_ex_and_q(self):
+        self._channel.exchange_declare(exchange=self._config['render_ex'],
+                                       exchange_type=self._config['render_ex_type'],
                                        passive=False,
                                        durable=False,
                                        auto_delete=False,
                                        internal=False,
                                        arguments=None)
-
-    def _declare_render_req_queue(self):
-        self._channel.queue_declare(queue=self.RENDER_REQ_QUEUE,
+        self._channel.queue_declare(queue=self._config['render_request_q'],
                                     passive=False,
                                     durable=False,
                                     exclusive=False,
                                     auto_delete=False,
                                     arguments=None)
-
-    def _bind_render_req_queue(self):
-        self._channel.queue_bind(queue=self.RENDER_REQ_QUEUE,
-                                 exchange=self.SERVER_EXCHANGE,
-                                 routing_key=self.RENDER_REQ_ROUTING_KEY)
+        self._channel.queue_bind(queue=self._config['render_request_q'],
+                                 exchange=self._config['render_ex'],
+                                 routing_key=self._config['render_request_rk'])
 
     def _connect(self):
         LOGGER.info('[connect]')
-        cred = pika.PlainCredentials(self._user, self._passwd)
-        connect_params = pika.ConnectionParameters(host=self._host,
-                                                   port=self._port,
-                                                   virtual_host=self._virtual_host,
+        cred = pika.PlainCredentials(self._config['username'],
+                                     self._config['password'])
+        connect_params = pika.ConnectionParameters(self._config['host'],
+                                                   self._config['port'],
+                                                   virtual_host=self._config['virtual_host'],
                                                    credentials=cred)
         self._connection = pika.BlockingConnection(connect_params)
         self._channel = self._connection.channel()
-        self._declare_server_exchange()
-        self._declare_render_req_queue()
-        self._bind_render_req_queue()
+        self._build_render_ex_and_q()
 
     def _reconnect(self):
         LOGGER.info('[reconnect]')
@@ -85,44 +70,38 @@ class ExConsumer(object):
             # Create a new connection
             self._connect()
 
-    def _consume_render_req(self):
-        method_frame, header_frame, body = self._channel.basic_get(queue=self.RENDER_REQ_QUEUE,
-                                                                   no_ack=True)
+    def _get_render_request(self):
+        (method_frame, header_frame, body) = \
+            self._channel.basic_get(queue=self._config['render_request_q'], no_ack=True)
         if (method_frame is not None) and (header_frame is not None) and (body is not None):
-            self._render_req = json.loads(s=body, encoding='utf-8')
-            LOGGER.info('[consume] %r', self._render_req)
-            self._render_res_routing_key = self._render_req['reply_to']
+            self._render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
+            self._render_reply_to = self._render_request['reply_to']
+            LOGGER.info('[get] %r', self._render_request)
             return True
         return False
 
     def _do_work(self):
         json_data = {"status": "OK", "xpath": "c:/output/视频.mov"}
-        self._render_res = json.dumps(json_data, ensure_ascii=False)
-        LOGGER.info('[work result] %r', self._render_res)
-        time.sleep(5)
+        LOGGER.info('[doing work...] %r', json_data)
+        time.sleep(3)
+        self._render_response = json.dumps(json_data, ensure_ascii=False)
+        LOGGER.info('[work result] %r', self._render_response)
 
-    def _rendering(self):
-        LOGGER.info('[rendering begin]')
-        self._do_work()
-        LOGGER.info('[rendering end]')
-        return True
+    def _publish_render_response(self):
+        self._channel.basic_publish(exchange=self._config['render_ex'],
+                                    routing_key=self._render_reply_to,
+                                    body=self._render_response.encode('utf-8'))
+        LOGGER.info('[publish] %r', self._render_response)
 
-    def _publish_render_res(self):
-        LOGGER.info('[publish] %r', self._render_res)
-        self._channel.basic_publish(exchange=self.SERVER_EXCHANGE,
-                                    routing_key=self.RENDER_RES_ROUTING_KEY,
-                                    body=self._render_res.encode('utf-8'))
-        return True
-
-    def setup_with_connect_params(self, host, port, virtual_host, user, passwd):
+    def setup_with_connect_params(self, host, port, virtual_host, username, password):
         """To do
         """
         LOGGER.info('[setup]')
-        self._host = host
-        self._port = port
-        self._virtual_host = virtual_host
-        self._user = user
-        self._passwd = passwd
+        self._config['host'] = host
+        self._config['port'] = port
+        self._config['virtual_host'] = virtual_host
+        self._config['username'] = username
+        self._config['password'] = password
 
     def run(self):
         """To do
@@ -130,30 +109,20 @@ class ExConsumer(object):
         LOGGER.info('[run]')
         self._connect()
         self._closing = False
-        self._change_state(self.STATE_IDLE)
         while not self._closing:
-            if self.STATE_IDLE == self._state:
-                if self._consume_render_req():
-                    self._change_state(self.STATE_RENDERING)
-            elif self.STATE_RENDERING == self._state:
-                if self._rendering():
-                    self._change_state(self.STATE_PUBLISH_RENDER_RES)
-            elif self.STATE_PUBLISH_RENDER_RES == self._state:
-                if self._publish_render_res():
-                    self._change_state(self.STATE_IDLE)
-            else:
-                LOGGER.warning('self._state %d is invalid', self._state)
-                break
+            if self._get_render_request():
+                self._do_work()
+                self._publish_render_response()
 
     def stop(self):
         """To do
         """
         LOGGER.info('[stop]')
         self._closing = True
-        if self._channel is not None:
+        if self._channel is not None and self._channel.is_open:
             self._channel.close()
             self._channel = None
-        if self._connection is not None:
+        if self._connection is not None and self._connection.is_open:
             self._connection.close()
             self._connection = None
 
@@ -165,11 +134,12 @@ def main():
     ex.setup_with_connect_params(host='localhost',
                                  port=5672,
                                  virtual_host='/',
-                                 user='guest',
-                                 passwd='guest')
+                                 username='guest',
+                                 password='guest')
     try:
         ex.run()
     except KeyboardInterrupt:
+        LOGGER.exception('[exception]')
         ex.stop()
 
 if __name__ == '__main__':
