@@ -314,6 +314,121 @@ Traceback (most recent call last):
     raise exceptions.ChannelClosed(method.reply_code, method.reply_text)
 pika.exceptions.ChannelClosed: (404, "NOT_FOUND - no queue 'render_response_q' in vhost '/'")
 
+8. install wireshark
+mjh@mjh-Inspiron-5520:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin$ sudo apt-get install python3-pip
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  libexpat1-dev libpython3-dev libpython3.4-dev python-chardet-whl
+  python-colorama-whl python-distlib-whl python-html5lib-whl python-pip-whl
+  python-requests-whl python-setuptools-whl python-six-whl python-urllib3-whl
+  python3-colorama python3-dev python3-distlib python3-html5lib
+  python3-setuptools python3-wheel python3.4-dev
+Suggested packages:
+  python3-genshi
+......
+Setting up python3-setuptools (3.3-1ubuntu2) ...
+Setting up python3-pip (1.5.4-1ubuntu4) ...
+Setting up python3-wheel (0.24.0-1~ubuntu1) ...
+
+
+
+mjh@mjh-Inspiron-5520:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin$ sudo apt-get install wireshark 
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following extra packages will be installed:
+  libc-ares2 libsmi2ldbl libwireshark-data libwireshark3 libwiretap3
+  libwsutil3 wireshark-common
+Suggested packages:
+  snmp-mibs-downloader wireshark-doc
+The following NEW packages will be installed:
+  libc-ares2 libsmi2ldbl libwireshark-data libwireshark3 libwiretap3
+  libwsutil3 wireshark wireshark-common
+0 upgraded, 8 newly installed, 0 to remove and 3 not upgraded.
+Need to get 12.2 MB of archives.
+After this operation, 71.8 MB of additional disk space will be used.
+Do you want to continue? [Y/n] Y
+Get:1 http://mirrors.aliyun.com/ubuntu/ trusty/universe libsmi2ldbl amd64 0.4.8+dfsg2-8ubuntu2 [99.4 kB]
+Processing triggers for bamfdaemon (0.5.1+14.04.20140409-0ubuntu1) ...
+Rebuilding /usr/share/applications/bamf-2.index...
+Setting up libsmi2ldbl:amd64 (0.4.8+dfsg2-8ubuntu2) ...
+Setting up libc-ares2:amd64 (1.10.0-2ubuntu0.1) ...
+Setting up libwireshark-data (1.10.6-1) ...
+Setting up libwsutil3:amd64 (1.10.6-1) ...
+Setting up libwireshark3:amd64 (1.10.6-1) ...
+Setting up libwiretap3:amd64 (1.10.6-1) ...
+Setting up wireshark-common (1.10.6-1) ...
+Setting up wireshark (1.10.6-1) ...
+Processing triggers for libc-bin (2.19-0ubuntu6.11) ...
+
+mjh@mjh-Inspiron-5520:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin$ sudo gedit /usr/share/wireshark/init.lua
+#注释倒数第二行，添加单行注释--
+--dofile(DATA_DIR.."console.lua")
+sudo wireshark
+
+9. install pika by python3
+mjh@mjh-Inspiron-5520:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin$ sudo pip3 install pika
+Downloading/unpacking pika
+  Downloading pika-0.10.0-py2.py3-none-any.whl (92kB): 92kB downloaded
+Installing collected packages: pika
+Successfully installed pika
+Cleaning up...
+
+10.
+mjh@mjh-Inspiron-5520:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin$ sudo apt-get install python-setuptools
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following NEW packages will be installed:
+  python-setuptools
+0 upgraded, 1 newly installed, 0 to remove and 3 not upgraded.
+Need to get 230 kB of archives.
+After this operation, 830 kB of additional disk space will be used.
+Get:1 http://mirrors.aliyun.com/ubuntu/ trusty-updates/main python-setuptools all 3.3-1ubuntu2 [230 kB]
+Fetched 230 kB in 0s (322 kB/s)           
+Selecting previously unselected package python-setuptools.
+(Reading database ... 225151 files and directories currently installed.)
+Preparing to unpack .../python-setuptools_3.3-1ubuntu2_all.deb ...
+Unpacking python-setuptools (3.3-1ubuntu2) ...
+Setting up python-setuptools (3.3-1ubuntu2) ...
+mjh@mjh-Inspiron-5520:/usr/lib/rabbitmq/lib/rabbitmq_server-3.6.9/sbin$ sudo easy_install pip
+Searching for pip
+Reading https://pypi.python.org/simple/pip/
+Best match: pip 9.0.1
+Downloading https://pypi.python.org/packages/11/b6/abcb525026a4be042b486df43905d6893fb04f05aac21c32c638e939e447/pip-9.0.1.tar.gz#md5=35f01da33009719497f01a4ba69d63c9
+Processing pip-9.0.1.tar.gz
+Writing /tmp/easy_install-VqwDTK/pip-9.0.1/setup.cfg
+Running pip-9.0.1/setup.py -q bdist_egg --dist-dir /tmp/easy_install-VqwDTK/pip-9.0.1/egg-dist-tmp-yBiKIa
+/usr/lib/python2.7/distutils/dist.py:267: UserWarning: Unknown distribution option: 'python_requires'
+  warnings.warn(msg)
+warning: no previously-included files found matching '.coveragerc'
+warning: no previously-included files found matching '.mailmap'
+warning: no previously-included files found matching '.travis.yml'
+warning: no previously-included files found matching '.landscape.yml'
+warning: no previously-included files found matching 'pip/_vendor/Makefile'
+warning: no previously-included files found matching 'tox.ini'
+warning: no previously-included files found matching 'dev-requirements.txt'
+warning: no previously-included files found matching 'appveyor.yml'
+no previously-included directories found matching '.github'
+no previously-included directories found matching '.travis'
+no previously-included directories found matching 'docs/_build'
+no previously-included directories found matching 'contrib'
+no previously-included directories found matching 'tasks'
+no previously-included directories found matching 'tests'
+Adding pip 9.0.1 to easy-install.pth file
+Installing pip script to /usr/local/bin
+Installing pip2.7 script to /usr/local/bin
+Installing pip2 script to /usr/local/bin
+
+Installed /usr/local/lib/python2.7/dist-packages/pip-9.0.1-py2.7.egg
+Processing dependencies for pip
+Finished processing dependencies for pip
+
+
+
+
 
 
  

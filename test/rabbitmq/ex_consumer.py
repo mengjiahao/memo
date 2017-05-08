@@ -70,20 +70,10 @@ class ExConsumer(object):
             # Create a new connection
             self._connect()
 
-    def _get_render_request(self):
-        (method_frame, header_frame, body) = \
-            self._channel.basic_get(queue=self._config['render_request_q'], no_ack=True)
-        if (method_frame is not None) and (header_frame is not None) and (body is not None):
-            self._render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-            self._render_reply_to = self._render_request['reply_to']
-            LOGGER.info('[get] %r', self._render_request)
-            return True
-        return False
-
     def _do_work(self):
         json_data = {"status": "OK", "xpath": "c:/output/视频.mov"}
         LOGGER.info('[doing work...] %r', json_data)
-        time.sleep(3)
+        time.sleep(6)
         self._render_response = json.dumps(json_data, ensure_ascii=False)
         LOGGER.info('[work result] %r', self._render_response)
 
@@ -103,16 +93,29 @@ class ExConsumer(object):
         self._config['username'] = username
         self._config['password'] = password
 
+    def _on_render_request(self, channel, method_frame, header_frame, body):
+        self._render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
+        self._render_reply_to = self._render_request['reply_to']
+        LOGGER.info('[consume] %r', self._render_request)
+        self._do_work()
+        self._publish_render_response()
+
     def run(self):
         """To do
         """
         LOGGER.info('[run]')
         self._connect()
-        self._closing = False
-        while not self._closing:
-            if self._get_render_request():
-                self._do_work()
-                self._publish_render_response()
+        self._channel.basic_consume(consumer_callback=self._on_render_request,
+                                    queue=self._config['render_request_q'],
+                                    no_ack=True,
+                                    exclusive=False,
+                                    consumer_tag=None,
+                                    arguments=None)
+        LOGGER.info('[start consuming]')
+        try:
+            self._channel.start_consuming()
+        except KeyboardInterrupt:
+            self._channel.stop_consuming()
 
     def stop(self):
         """To do
@@ -136,11 +139,8 @@ def main():
                                  virtual_host='/',
                                  username='guest',
                                  password='guest')
-    try:
-        ex.run()
-    except KeyboardInterrupt:
-        LOGGER.exception('[exception]')
-        ex.stop()
+    ex.run()
+    ex.stop()
 
 if __name__ == '__main__':
     main()

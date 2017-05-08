@@ -86,25 +86,31 @@ class ExPublisher(object):
         self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
         logging.info("[gen req] %r", self._render_request)
 
+    def _on_render_response(self, channel, method_frame, header_frame, body):
+        self._render_response = json.loads(s=body.decode('utf-8'), encoding='utf-8')
+        logging.info("[received] %r", self._render_response)
+
     def run(self):
         """To do
         """
         LOGGER.info('[run]')
         self._connect()
+        self._channel.basic_consume(consumer_callback=self._on_render_response,
+                                    queue=self._config['render_response_q'],
+                                    no_ack=True,
+                                    exclusive=False,
+                                    consumer_tag=None,
+                                    arguments=None)
         self._gen_json_data()
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_request_rk'],
                                                 body=self._render_request.encode('utf-8'))
         LOGGER.info('[publish] %r', pb_result)
-        LOGGER.info('[wait response]')
-        body = None
-        while body is None:
-            (method_frame, header_frame, body) = \
-                self._channel.basic_get(queue=self._config['render_response_q'], no_ack=True)
-            if (method_frame is not None) and \
-               (header_frame is not None) and (body is not None):
-                self._render_response = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-                logging.info("[received] %r", self._render_response)
+        LOGGER.info('[start consuming]')
+        try:
+            self._channel.start_consuming()
+        except KeyboardInterrupt:
+            self._channel.stop_consuming()
 
     def stop(self):
         """To do
@@ -128,11 +134,8 @@ def main():
                                  virtual_host='/',
                                  username='guest',
                                  password='guest')
-    try:
-        ex.run()
-        ex.stop()
-    except KeyboardInterrupt:
-        ex.stop()
+    ex.run()
+    ex.stop()
 
 if __name__ == '__main__':
     main()
