@@ -5,6 +5,7 @@
 import json
 import logging
 import time
+import traceback
 import pika
 
 LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -20s %(funcName) '
@@ -73,7 +74,7 @@ class ExConsumer(object):
     def _do_work(self):
         json_data = {"status": "OK", "xpath": "c:/output/视频.mov"}
         LOGGER.info('[doing work...] %r', json_data)
-        time.sleep(6)
+        time.sleep(3)
         self._render_response = json.dumps(json_data, ensure_ascii=False)
         LOGGER.info('[work result] %r', self._render_response)
 
@@ -113,9 +114,15 @@ class ExConsumer(object):
                                     arguments=None)
         LOGGER.info('[start consuming]')
         try:
-            self._channel.start_consuming()
+            while True:
+                self._connection.process_data_events(1) #self._connection.sleep(1)
         except KeyboardInterrupt:
-            self._channel.stop_consuming()
+            LOGGER.exception('[exception]')
+        except pika.exceptions.ChannelClosed:
+            LOGGER.exception('[exception]')
+        except pika.exceptions.ConnectionClosed:
+            LOGGER.exception('[exception]')
+        self.stop()
 
     def stop(self):
         """To do
@@ -140,7 +147,6 @@ def main():
                                  username='guest',
                                  password='guest')
     ex.run()
-    ex.stop()
 
 if __name__ == '__main__':
     main()
