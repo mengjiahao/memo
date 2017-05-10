@@ -4,7 +4,10 @@
 """
 import json
 import logging
+import os
 import time
+from queue import Queue
+import concurrent.futures
 import pika
 
 LOG_FORMAT = ('%(levelname) -10s | %(asctime)s %(name) -20s | %(funcName) '
@@ -142,7 +145,7 @@ class ExPublisher(object):
         self._channel.basic_ack(delivery_tag=self._delivery_tag, multiple=False)
         logging.info("[basic_ack] %r", self._delivery_tag)
 
-    def test(self):
+    def test_rabbitmq(self):
         """To do
         """
         LOGGER.info('[test]')
@@ -174,6 +177,37 @@ class ExPublisher(object):
             self._channel.stop_consuming()
         self.stop()
 
+    def _test_processing(self):
+        """To do
+        """
+        print('[work_process start] time: %f, pid: %d, ppid: %d' %
+              (time.time(), os.getpid(), os.getppid()))
+        time.sleep(5)
+        json_data = {"tx_id": 1, "status": "正常"}
+        print('[work_process end] time: %f, pid: %d, ppid: %d, json_data: %r, %d' %
+              (time.time(), os.getpid(), os.getppid(), json_data, isinstance(json_data, dict)))
+        return json_data
+
+    def test_process_pool(self):
+        """To do
+        """
+        LOGGER.info('[main_process start] pid: %r, ppid: %r', os.getpid(), os.getppid())
+        res_futures = set()
+        ppexecutor = concurrent.futures.ProcessPoolExecutor(max_workers=2)
+        for i in range(2):
+            res_future = ppexecutor.submit(self._test_processing)
+            res_futures.add(res_future)
+            LOGGER.info('[submit process] i: %r, res_future: %r, res_futures: %r',
+                        i, res_future, res_futures)
+        LOGGER.info('[main_process continue]')
+        for res_future in res_futures:
+            LOGGER.info('[res_future] res_future: %r', res_future)
+        time.sleep(8)
+        for res_future in res_futures:
+            LOGGER.info('[res_future] res_future: %r', res_future)
+        ppexecutor.shutdown()
+        LOGGER.info('[main_process end] pid: %r, ppid: %r', os.getpid(), os.getppid())
+
 def main():
     """To do
     """
@@ -186,7 +220,7 @@ def main():
                                  username='guest',
                                  password='guest')
     #ex.run()
-    ex.test()
+    ex.test_process_pool()
 
 if __name__ == '__main__':
     main()
