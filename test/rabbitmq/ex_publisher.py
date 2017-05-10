@@ -67,11 +67,6 @@ class ExPublisher(object):
         self._channel = self._connection.channel()
         self._build_render_ex_and_q()
 
-    def _gen_json_data(self):
-        json_data = {"reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
-        self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
-        logging.info("[gen req] %r", self._render_request)
-
     def _on_render_response(self, channel, method_frame, header_frame, body):
         self._render_response = json.loads(s=body.decode('utf-8'), encoding='utf-8')
         logging.info("[received] %r", self._render_response)
@@ -124,7 +119,11 @@ class ExPublisher(object):
                                     exclusive=False,
                                     consumer_tag=None,
                                     arguments=None)
-        self._gen_json_data()
+
+        json_data = {"reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
+        self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
+        logging.info("[create req] %r", self._render_request)
+
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_request_rk'],
                                                 body=self._render_request.encode('utf-8'))
@@ -151,11 +150,15 @@ class ExPublisher(object):
         self._channel.basic_qos(prefetch_size=0, prefetch_count=1, all_channels=False)
         self._channel.basic_consume(consumer_callback=self._on_test_message,
                                     queue=self._config['render_response_q'],
-                                    no_ack=False,
+                                    no_ack=True,
                                     exclusive=False,
                                     consumer_tag=None,
                                     arguments=None)
-        self._gen_json_data()
+
+        json_data = {"reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
+        self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
+        logging.info("[create req] %r", self._render_request)
+
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_response_rk'],
                                                 body=self._render_request.encode('utf-8'))
