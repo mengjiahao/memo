@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import time
-import queue
+import multiprocessing
 import concurrent.futures
 import pika
 
@@ -17,11 +17,11 @@ LOGGER = logging.getLogger(__name__)
 def do_real_work(request):
     """To do
     """
-    print('[work start] time: %f, pid: %d, request: %r', 
+    print('[work start] time: %f, pid: %d, request: %r' %
           (time.time(), os.getpid(), request))
-    time.sleep(3)
-    result_data = {"status": "OK", "reply_to": 'render_response_rk', "xpath": "c:/footage/文件名.aepx"}
-    print('[work end] time: %f, pid: %d, result_data: %r',
+    time.sleep(10)
+    result_data = {"status": "OK", "reply_to": 'render_response_rk', "xpath": "c:/footage/视频.mov"}
+    print('[work end] time: %f, pid: %d, result_data: %r' %
           (time.time(), os.getpid(), result_data))
     return result_data
 
@@ -36,49 +36,58 @@ class RenderWorker(object):
 def queue_get_nowait(q):
     """To do
     """
-    if not isinstance(q, queue.Queue) or q.empty():
+    if q.empty():
         return None
+    item = None
     try:
         item = q.get_nowait()
         q.task_done()
-    except queue.Empty:
+    except multiprocessing.Queue.Empty:
         return None
     return item
 
 def queue_put_nowait(q, item):
     """To do
     """
-    if not isinstance(q, queue.Queue) or q.full():
+    if q.full():
         return False
+    flag = False
     try:
         q.put_nowait(item)
-    except queue.Full:
+        flag = True
+    except multiprocessing.Queue.Full:
         return False
-    return True
+    return flag
 
 def render_processing(render_worker):
     """To do
     """
     if not isinstance(render_worker, RenderWorker):
+        print('[render_process invalid] time: %f, pid: %d, ppid: %d, render_worker: %r' %
+              (time.time(), os.getpid(), os.getppid(), render_worker))
         return
     render_request_q = render_worker.render_request_q
     render_result_q = render_worker.render_result_q
-    print('[render_process start] time: %f, pid: %d, ppid: %d',
+    print('[render_process start] time: %f, pid: %d, ppid: %d' %
           (time.time(), os.getpid(), os.getppid()))
     while True:
         render_request = queue_get_nowait(render_request_q)
         if render_request is not None:
+            print('[render_process handler request] time: %f, pid: %d, ppid: %d, request: %r' %
+                  (time.time(), os.getpid(), os.getppid(), render_request))
             render_result = None
             try:
                 render_result = render_worker.handler(render_request)
             except:
-                print('[work_process exception]')
+                print('[render_process exception] work handler exception')
                 continue
             if render_result is not None:
+                print('[render_process handler result] time: %f, pid: %d, ppid: %d, result: %r' %
+                      (time.time(), os.getpid(), os.getppid(), render_result))
                 queue_put_nowait(render_result_q, render_result)
             else:
                 print('[render_process exception] render_result is None')
-    print('[render_process end] time: %f, pid: %d, ppid: %d',
+    print('[render_process end] time: %f, pid: %d, ppid: %d' %
           (time.time(), os.getpid(), os.getppid()))
 
 class ExConsumer(object):
@@ -89,10 +98,12 @@ class ExConsumer(object):
         self._closing = None
         self._connection = None
         self._channel = None
+        self._monitor_timestamp = None
+        self._render_process_manager = None
+        self._render_pool_executor = None
         self._render_request_q = None
         self._render_result_q = None
-        self._render_pool_executor = None
-        self._render_res_futures = set()
+        self._render_res_futures = None
 
     def _build_render_ex_and_q(self):
         self._channel.exchange_declare(exchange=self._config['render_ex'],
@@ -124,6 +135,18 @@ class ExConsumer(object):
         self._channel = self._connection.channel()
         self._build_render_ex_and_q()
 
+    def _disconnect(self):
+        """To do
+        """
+        LOGGER.info('[disconnect]')
+        self._closing = True
+        if self._channel is not None and self._channel.is_open:
+            self._channel.close()
+            self._channel = None
+        if self._connection is not None and self._connection.is_open:
+            self._connection.close()
+            self._connection = None
+
     def _reconnect(self):
         LOGGER.info('[reconnect]')
         if not self._closing:
@@ -145,8 +168,8 @@ class ExConsumer(object):
                                     arguments=None)
         LOGGER.info('[basic_consume]')
 
-    def _basic_ack_render_request(self, tag):
-        self._channel.basic_ack(delivery_tag=tag, multiple=False)
+    def _basic_ack_render_request(self, delivery_tag):
+        self._channel.basic_ack(delivery_tag=delivery_tag, multiple=False)
         LOGGER.info('[basic_ack]')
 
     def _basic_get_render_request(self):
@@ -159,25 +182,27 @@ class ExConsumer(object):
         return None
 
     def _validate_render_result(self, render_result):
-        if isinstance(render_result, dict) and render_result.has_key('reply_to'):
+        if isinstance(render_result, dict) and ('reply_to' in render_result):
             return True
         return False
 
     def _basic_publish_render_result(self, render_result):
         if not self._validate_render_result(render_result):
             return
-        render_response = json.dumps(render_result, ensure_ascii=False)
+        render_response = json.dumps(obj=render_result, ensure_ascii=False)
         self._channel.basic_publish(exchange=self._config['render_ex'],
                                     routing_key=render_result['reply_to'],
                                     body=render_response.encode('utf-8'))
         LOGGER.info('[basic_publish] render_response: %r', render_response)
 
     def _submit_process_pool(self):
-        self._render_request_q = queue.Queue(self._config['render_request_q_maxsize'])
-        self._render_result_q = queue.Queue(self._config['render_result_q_maxsize'])
+        self._render_process_manager = multiprocessing.Manager()
+        self._render_request_q = self._render_process_manager.Queue()
+        self._render_result_q = self._render_process_manager.Queue()
         self._render_pool_executor = concurrent.futures.ProcessPoolExecutor(
             self._config['render_max_workers'])
-        for i in range(self._config['render_process_count']):
+        self._render_res_futures = set()
+        for i in range(self._config['render_max_workers']):
             render_worker = RenderWorker(handler=do_real_work,
                                          render_request_q=self._render_request_q,
                                          render_result_q=self._render_result_q)
@@ -199,6 +224,13 @@ class ExConsumer(object):
             if render_result is not None:
                 LOGGER.info('[process result] render_result: %r', render_result)
                 self._basic_publish_render_result(render_result)
+    
+    def _monitor(self):
+        now_time = time.time()
+        if now_time > self._monitor_timestamp:
+            if self._render_res_futures is not None:
+                LOGGER.info('[monitor] %r', self._render_res_futures)
+            self._monitor_timestamp = now_time + self._config['monitor_interval'];
 
     def load_config(self):
         """To do
@@ -214,10 +246,11 @@ class ExConsumer(object):
         self._config['render_request_rk'] = 'render_request_rk'
         self._config['render_response_q'] = 'render_response_q'
         self._config['render_response_rk'] = 'render_response_rk'
-        self._config['render_max_workers'] = 2
+        self._config['render_max_workers'] = 1
         self._config['render_request_q_maxsize'] = 2
         self._config['render_result_q_maxsize'] = 100
-        self._config['rabbitmq_pull_interval'] = 10
+        self._config['rabbitmq_pull_interval'] = 5
+        self._config['monitor_interval'] = 30
 
     def setup_with_connect_params(self, host, port, virtual_host, username, password):
         """To do
@@ -229,31 +262,22 @@ class ExConsumer(object):
         self._config['username'] = username
         self._config['password'] = password
 
-    def _disconnect(self):
-        """To do
-        """
-        LOGGER.info('[disconnect]')
-        self._closing = True
-        if self._channel is not None and self._channel.is_open:
-            self._channel.close()
-            self._channel = None
-        if self._connection is not None and self._connection.is_open:
-            self._connection.close()
-            self._connection = None
-
     def stop(self):
         """To do
         """
         self._disconnect()
         if self._render_pool_executor is not None:
             self._render_pool_executor.shutdown()
+        if self._render_process_manager is not None:
+            self._render_process_manager.shutdown()
 
     def run(self):
         """To do
         """
-        self._connect()
+        self._monitor_timestamp = time.time()
         self._submit_process_pool()
-        LOGGER.info('[main running] pid %r', os.getpid())
+        self._connect()
+        LOGGER.info('[main running] pid %d', os.getpid())
         while True:
             try:
                 self._pull_render_request()
@@ -266,12 +290,27 @@ class ExConsumer(object):
                 LOGGER.exception('[exception]')
             except KeyboardInterrupt:
                 LOGGER.exception('[exception]')
+                break
         self.stop()
+
+def logging_config():
+    """To do
+    """
+    logging.basicConfig(level=logging.INFO,
+                        format=LOG_FORMAT,
+                        filename='logs/ae_consumer.log',
+                        filemode='a+')
+    console = logging.StreamHandler()
+    console.setLevel(logging.INFO)
+    logging.getLogger('').addHandler(console)
 
 def main():
     """To do
     """
-    logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+    logging_config()
+    LOGGER.info('*************************************************')
+    LOGGER.info('*                ae rabbitmq consumer           *')
+    LOGGER.info('*************************************************')
     ex = ExConsumer()
     ex.load_config()
     ex.setup_with_connect_params(host='localhost',

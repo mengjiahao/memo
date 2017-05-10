@@ -6,7 +6,7 @@ import json
 import logging
 import os
 import time
-from queue import Queue
+from multiprocessing import Queue
 import concurrent.futures
 import pika
 
@@ -125,7 +125,7 @@ class ExPublisher(object):
 
         json_data = {"status": "UnKnown", "reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
         self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
-        logging.info("[create req] %r", self._render_request)
+        logging.info("[json dump] %r", self._render_request)
 
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_request_rk'],
@@ -200,18 +200,30 @@ class ExPublisher(object):
             LOGGER.info('[submit process] i: %r, res_future: %r, res_futures: %r',
                         i, res_future, res_futures)
         LOGGER.info('[main_process continue]')
-        for res_future in res_futures:
-            LOGGER.info('[res_future] res_future: %r', res_future)
+        LOGGER.info('[monitor] res_futures: %r', res_futures)
         time.sleep(8)
-        for res_future in res_futures:
-            LOGGER.info('[res_future] res_future: %r', res_future)
+        LOGGER.info('[monitor] res_futures: %r', res_futures)
         ppexecutor.shutdown()
         LOGGER.info('[main_process end] pid: %r, ppid: %r', os.getpid(), os.getppid())
+    
+def logging_config():
+    """To do
+    """
+    logging.basicConfig(level=logging.INFO,
+                        format=LOG_FORMAT,
+                        filename='logs/ae_publish.log',
+                        filemode='a+')
+    console = logging.StreamHandler()
+    console.setLevel(logging.INFO)
+    logging.getLogger('').addHandler(console)
 
 def main():
     """To do
     """
-    logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
+    logging_config()
+    LOGGER.info('*************************************************')
+    LOGGER.info('*               ae rabbitmq publisher           *')
+    LOGGER.info('*************************************************')
     ex = ExPublisher()
     ex.load_config()
     ex.setup_with_connect_params(host='localhost',
@@ -219,8 +231,7 @@ def main():
                                  virtual_host='/',
                                  username='guest',
                                  password='guest')
-    #ex.run()
-    ex.test_process_pool()
+    ex.run()
 
 if __name__ == '__main__':
     main()
