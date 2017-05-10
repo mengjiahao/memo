@@ -7,8 +7,8 @@ import logging
 import time
 import pika
 
-LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -20s %(funcName) '
-              '-30s %(lineno) -5d: %(message)s')
+LOG_FORMAT = ('%(levelname) -10s | %(asctime)s %(name) -20s | %(funcName) '
+              '-30s | %(lineno) -5d | %(message)s')
 LOGGER = logging.getLogger(__name__)
 
 class ExPublisher(object):
@@ -120,7 +120,7 @@ class ExPublisher(object):
                                     consumer_tag=None,
                                     arguments=None)
 
-        json_data = {"reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
+        json_data = {"status": "UnKnown", "reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
         self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
         logging.info("[create req] %r", self._render_request)
 

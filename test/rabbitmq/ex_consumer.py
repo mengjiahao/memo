@@ -6,70 +6,74 @@ import json
 import logging
 import os
 import time
-import Queue
+from queue import Queue
 import concurrent.futures
 import pika
 
-LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -20s %(funcName) '
-              '-30s %(lineno) -5d: %(message)s')
+LOG_FORMAT = ('%(levelname) -10s | %(asctime)s %(name) -20s | %(funcName) '
+              '-30s | %(lineno) -5d | %(message)s')
 LOGGER = logging.getLogger(__name__)
 
 def do_real_work(request):
     """To do
     """
-    LOGGER.info('[doing work...]')
+    print('[doing work... ] pid: %r', os.getpid())
     time.sleep(3)
-    json_data = {"status": "OK", "xpath": "c:/output/视频.mov"}
-    print('[work result] %r', json_data)
+    json_data = {"status": "OK", "reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
+    print('[work result] pid: %r, result_data: %r', os.getpid(), json_data)
     return json_data
 
-class RenderWork(object):
+class RenderWorker(object):
     """To do
     """
     def __init__(self, handler, render_request_q, render_result_q):
         self.handler = handler
         self.render_request_q = render_request_q
         self.render_result_q = render_result_q
-        self.test = 1
 
-def queue_get_nowait(queue):
+def queue_get_nowait(q):
     """To do
     """
-    if not isinstance(queue, Queue) or queue.empty():
+    if not isinstance(q, Queue) or q.empty():
         return None
     try:
-        item = queue.get_nowait()
-        queue.task_done()
+        item = q.get_nowait()
+        q.task_done()
     except Queue.Empty:
         return None
     return item
 
-def queue_put_nowait(queue, item):
+def queue_put_nowait(q, item):
     """To do
     """
-    if not isinstance(queue, Queue) or queue.full():
+    if not isinstance(q, Queue) or q.full():
         return False
     try:
-        queue.put_nowait(item)
+        q.put_nowait(item)
     except Queue.Full:
         return False
     return True
 
-def render_processing(render_work):
+def render_processing(render_worker):
     """To do
     """
-    print('[render_processing start] %r | %r', os.getpid(), os.getppid())
-    if not isinstance(render_work, RenderWork):
+    print('[render_process start] pid: %r, ppid: %r', os.getpid(), os.getppid())
+    if not isinstance(render_worker, RenderWorker):
         return
-    render_request_q = render_work.render_request_q
-    render_result_q = render_work.render_result_q
+    render_request_q = render_worker.render_request_q
+    render_result_q = render_worker.render_result_q
     while True:
         render_request = queue_get_nowait(render_request_q)
         if render_request is not None:
-            render_result = render_work.do_work(render_request)
+            render_result = None
+            try:
+                render_result = render_worker.handler(render_request)
+            except:
+                print('[render_process exception]')
+                continue
             if render_result is not None:
                 queue_put_nowait(render_result_q, render_result)
-    print('[render_processing stop] %r | %r', os.getpid(), os.getppid())
+    print('[render_process stop] pid: %r, ppid: %r', os.getpid(), os.getppid())
 
 class ExConsumer(object):
     """To do
@@ -123,7 +127,7 @@ class ExConsumer(object):
 
     def _on_render_request(self, channel, method_frame, header_frame, body):
         render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-        LOGGER.info('[consume] %r | %r | %r | %r | %r',
+        LOGGER.info('[consume] channel: %r, method_frame: %r, header_frame: %r, body: %r, render_request: %r',
                     channel, method_frame, header_frame, body, render_request)
 
     def _basic_consume_render_request(self):
@@ -145,40 +149,48 @@ class ExConsumer(object):
             queue=self._config['render_request_q'], no_ack=True)
         if body is not None:
             render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-            LOGGER.info('[basic_get] %r', render_request)
+            LOGGER.info('[basic_get] render_request: %r', render_request)
             return render_request
         return None
 
+    def _validate_render_result(self, render_result):
+        if isinstance(render_result, dict) and render_result.has_key('reply_to')
+            return True
+        return False
+
     def _basic_publish_render_result(self, render_result):
+        if not self._validate_render_result(render_result)
+            return
         render_response = json.dumps(render_result, ensure_ascii=False)
         self._channel.basic_publish(exchange=self._config['render_ex'],
                                     routing_key=render_result['reply_to'],
                                     body=render_response.encode('utf-8'))
-        LOGGER.info('[basic_publish] %r', render_response)
+        LOGGER.info('[basic_publish] render_response: %r', render_response)
 
     def _submit_process_pool(self):
-        self._render_request_q = Queue.Queue(self._config['render_request_q_maxsize'])
-        self._render_result_q = Queue.Queue(self._config['render_result_q_maxsize'])
-        render_work = RenderWork(handler=do_real_work,
-                                 render_request_q=self._render_request_q,
-                                 render_result_q=self._render_result_q)
-        with concurrent.futures.ProcessPoolExecutor() as ppexecutor:
-            for i in range(self._config['render_process_count']):
-                res_future = ppexecutor.submit(render_processing, render_work)
-                self._render_res_futures.add(res_future)
-                LOGGER.info('[create process] %r | %r | %r | %r',
-                            i, res_future, self._render_res_futures, render_work)
+        self._render_request_q = Queue(self._config['render_request_q_maxsize'])
+        self._render_result_q = Queue(self._config['render_result_q_maxsize'])
+        for i in range(self._config['render_process_count']):
+            render_worker = RenderWorker(handler=do_real_work,
+                                         render_request_q=self._render_request_q,
+                                         render_result_q=self._render_result_q)
+            res_future = concurrent.futures.ProcessPoolExecutor.submit(render_processing, render_worker)
+            self._render_res_futures.add(res_future)
+            LOGGER.info('[submit process] index: %r, res_future: %r, render_res_futures: %r, render_worker: %r',
+                        i, res_future, self._render_res_futures, render_worker)
 
     def _pull_render_request(self):
         if self._render_request_q.full():
             return
         render_request = self._basic_get_render_request()
-        queue_put_nowait(self._render_request_q, render_request)
+        if render_request is not None:
+            queue_put_nowait(self._render_request_q, render_request)
 
     def _process_render_result(self):
-        render_result = queue_get_nowait(self._render_result_q)
-        if render_result is not None:
-            self._basic_publish_render_result(render_result)
+        while not self._render_result_q.empty():
+            render_result = queue_get_nowait(self._render_result_q)
+            if render_result is not None:
+                self._basic_publish_render_result(render_result)
 
     def load_config(self):
         """To do
@@ -224,10 +236,9 @@ class ExConsumer(object):
     def run(self):
         """To do
         """
-        LOGGER.info('[run] %r', os.getpid())
         self._connect()
         self._submit_process_pool()
-        LOGGER.info('[start processing]')
+        LOGGER.info('[main running] pid %r', os.getpid())
         while True:
             try:
                 self._pull_render_request()
