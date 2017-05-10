@@ -5,8 +5,10 @@
 import json
 import logging
 import os
+import sys
 import time
-from multiprocessing import Queue
+import multiprocessing
+import queue
 import concurrent.futures
 import pika
 
@@ -123,7 +125,8 @@ class ExPublisher(object):
                                     consumer_tag=None,
                                     arguments=None)
 
-        json_data = {"status": "UnKnown", "reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
+        json_data = {"status": "UnKnown", "reply_to": self._config['render_response_rk'],
+                     "xpath": "c:/footage/文件名.aepx"}
         self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
         logging.info("[json dump] %r", self._render_request)
 
@@ -184,8 +187,10 @@ class ExPublisher(object):
               (time.time(), os.getpid(), os.getppid()))
         time.sleep(5)
         json_data = {"tx_id": 1, "status": "正常"}
-        print('[work_process end] time: %f, pid: %d, ppid: %d, json_data: %r, %d' %
-              (time.time(), os.getpid(), os.getppid(), json_data, isinstance(json_data, dict)))
+        print('[work_process end] time: %f, pid: %d, ppid: %d, '
+              'json_data: %r, is_dict: %d, size: %d' %
+              (time.time(), os.getpid(), os.getppid(), json_data,
+               isinstance(json_data, dict), sys.getsizeof(json_data)))
         return json_data
 
     def test_process_pool(self):
@@ -205,7 +210,7 @@ class ExPublisher(object):
         LOGGER.info('[monitor] res_futures: %r', res_futures)
         ppexecutor.shutdown()
         LOGGER.info('[main_process end] pid: %r, ppid: %r', os.getpid(), os.getppid())
-    
+
 def logging_config():
     """To do
     """

@@ -17,3 +17,127 @@ INFO       | 2017-05-10 21:07:45,385 pika.adapters.blocking_connection | close  
 INFO       | 2017-05-10 21:07:45,385 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
 WARNING    | 2017-05-10 21:07:45,386 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
 INFO       | 2017-05-10 21:07:45,386 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f1c64897c18>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:10:40,769 __main__             | main                           |  226  | *************************************************
+INFO       | 2017-05-10 23:10:40,769 __main__             | main                           |  227  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-10 23:10:40,769 __main__             | main                           |  228  | *************************************************
+INFO       | 2017-05-10 23:10:40,769 __main__             | setup_with_connect_params      |  96   | [setup]
+INFO       | 2017-05-10 23:10:40,769 __main__             | test_process_pool              |  196  | [main_process start] pid: 6516, ppid: 6499
+INFO       | 2017-05-10 23:10:40,774 __main__             | test_process_pool              |  203  | [submit process] i: 0, res_future: <Future at 0x7fb65c2497f0 state=running>, res_futures: {<Future at 0x7fb65c2497f0 state=running>}
+INFO       | 2017-05-10 23:10:40,776 __main__             | test_process_pool              |  203  | [submit process] i: 1, res_future: <Future at 0x7fb65c249e48 state=pending>, res_futures: {<Future at 0x7fb65c249e48 state=pending>, <Future at 0x7fb65c2497f0 state=running>}
+INFO       | 2017-05-10 23:10:40,777 __main__             | test_process_pool              |  204  | [main_process continue]
+INFO       | 2017-05-10 23:10:40,777 __main__             | test_process_pool              |  205  | [monitor] res_futures: {<Future at 0x7fb65c249e48 state=running>, <Future at 0x7fb65c2497f0 state=running>}
+INFO       | 2017-05-10 23:10:48,786 __main__             | test_process_pool              |  207  | [monitor] res_futures: {<Future at 0x7fb65c249e48 state=finished returned dict>, <Future at 0x7fb65c2497f0 state=finished returned dict>}
+INFO       | 2017-05-10 23:10:48,789 __main__             | test_process_pool              |  209  | [main_process end] pid: 6516, ppid: 6499
+INFO       | 2017-05-10 23:35:56,635 __main__             | main                           |  229  | *************************************************
+INFO       | 2017-05-10 23:35:56,636 __main__             | main                           |  230  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-10 23:35:56,636 __main__             | main                           |  231  | *************************************************
+INFO       | 2017-05-10 23:35:56,636 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-10 23:35:56,636 __main__             | test_rabbitmq                  |  154  | [test]
+INFO       | 2017-05-10 23:35:56,636 __main__             | _connect                       |  64   | [connect]
+INFO       | 2017-05-10 23:35:56,638 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:35:56,642 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:35:56,651 root                 | test_rabbitmq                  |  166  | [create req] '{"reply_to": "render_response_rk", "xpath": "c:/footage/文件名.aepx"}'
+INFO       | 2017-05-10 23:35:56,652 __main__             | test_rabbitmq                  |  171  | [publish 1] True
+INFO       | 2017-05-10 23:35:56,653 __main__             | test_rabbitmq                  |  175  | [publish 2] True
+INFO       | 2017-05-10 23:35:56,653 __main__             | test_rabbitmq                  |  176  | [start consuming]
+INFO       | 2017-05-10 23:35:56,653 root                 | _on_test_message               |  145  | [received] b'{"reply_to": "render_response_rk", "xpath": "c:/footage/\xe6\x96\x87\xe4\xbb\xb6\xe5\x90\x8d.aepx"}'
+INFO       | 2017-05-10 23:36:06,664 root                 | _on_test_message               |  149  | [basic_ack] 1
+INFO       | 2017-05-10 23:36:06,664 root                 | _on_test_message               |  145  | [received] b'{"reply_to": "render_response_rk", "xpath": "c:/footage/\xe6\x96\x87\xe4\xbb\xb6\xe5\x90\x8d.aepx"}'
+INFO       | 2017-05-10 23:36:16,674 root                 | _on_test_message               |  149  | [basic_ack] 2
+INFO       | 2017-05-10 23:36:16,675 pika.channel         | _on_close                      |  938  | <METHOD(['channel_number=1', 'frame_type=1', "method=<Channel.Close(['class_id=60', 'method_id=80', 'reply_code=406', 'reply_text=PRECONDITION_FAILED - unknown delivery tag 1'])>"])>
+WARNING    | 2017-05-10 23:36:16,676 pika.channel         | _on_close                      |  941  | Received remote Channel.Close (406): PRECONDITION_FAILED - unknown delivery tag 1
+INFO       | 2017-05-10 23:36:53,845 __main__             | main                           |  229  | *************************************************
+INFO       | 2017-05-10 23:36:53,846 __main__             | main                           |  230  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-10 23:36:53,846 __main__             | main                           |  231  | *************************************************
+INFO       | 2017-05-10 23:36:53,846 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-10 23:36:53,846 __main__             | run                            |  119  | [run]
+INFO       | 2017-05-10 23:36:53,846 __main__             | _connect                       |  64   | [connect]
+INFO       | 2017-05-10 23:36:53,848 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:36:53,852 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:36:53,856 root                 | run                            |  131  | [json dump] '{"status": "UnKnown", "xpath": "c:/footage/文件名.aepx", "reply_to": "render_response_rk"}'
+INFO       | 2017-05-10 23:36:53,856 __main__             | run                            |  136  | [publish] True
+INFO       | 2017-05-10 23:36:53,857 __main__             | run                            |  137  | [start consuming]
+INFO       | 2017-05-10 23:37:28,006 root                 | _on_render_response            |  77   | [received] {'status': 'OK', 'xpath': 'c:/footage/视频.mov', 'reply_to': 'render_response_rk'}
+INFO       | 2017-05-10 23:40:37,316 __main__             | stop                           |  107  | [stop]
+INFO       | 2017-05-10 23:40:37,316 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:40:37,316 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:40:37,318 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:40:37,318 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:40:37,319 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:40:37,320 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f5789386cc0>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:42:34,170 __main__             | main                           |  229  | *************************************************
+INFO       | 2017-05-10 23:42:34,171 __main__             | main                           |  230  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-10 23:42:34,171 __main__             | main                           |  231  | *************************************************
+INFO       | 2017-05-10 23:42:34,171 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-10 23:42:34,171 __main__             | run                            |  119  | [run]
+INFO       | 2017-05-10 23:42:34,172 __main__             | _connect                       |  64   | [connect]
+INFO       | 2017-05-10 23:42:34,174 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:42:34,177 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:42:34,181 root                 | run                            |  131  | [json dump] '{"status": "UnKnown", "reply_to": "render_response_rk", "xpath": "c:/footage/文件名.aepx"}'
+INFO       | 2017-05-10 23:42:34,182 __main__             | run                            |  136  | [publish] True
+INFO       | 2017-05-10 23:42:34,183 __main__             | run                            |  137  | [start consuming]
+INFO       | 2017-05-10 23:43:29,806 root                 | _on_render_response            |  77   | [received] {'status': 'OK', 'reply_to': 'render_response_rk', 'xpath': 'c:/footage/视频.mov'}
+INFO       | 2017-05-10 23:44:12,392 __main__             | stop                           |  107  | [stop]
+INFO       | 2017-05-10 23:44:12,393 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:44:12,393 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:44:12,395 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:44:12,395 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:44:12,396 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:44:12,397 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7ff9e37b4cc0>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:50:31,140 __main__             | main                           |  229  | *************************************************
+INFO       | 2017-05-10 23:50:31,140 __main__             | main                           |  230  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-10 23:50:31,141 __main__             | main                           |  231  | *************************************************
+INFO       | 2017-05-10 23:50:31,141 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-10 23:50:31,141 __main__             | run                            |  119  | [run]
+INFO       | 2017-05-10 23:50:31,141 __main__             | _connect                       |  64   | [connect]
+INFO       | 2017-05-10 23:50:31,144 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:50:31,149 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:50:31,154 root                 | run                            |  131  | [json dump] '{"reply_to": "render_response_rk", "xpath": "c:/footage/文件名.aepx", "status": "UnKnown"}'
+INFO       | 2017-05-10 23:50:31,155 __main__             | run                            |  136  | [publish] True
+INFO       | 2017-05-10 23:50:31,156 __main__             | run                            |  137  | [start consuming]
+INFO       | 2017-05-10 23:50:34,098 __main__             | main                           |  229  | *************************************************
+INFO       | 2017-05-10 23:50:34,098 __main__             | main                           |  230  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-10 23:50:34,098 __main__             | main                           |  231  | *************************************************
+INFO       | 2017-05-10 23:50:34,098 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-10 23:50:34,098 __main__             | run                            |  119  | [run]
+INFO       | 2017-05-10 23:50:34,099 __main__             | _connect                       |  64   | [connect]
+INFO       | 2017-05-10 23:50:34,102 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:50:34,106 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:50:34,111 root                 | run                            |  131  | [json dump] '{"status": "UnKnown", "reply_to": "render_response_rk", "xpath": "c:/footage/文件名.aepx"}'
+INFO       | 2017-05-10 23:50:34,111 __main__             | run                            |  136  | [publish] True
+INFO       | 2017-05-10 23:50:34,111 __main__             | run                            |  137  | [start consuming]
+INFO       | 2017-05-10 23:51:12,759 root                 | _on_render_response            |  77   | [received] {'reply_to': 'render_response_rk', 'xpath': 'c:/footage/视频.mov', 'status': 'OK'}
+INFO       | 2017-05-10 23:51:42,768 root                 | _on_render_response            |  77   | [received] {'status': 'OK', 'reply_to': 'render_response_rk', 'xpath': 'c:/footage/视频.mov'}
+INFO       | 2017-05-10 23:51:49,034 __main__             | stop                           |  107  | [stop]
+INFO       | 2017-05-10 23:51:49,034 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:51:49,035 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:51:49,036 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:51:49,036 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:51:49,038 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:51:49,038 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7fd7aa039cc0>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:51:53,912 __main__             | stop                           |  107  | [stop]
+INFO       | 2017-05-10 23:51:53,912 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:51:53,913 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:51:53,914 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:51:53,915 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:51:53,916 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:51:53,916 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f349c81fcc0>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-11 00:24:40,767 __main__             | main                           |  229  | *************************************************
+INFO       | 2017-05-11 00:24:40,768 __main__             | main                           |  230  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-11 00:24:40,768 __main__             | main                           |  231  | *************************************************
+INFO       | 2017-05-11 00:24:40,768 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-11 00:24:40,768 __main__             | run                            |  119  | [run]
+INFO       | 2017-05-11 00:24:40,768 __main__             | _connect                       |  64   | [connect]
+INFO       | 2017-05-11 00:24:40,771 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-11 00:24:40,774 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-11 00:24:40,778 root                 | run                            |  131  | [json dump] '{"reply_to": "render_response_rk", "xpath": "c:/footage/文件名.aepx", "status": "UnKnown"}'
+INFO       | 2017-05-11 00:24:40,779 __main__             | run                            |  136  | [publish] True
+INFO       | 2017-05-11 00:24:40,779 __main__             | run                            |  137  | [start consuming]
+INFO       | 2017-05-11 00:25:35,712 root                 | _on_render_response            |  77   | [received] {'reply_to': 'render_response_rk', 'xpath': 'c:/footage/视频.mov', 'status': 'OK'}
+INFO       | 2017-05-11 00:27:10,819 __main__             | stop                           |  107  | [stop]
+INFO       | 2017-05-11 00:27:10,819 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-11 00:27:10,819 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-11 00:27:10,821 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-11 00:27:10,821 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-11 00:27:10,824 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-11 00:27:10,825 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f237534dcc0>, reason_code=200, reason_text='Normal shutdown')

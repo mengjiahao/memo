@@ -30,3 +30,223 @@ INFO       | 2017-05-10 21:07:44,171 pika.adapters.blocking_connection | close  
 INFO       | 2017-05-10 21:07:44,171 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
 WARNING    | 2017-05-10 21:07:44,172 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
 INFO       | 2017-05-10 21:07:44,172 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f2633197208>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 22:05:44,190 __main__             | main                           |  311  | *************************************************
+INFO       | 2017-05-10 22:05:44,191 __main__             | main                           |  312  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-10 22:05:44,191 __main__             | main                           |  313  | *************************************************
+INFO       | 2017-05-10 22:05:44,191 __main__             | setup_with_connect_params      |  258  | [setup]
+INFO       | 2017-05-10 22:05:44,246 __main__             | _submit_process_pool           |  212  | [submit process] i: 0, res_future: <Future at 0x7faf11e93d68 state=running>, render_res_futures: {<Future at 0x7faf11e93d68 state=running>}, render_worker: <__main__.RenderWorker object at 0x7faf11e93d30>
+INFO       | 2017-05-10 22:05:44,247 __main__             | _connect                       |  127  | [connect]
+INFO       | 2017-05-10 22:05:44,252 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 22:05:44,260 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 22:05:44,268 __main__             | run                            |  280  | [main running] pid 3862
+ERROR      | 2017-05-10 22:05:52,333 __main__             | run                            |  292  | [exception]
+Traceback (most recent call last):
+  File "ex_consumer.py", line 285, in run
+    self._connection.sleep(self._config['rabbitmq_pull_interval'])
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 673, in sleep
+    self.process_data_events(time_limit)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 650, in process_data_events
+    self._flush_output(timer.is_ready, common_terminator)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 410, in _flush_output
+    self._impl.ioloop.poll()
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/select_connection.py", line 590, in poll
+    events = self._poll.poll(self.get_next_deadline())
+KeyboardInterrupt
+INFO       | 2017-05-10 22:05:52,346 __main__             | _disconnect                    |  141  | [disconnect]
+INFO       | 2017-05-10 22:05:52,347 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 22:05:52,347 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 22:05:52,349 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 22:05:52,350 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 22:05:52,351 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 22:05:52,352 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7faf11ea0320>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 22:06:24,980 __main__             | main                           |  311  | *************************************************
+INFO       | 2017-05-10 22:06:24,980 __main__             | main                           |  312  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-10 22:06:24,980 __main__             | main                           |  313  | *************************************************
+INFO       | 2017-05-10 22:06:24,981 __main__             | setup_with_connect_params      |  258  | [setup]
+INFO       | 2017-05-10 22:06:25,002 __main__             | _submit_process_pool           |  212  | [submit process] i: 0, res_future: <Future at 0x7f2db105cd68 state=running>, render_res_futures: {<Future at 0x7f2db105cd68 state=running>}, render_worker: <__main__.RenderWorker object at 0x7f2db105cd30>
+INFO       | 2017-05-10 22:06:25,003 __main__             | _connect                       |  127  | [connect]
+INFO       | 2017-05-10 22:06:25,010 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 22:06:25,019 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 22:06:25,023 __main__             | run                            |  280  | [main running] pid 4097
+ERROR      | 2017-05-10 23:08:03,671 __main__             | run                            |  292  | [exception]
+Traceback (most recent call last):
+  File "ex_consumer.py", line 285, in run
+    self._connection.sleep(self._config['rabbitmq_pull_interval'])
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 673, in sleep
+    self.process_data_events(time_limit)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 650, in process_data_events
+    self._flush_output(timer.is_ready, common_terminator)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 410, in _flush_output
+    self._impl.ioloop.poll()
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/select_connection.py", line 590, in poll
+    events = self._poll.poll(self.get_next_deadline())
+KeyboardInterrupt
+INFO       | 2017-05-10 23:08:03,674 __main__             | _disconnect                    |  141  | [disconnect]
+INFO       | 2017-05-10 23:08:03,674 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:08:03,674 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:08:03,676 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:08:03,677 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:08:03,678 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:08:03,678 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f2db10692e8>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:18:25,014 __main__             | main                           |  312  | *************************************************
+INFO       | 2017-05-10 23:18:25,014 __main__             | main                           |  313  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-10 23:18:25,015 __main__             | main                           |  314  | *************************************************
+INFO       | 2017-05-10 23:18:25,015 __main__             | setup_with_connect_params      |  259  | [setup]
+INFO       | 2017-05-10 23:18:25,031 __main__             | _submit_process_pool           |  213  | [submit process] i: 0, res_future: <Future at 0x7f56cfdbbd68 state=running>, render_res_futures: {<Future at 0x7f56cfdbbd68 state=running>}, render_worker: <__main__.RenderWorker object at 0x7f56cfdbbd30>
+INFO       | 2017-05-10 23:18:25,033 __main__             | _connect                       |  128  | [connect]
+INFO       | 2017-05-10 23:18:25,037 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:18:25,043 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:18:25,047 __main__             | run                            |  281  | [main running] pid: 7002
+ERROR      | 2017-05-10 23:18:27,733 __main__             | run                            |  293  | [exception]
+Traceback (most recent call last):
+  File "ex_consumer.py", line 286, in run
+    self._connection.sleep(self._config['rabbitmq_pull_interval'])
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 673, in sleep
+    self.process_data_events(time_limit)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 650, in process_data_events
+    self._flush_output(timer.is_ready, common_terminator)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 410, in _flush_output
+    self._impl.ioloop.poll()
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/select_connection.py", line 590, in poll
+    events = self._poll.poll(self.get_next_deadline())
+KeyboardInterrupt
+INFO       | 2017-05-10 23:18:27,736 __main__             | _disconnect                    |  142  | [disconnect]
+INFO       | 2017-05-10 23:18:27,736 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:18:27,737 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:18:27,738 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:18:27,738 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:18:27,739 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:18:27,740 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f56cfdc82e8>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:28:57,881 __main__             | main                           |  326  | *************************************************
+INFO       | 2017-05-10 23:28:57,881 __main__             | main                           |  327  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-10 23:28:57,881 __main__             | main                           |  328  | *************************************************
+INFO       | 2017-05-10 23:28:57,881 __main__             | setup_with_connect_params      |  273  | [setup]
+INFO       | 2017-05-10 23:28:57,900 __main__             | _submit_process_pool           |  225  | [submit process] i: 0, res_future: <Future at 0x7fda6a675d68 state=running>, render_res_futures: {<Future at 0x7fda6a675d68 state=running>},render_worker: <__main__.RenderWorker object at 0x7fda6a675d30>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-10 23:28:57,900 __main__             | _connect                       |  137  | [connect]
+INFO       | 2017-05-10 23:28:57,904 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:28:57,911 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:28:57,915 __main__             | run                            |  295  | [main running] pid: 8000
+INFO       | 2017-05-10 23:36:57,993 __main__             | _basic_get_render_request      |  191  | [basic_get] render_request: {'status': 'UnKnown', 'reply_to': 'render_response_rk', 'xpath': 'c:/footage/文件名.aepx'}
+INFO       | 2017-05-10 23:37:28,004 __main__             | _process_render_result         |  238  | [process result] render_result: {'status': 'OK', 'xpath': 'c:/footage/视频.mov', 'reply_to': 'render_response_rk'}
+INFO       | 2017-05-10 23:37:28,005 __main__             | _basic_publish_render_result   |  207  | [basic_publish] render_response: '{"status": "OK", "xpath": "c:/footage/视频.mov", "reply_to": "render_response_rk"}'
+ERROR      | 2017-05-10 23:40:38,064 __main__             | run                            |  307  | [exception]
+Traceback (most recent call last):
+  File "ex_consumer.py", line 300, in run
+    self._submit_process_pool()
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 673, in sleep
+    self.process_data_events(time_limit)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 650, in process_data_events
+    self._flush_output(timer.is_ready, common_terminator)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 410, in _flush_output
+    self._impl.ioloop.poll()
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/select_connection.py", line 590, in poll
+    events = self._poll.poll(self.get_next_deadline())
+KeyboardInterrupt
+INFO       | 2017-05-10 23:40:38,068 __main__             | _disconnect                    |  151  | [disconnect]
+INFO       | 2017-05-10 23:40:38,068 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:40:38,069 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:40:38,072 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:40:38,072 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:40:38,074 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:40:38,077 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7fda6a683278>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:42:29,752 __main__             | main                           |  333  | *************************************************
+INFO       | 2017-05-10 23:42:29,752 __main__             | main                           |  334  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-10 23:42:29,753 __main__             | main                           |  335  | *************************************************
+INFO       | 2017-05-10 23:42:29,753 __main__             | setup_with_connect_params      |  280  | [setup]
+INFO       | 2017-05-10 23:42:29,775 __main__             | _submit_process_pool           |  231  | [submit process] i: 0, res_future: <Future at 0x7fd6e29d5d68 state=running>, render_res_futures: {<Future at 0x7fd6e29d5d68 state=running>},render_worker: <__main__.RenderWorker object at 0x7fd6e29d5d30>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-10 23:42:29,776 __main__             | _connect                       |  142  | [connect]
+INFO       | 2017-05-10 23:42:29,781 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:42:29,788 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:42:29,793 __main__             | run                            |  302  | [main running] pid: 9105
+INFO       | 2017-05-10 23:42:59,800 __main__             | _basic_get_render_request      |  197  | [basic_get] render_request: {'xpath': 'c:/footage/文件名.aepx', 'reply_to': 'render_response_rk', 'status': 'UnKnown'}, render_request_size: 288
+INFO       | 2017-05-10 23:43:29,804 __main__             | _process_render_result         |  245  | [process result] render_result: {'xpath': 'c:/footage/视频.mov', 'reply_to': 'render_response_rk', 'status': 'OK'}, render_result_size: 288
+INFO       | 2017-05-10 23:43:29,805 __main__             | _basic_publish_render_result   |  213  | [basic_publish] render_response: '{"xpath": "c:/footage/视频.mov", "reply_to": "render_response_rk", "status": "OK"}'
+ERROR      | 2017-05-10 23:44:13,045 __main__             | run                            |  314  | [exception]
+Traceback (most recent call last):
+  File "ex_consumer.py", line 307, in run
+    self._connection.sleep(self._config['rabbitmq_pull_interval'])
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 673, in sleep
+    self.process_data_events(time_limit)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 650, in process_data_events
+    self._flush_output(timer.is_ready, common_terminator)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 410, in _flush_output
+    self._impl.ioloop.poll()
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/select_connection.py", line 590, in poll
+    events = self._poll.poll(self.get_next_deadline())
+KeyboardInterrupt
+INFO       | 2017-05-10 23:44:13,048 __main__             | _disconnect                    |  156  | [disconnect]
+INFO       | 2017-05-10 23:44:13,048 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:44:13,048 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:44:13,050 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:44:13,051 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:44:13,052 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:44:13,053 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7fd6e29e42e8>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-10 23:50:12,692 __main__             | main                           |  333  | *************************************************
+INFO       | 2017-05-10 23:50:12,692 __main__             | main                           |  334  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-10 23:50:12,692 __main__             | main                           |  335  | *************************************************
+INFO       | 2017-05-10 23:50:12,692 __main__             | setup_with_connect_params      |  280  | [setup]
+INFO       | 2017-05-10 23:50:12,714 __main__             | _submit_process_pool           |  231  | [submit process] i: 0, res_future: <Future at 0x7f58ea61fd68 state=running>, render_res_futures: {<Future at 0x7f58ea61fd68 state=running>},render_worker: <__main__.RenderWorker object at 0x7f58ea61fd30>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-10 23:50:12,716 __main__             | _submit_process_pool           |  231  | [submit process] i: 1, res_future: <Future at 0x7f58ea62c3c8 state=running>, render_res_futures: {<Future at 0x7f58ea62c3c8 state=running>, <Future at 0x7f58ea61fd68 state=running>},render_worker: <__main__.RenderWorker object at 0x7f58ea62c0b8>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-10 23:50:12,716 __main__             | _connect                       |  142  | [connect]
+INFO       | 2017-05-10 23:50:12,720 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-10 23:50:12,728 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-10 23:50:12,746 __main__             | run                            |  302  | [main running] pid: 9490
+INFO       | 2017-05-10 23:50:42,752 __main__             | _basic_get_render_request      |  197  | [basic_get] render_request: {'xpath': 'c:/footage/文件名.aepx', 'reply_to': 'render_response_rk', 'status': 'UnKnown'}, render_request_size: 288
+INFO       | 2017-05-10 23:51:12,755 __main__             | _basic_get_render_request      |  197  | [basic_get] render_request: {'status': 'UnKnown', 'reply_to': 'render_response_rk', 'xpath': 'c:/footage/文件名.aepx'}, render_request_size: 288
+INFO       | 2017-05-10 23:51:12,757 __main__             | _process_render_result         |  245  | [process result] render_result: {'status': 'OK', 'reply_to': 'render_response_rk', 'xpath': 'c:/footage/视频.mov'}, render_result_size: 288
+INFO       | 2017-05-10 23:51:12,757 __main__             | _basic_publish_render_result   |  213  | [basic_publish] render_response: '{"status": "OK", "reply_to": "render_response_rk", "xpath": "c:/footage/视频.mov"}'
+INFO       | 2017-05-10 23:51:42,766 __main__             | _process_render_result         |  245  | [process result] render_result: {'status': 'OK', 'reply_to': 'render_response_rk', 'xpath': 'c:/footage/视频.mov'}, render_result_size: 288
+INFO       | 2017-05-10 23:51:42,768 __main__             | _basic_publish_render_result   |  213  | [basic_publish] render_response: '{"status": "OK", "reply_to": "render_response_rk", "xpath": "c:/footage/视频.mov"}'
+ERROR      | 2017-05-10 23:51:55,571 __main__             | run                            |  314  | [exception]
+Traceback (most recent call last):
+  File "ex_consumer.py", line 307, in run
+    self._connection.sleep(self._config['rabbitmq_pull_interval'])
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 673, in sleep
+    self.process_data_events(time_limit)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 650, in process_data_events
+    self._flush_output(timer.is_ready, common_terminator)
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/blocking_connection.py", line 410, in _flush_output
+    self._impl.ioloop.poll()
+  File "/usr/local/lib/python3.4/dist-packages/pika/adapters/select_connection.py", line 590, in poll
+    events = self._poll.poll(self.get_next_deadline())
+KeyboardInterrupt
+INFO       | 2017-05-10 23:51:55,573 __main__             | _disconnect                    |  156  | [disconnect]
+INFO       | 2017-05-10 23:51:55,574 pika.adapters.blocking_connection | close                          |  1330 | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:51:55,574 pika.channel         | close                          |  422  | Channel.close(0, Normal Shutdown)
+INFO       | 2017-05-10 23:51:55,575 pika.adapters.blocking_connection | close                          |  616  | Closing connection (200): Normal shutdown
+INFO       | 2017-05-10 23:51:55,575 pika.connection      | close                          |  731  | Closing connection (200): Normal shutdown
+WARNING    | 2017-05-10 23:51:55,576 pika.connection      | _on_disconnect                 |  1360 | Disconnected from RabbitMQ at localhost:5672 (200): Normal shutdown
+INFO       | 2017-05-10 23:51:55,576 pika.adapters.blocking_connection | _flush_output                  |  428  | Connection closed; result=BlockingConnection__OnClosedArgs(connection=<pika.adapters.select_connection.SelectConnection object at 0x7f58ea62c4e0>, reason_code=200, reason_text='Normal shutdown')
+INFO       | 2017-05-11 00:06:54,233 __main__             | main                           |  347  | *************************************************
+INFO       | 2017-05-11 00:06:54,233 __main__             | main                           |  348  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-11 00:06:54,233 __main__             | main                           |  349  | *************************************************
+INFO       | 2017-05-11 00:06:54,233 __main__             | setup_with_connect_params      |  294  | [setup]
+INFO       | 2017-05-11 00:06:54,260 __main__             | _submit_process_pool           |  238  | [submit process] i: 0, res_future: <Future at 0x7f52eb9f8d68 state=running>, render_res_futures: {<Future at 0x7f52eb9f8d68 state=running>},render_worker: <__main__.RenderWorker object at 0x7f52eb9f8d30>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-11 00:06:54,263 __main__             | _submit_process_pool           |  238  | [submit process] i: 1, res_future: <Future at 0x7f52eba042e8 state=running>, render_res_futures: {<Future at 0x7f52eb9f8d68 state=running>, <Future at 0x7f52eba042e8 state=running>},render_worker: <__main__.RenderWorker object at 0x7f52eba040b8>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-11 00:06:54,264 __main__             | _connect                       |  147  | [connect]
+INFO       | 2017-05-11 00:06:54,272 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-11 00:06:54,277 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-11 00:06:54,288 __main__             | run                            |  316  | [main running] pid: 10697
+INFO       | 2017-05-11 00:16:02,003 __main__             | main                           |  347  | *************************************************
+INFO       | 2017-05-11 00:16:02,003 __main__             | main                           |  348  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-11 00:16:02,004 __main__             | main                           |  349  | *************************************************
+INFO       | 2017-05-11 00:16:02,004 __main__             | setup_with_connect_params      |  294  | [setup]
+INFO       | 2017-05-11 00:16:02,023 __main__             | _submit_process_pool           |  238  | [submit process] i: 0, res_future: <Future at 0x7fc1fa682d68 state=running>, render_res_futures: {<Future at 0x7fc1fa682d68 state=running>},render_worker: <__main__.RenderWorker object at 0x7fc1fa682d30>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-11 00:16:02,024 __main__             | _submit_process_pool           |  238  | [submit process] i: 1, res_future: <Future at 0x7fc1fa68e278 state=running>, render_res_futures: {<Future at 0x7fc1fa682d68 state=running>, <Future at 0x7fc1fa68e278 state=running>},render_worker: <__main__.RenderWorker object at 0x7fc1fa68e3c8>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-11 00:16:02,024 __main__             | _connect                       |  147  | [connect]
+INFO       | 2017-05-11 00:16:02,029 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-11 00:16:02,038 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-11 00:16:02,042 __main__             | run                            |  316  | [main running] pid: 11175
+INFO       | 2017-05-11 00:24:35,646 __main__             | main                           |  352  | *************************************************
+INFO       | 2017-05-11 00:24:35,646 __main__             | main                           |  353  | *                ae rabbitmq consumer           *
+INFO       | 2017-05-11 00:24:35,647 __main__             | main                           |  354  | *************************************************
+INFO       | 2017-05-11 00:24:35,647 __main__             | setup_with_connect_params      |  299  | [setup]
+INFO       | 2017-05-11 00:24:35,672 __main__             | _submit_process_pool           |  243  | [submit process] i: 0, res_future: <Future at 0x7f98a5a91e10 state=running>, render_res_futures: {<Future at 0x7f98a5a91e10 state=running>},render_worker: <__main__.RenderWorker object at 0x7f98a5a91dd8>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-11 00:24:35,676 __main__             | _submit_process_pool           |  243  | [submit process] i: 1, res_future: <Future at 0x7f98a5a9d470 state=running>, render_res_futures: {<Future at 0x7f98a5a91e10 state=running>, <Future at 0x7f98a5a9d470 state=running>},render_worker: <__main__.RenderWorker object at 0x7f98a5a9d160>, render_request_q_size: 0, render_result_q_size: 0
+INFO       | 2017-05-11 00:24:35,677 __main__             | _connect                       |  150  | [connect]
+INFO       | 2017-05-11 00:24:35,684 pika.adapters.base_connection | _create_and_connect_to_socket  |  212  | Connecting to 127.0.0.1:5672
+INFO       | 2017-05-11 00:24:35,690 pika.adapters.blocking_connection | __init__                       |  1099 | Created channel=1
+INFO       | 2017-05-11 00:24:35,694 __main__             | run                            |  321  | [main running] pid: 11664
+INFO       | 2017-05-11 00:25:05,705 __main__             | _basic_get_render_request      |  205  | [basic_get] render_request: {'reply_to': 'render_response_rk', 'status': 'UnKnown', 'xpath': 'c:/footage/文件名.aepx'}, render_request_size: 288
+INFO       | 2017-05-11 00:25:35,710 __main__             | _process_render_result         |  263  | [process result] render_result: {'status': 'OK', 'reply_to': 'render_response_rk', 'xpath': 'c:/footage/视频.mov'}, render_result_size: 288
+INFO       | 2017-05-11 00:25:35,711 __main__             | _basic_publish_render_result   |  221  | [basic_publish] render_response: '{"status": "OK", "reply_to": "render_response_rk", "xpath": "c:/footage/视频.mov"}'

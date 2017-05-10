@@ -5,8 +5,10 @@
 import json
 import logging
 import os
+import sys
 import time
 import multiprocessing
+import queue  #for python3
 import concurrent.futures
 import pika
 
@@ -17,21 +19,24 @@ LOGGER = logging.getLogger(__name__)
 def do_real_work(request):
     """To do
     """
-    print('[work start] time: %f, pid: %d, request: %r' %
-          (time.time(), os.getpid(), request))
+    print('[work start] time: %f, pid: %d, request: %r, request_size: %d' %
+          (time.time(), os.getpid(), request, sys.getsizeof(request)))
     time.sleep(10)
-    result_data = {"status": "OK", "reply_to": 'render_response_rk', "xpath": "c:/footage/视频.mov"}
-    print('[work end] time: %f, pid: %d, result_data: %r' %
-          (time.time(), os.getpid(), result_data))
-    return result_data
+    result = {"status": "OK", "reply_to": 'render_response_rk',
+              "xpath": "c:/footage/视频.mov"}
+    print('[work end] time: %f, pid: %d, result: %r, result_size: %d' %
+          (time.time(), os.getpid(), result, sys.getsizeof(result)))
+    return result
 
 class RenderWorker(object):
     """To do
     """
-    def __init__(self, handler, render_request_q, render_result_q):
+    def __init__(self, handler, lock, render_request_q, render_result_q, pending_request_count):
         self.handler = handler
+        self.lock = lock
         self.render_request_q = render_request_q
         self.render_result_q = render_result_q
+        self.pending_request_count = pending_request_count
 
 def queue_get_nowait(q):
     """To do
@@ -42,7 +47,7 @@ def queue_get_nowait(q):
     try:
         item = q.get_nowait()
         q.task_done()
-    except multiprocessing.Queue.Empty:
+    except queue.Empty:
         return None
     return item
 
@@ -55,7 +60,7 @@ def queue_put_nowait(q, item):
     try:
         q.put_nowait(item)
         flag = True
-    except multiprocessing.Queue.Full:
+    except queue.Full:
         return False
     return flag
 
@@ -66,15 +71,25 @@ def render_processing(render_worker):
         print('[render_process invalid] time: %f, pid: %d, ppid: %d, render_worker: %r' %
               (time.time(), os.getpid(), os.getppid(), render_worker))
         return
+    lock = render_worker.lock
     render_request_q = render_worker.render_request_q
     render_result_q = render_worker.render_result_q
-    print('[render_process start] time: %f, pid: %d, ppid: %d' %
-          (time.time(), os.getpid(), os.getppid()))
+    pending_request_count = render_worker.pending_request_count
+    print('[render_process start] time: %f, pid: %d, ppid: %d, '
+          'render_request_qsize: %d, render_result_qsize: %d' %
+          (time.time(), os.getpid(), os.getppid(),
+           render_request_q.qsize(), render_result_q.qsize()))
     while True:
         render_request = queue_get_nowait(render_request_q)
         if render_request is not None:
-            print('[render_process handler request] time: %f, pid: %d, ppid: %d, request: %r' %
-                  (time.time(), os.getpid(), os.getppid(), render_request))
+            with lock:
+                pending_request_count.value -= 1
+            print('[render_process handler request] time: %f, pid: %d, ppid: %d, '
+                  'request: %r, request_size: %d'
+                  'render_request_qsize: %d, render_result_qsize: %d' %
+                  (time.time(), os.getpid(), os.getppid(),
+                   render_request, sys.getsizeof(render_request),
+                   render_request_q.qsize(), render_result_q.qsize()))
             render_result = None
             try:
                 render_result = render_worker.handler(render_request)
@@ -82,13 +97,19 @@ def render_processing(render_worker):
                 print('[render_process exception] work handler exception')
                 continue
             if render_result is not None:
-                print('[render_process handler result] time: %f, pid: %d, ppid: %d, result: %r' %
-                      (time.time(), os.getpid(), os.getppid(), render_result))
+                print('[render_process handler result] time: %f, pid: %d, ppid: %d,'
+                      'result: %r, result_size: %d'
+                      'render_request_qsize: %d, render_result_qsize: %d' %
+                      (time.time(), os.getpid(), os.getppid(),
+                       render_result, sys.getsizeof(render_result),
+                       render_request_q.qsize(), render_result_q.qsize()))
                 queue_put_nowait(render_result_q, render_result)
             else:
                 print('[render_process exception] render_result is None')
-    print('[render_process end] time: %f, pid: %d, ppid: %d' %
-          (time.time(), os.getpid(), os.getppid()))
+    print('[render_process end] time: %f, pid: %d, ppid: %d, '
+          'render_request_qsize: %d, render_result_qsize: %d' %
+          (time.time(), os.getpid(), os.getppid(),
+           render_request_q.qsize(), render_result_q.qsize()))
 
 class ExConsumer(object):
     """To do
@@ -101,9 +122,11 @@ class ExConsumer(object):
         self._monitor_timestamp = None
         self._render_process_manager = None
         self._render_pool_executor = None
+        self._render_process_lock = None
         self._render_request_q = None
         self._render_result_q = None
         self._render_res_futures = None
+        self._pending_request_count = None
 
     def _build_render_ex_and_q(self):
         self._channel.exchange_declare(exchange=self._config['render_ex'],
@@ -155,7 +178,8 @@ class ExConsumer(object):
 
     def _on_render_request(self, channel, method_frame, header_frame, body):
         render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-        LOGGER.info('[consume] channel: %r, method_frame: %r, header_frame: %r, body: %r, render_request: %r',
+        LOGGER.info('[consume] channel: %r, method_frame: %r, '
+                    'header_frame: %r, body: %r render_request: %r',
                     channel, method_frame, header_frame, body, render_request)
 
     def _basic_consume_render_request(self):
@@ -177,7 +201,8 @@ class ExConsumer(object):
             queue=self._config['render_request_q'], no_ack=True)
         if body is not None:
             render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-            LOGGER.info('[basic_get] render_request: %r', render_request)
+            LOGGER.info('[basic_get] render_request: %r, render_request_size: %d',
+                        render_request, sys.getsizeof(render_request))
             return render_request
         return None
 
@@ -197,6 +222,8 @@ class ExConsumer(object):
 
     def _submit_process_pool(self):
         self._render_process_manager = multiprocessing.Manager()
+        self._render_process_lock = self._render_process_manager.Lock()
+        self._pending_request_count = self._render_process_manager.Value('i', 0, lock=True)
         self._render_request_q = self._render_process_manager.Queue()
         self._render_result_q = self._render_process_manager.Queue()
         self._render_pool_executor = concurrent.futures.ProcessPoolExecutor(
@@ -204,14 +231,24 @@ class ExConsumer(object):
         self._render_res_futures = set()
         for i in range(self._config['render_max_workers']):
             render_worker = RenderWorker(handler=do_real_work,
+                                         lock=self._render_process_lock,
                                          render_request_q=self._render_request_q,
-                                         render_result_q=self._render_result_q)
+                                         render_result_q=self._render_result_q,
+                                         pending_request_count=self._pending_request_count)
             res_future = self._render_pool_executor.submit(render_processing, render_worker)
             self._render_res_futures.add(res_future)
-            LOGGER.info('[submit process] i: %d, res_future: %r, render_res_futures: %r, render_worker: %r',
-                        i, res_future, self._render_res_futures, render_worker)
+            LOGGER.info('[submit process] i: %d, res_future: %r, render_res_futures: %r,'
+                        'render_worker: %r, render_request_q_size: %d, render_result_q_size: %d',
+                        i, res_future, self._render_res_futures, render_worker,
+                        self._render_request_q.qsize(), self._render_result_q.qsize())
 
     def _pull_render_request(self):
+        with self._render_process_lock:
+            if self._pending_request_count.value < self._config['pending_request_count']:
+                self._pending_request_count.value += 1
+            else:
+                print('[pending request] %d' % self._pending_request_count.value)
+                return
         if self._render_request_q.full():
             return
         render_request = self._basic_get_render_request()
@@ -222,15 +259,18 @@ class ExConsumer(object):
         while not self._render_result_q.empty():
             render_result = queue_get_nowait(self._render_result_q)
             if render_result is not None:
-                LOGGER.info('[process result] render_result: %r', render_result)
+                LOGGER.info('[process result] render_result: %r, render_result_size: %d',
+                            render_result, sys.getsizeof(render_result))
                 self._basic_publish_render_result(render_result)
-    
+
     def _monitor(self):
         now_time = time.time()
         if now_time > self._monitor_timestamp:
             if self._render_res_futures is not None:
-                LOGGER.info('[monitor] %r', self._render_res_futures)
-            self._monitor_timestamp = now_time + self._config['monitor_interval'];
+                LOGGER.info('[monitor] %r, render_request_q_size: %d, render_result_q_size: %d',
+                            self._render_res_futures, self._render_request_q.qsize(),
+                            self._render_result_q.qsize())
+            self._monitor_timestamp = now_time + self._config['monitor_interval']
 
     def load_config(self):
         """To do
@@ -246,11 +286,12 @@ class ExConsumer(object):
         self._config['render_request_rk'] = 'render_request_rk'
         self._config['render_response_q'] = 'render_response_q'
         self._config['render_response_rk'] = 'render_response_rk'
-        self._config['render_max_workers'] = 1
-        self._config['render_request_q_maxsize'] = 2
-        self._config['render_result_q_maxsize'] = 100
-        self._config['rabbitmq_pull_interval'] = 5
-        self._config['monitor_interval'] = 30
+        self._config['render_max_workers'] = 2
+        self._config['render_request_q_maxsize'] = 1024 * 1024
+        self._config['render_result_q_maxsize'] = 1024 * 1024
+        self._config['pending_request_count'] = 2
+        self._config['rabbitmq_pull_interval'] = 30
+        self._config['monitor_interval'] = 60
 
     def setup_with_connect_params(self, host, port, virtual_host, username, password):
         """To do
@@ -277,7 +318,7 @@ class ExConsumer(object):
         self._monitor_timestamp = time.time()
         self._submit_process_pool()
         self._connect()
-        LOGGER.info('[main running] pid %d', os.getpid())
+        LOGGER.info('[main running] pid: %d', os.getpid())
         while True:
             try:
                 self._pull_render_request()
