@@ -151,7 +151,7 @@ class ExPublisher(object):
     def test_rabbitmq(self):
         """To do
         """
-        LOGGER.info('[test]')
+        LOGGER.info('[test rabbitmq]')
         self._connect()
         self._channel.basic_qos(prefetch_size=0, prefetch_count=1, all_channels=False)
         self._channel.basic_consume(consumer_callback=self._on_test_message,
@@ -185,7 +185,7 @@ class ExPublisher(object):
         """
         print('[work_process start] time: %f, pid: %d, ppid: %d' %
               (time.time(), os.getpid(), os.getppid()))
-        time.sleep(5)
+        time.sleep(2)
         json_data = {"tx_id": 1, "status": "正常"}
         print('[work_process end] time: %f, pid: %d, ppid: %d, '
               'json_data: %r, is_dict: %d, size: %d' %
@@ -198,16 +198,23 @@ class ExPublisher(object):
         """
         LOGGER.info('[main_process start] pid: %r, ppid: %r', os.getpid(), os.getppid())
         res_futures = set()
-        ppexecutor = concurrent.futures.ProcessPoolExecutor(max_workers=2)
-        for i in range(2):
+        ppexecutor = concurrent.futures.ProcessPoolExecutor(max_workers=1)
+        for i in range(3):
             res_future = ppexecutor.submit(self._test_processing)
             res_futures.add(res_future)
             LOGGER.info('[submit process] i: %r, res_future: %r, res_futures: %r',
                         i, res_future, res_futures)
-        LOGGER.info('[main_process continue]')
-        LOGGER.info('[monitor] res_futures: %r', res_futures)
-        time.sleep(8)
-        LOGGER.info('[monitor] res_futures: %r', res_futures)
+        LOGGER.info('[main_process continue] pid: %r, ppid: %r', os.getpid(), os.getppid())
+        for i in range(6):
+            LOGGER.info('[monitor] res_futures: %r', res_futures)
+            remove_set = set()
+            for res_future in res_futures:
+                if res_future.done():
+                    LOGGER.info('[result] result: %r', res_future.result())
+                    remove_set.add(res_future)
+            for res_future in remove_set:
+                res_futures.remove(res_future)
+            time.sleep(2)
         ppexecutor.shutdown()
         LOGGER.info('[main_process end] pid: %r, ppid: %r', os.getpid(), os.getppid())
 
@@ -216,11 +223,12 @@ def logging_config():
     """
     logging.basicConfig(level=logging.INFO,
                         format=LOG_FORMAT,
-                        filename='logs/ae_publish.log',
-                        filemode='a+')
-    console = logging.StreamHandler()
-    console.setLevel(logging.INFO)
-    logging.getLogger('').addHandler(console)
+                        #filename='logs/ae_publish.log',
+                        #filemode='a+'
+                        )
+    #console = logging.StreamHandler()
+    #console.setLevel(logging.INFO)
+    #logging.getLogger('').addHandler(console)
 
 def main():
     """To do

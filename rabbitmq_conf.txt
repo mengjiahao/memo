@@ -426,8 +426,76 @@ Installed /usr/local/lib/python2.7/dist-packages/pip-9.0.1-py2.7.egg
 Processing dependencies for pip
 Finished processing dependencies for pip
 
+11.
+mjh@mjh-Vostro-260:~/Documents/code/memo/test/rabbitmq$ 
+mjh@mjh-Vostro-260:~/Documents/code/memo/test/rabbitmq$ python3 ex_publisher.py INFO       | 2017-05-11 13:06:08,085 __main__             | main                           |  230  | *************************************************
+INFO       | 2017-05-11 13:06:08,085 __main__             | main                           |  231  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-11 13:06:08,085 __main__             | main                           |  232  | *************************************************
+INFO       | 2017-05-11 13:06:08,085 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-11 13:06:08,085 __main__             | test_process_pool              |  199  | [main_process start] pid: 10928, ppid: 2759
+INFO       | 2017-05-11 13:06:08,089 __main__             | test_process_pool              |  206  | [submit process] i: 0, res_future: <Future at 0x7f061428f518 state=running>, res_futures: {<Future at 0x7f061428f518 state=running>}
+INFO       | 2017-05-11 13:06:08,089 __main__             | test_process_pool              |  206  | [submit process] i: 1, res_future: <Future at 0x7f061428fa58 state=pending>, res_futures: {<Future at 0x7f061428f518 state=running>, <Future at 0x7f061428fa58 state=pending>}
+INFO       | 2017-05-11 13:06:08,089 __main__             | test_process_pool              |  206  | [submit process] i: 2, res_future: <Future at 0x7f061428fb00 state=pending>, res_futures: {<Future at 0x7f061428fb00 state=pending>, <Future at 0x7f061428f518 state=running>, <Future at 0x7f061428fa58 state=pending>}
+INFO       | 2017-05-11 13:06:08,090 __main__             | test_process_pool              |  207  | [main_process continue] pid: 10928, ppid: 2759
+INFO       | 2017-05-11 13:06:08,090 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7f061428fb00 state=pending>, <Future at 0x7f061428f518 state=running>, <Future at 0x7f061428fa58 state=pending>}
+[work_process start] time: 1494479168.091671, pid: 10931, ppid: 10928
+INFO       | 2017-05-11 13:06:10,092 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7f061428fb00 state=pending>, <Future at 0x7f061428f518 state=running>, <Future at 0x7f061428fa58 state=running>}
+[work_process end] time: 1494479170.093883, pid: 10931, ppid: 10928, json_data: {'tx_id': 1, 'status': '正常'}, is_dict: 1, size: 288
+[work_process start] time: 1494479170.094374, pid: 10931, ppid: 10928
+INFO       | 2017-05-11 13:06:12,094 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7f061428fb00 state=running>, <Future at 0x7f061428f518 state=finished returned dict>, <Future at 0x7f061428fa58 state=running>}
+[work_process end] time: 1494479172.096434, pid: 10931, ppid: 10928, json_data: {'tx_id': 1, 'status': '正常'}, is_dict: 1, size: 288
+[work_process start] time: 1494479172.096753, pid: 10931, ppid: 10928
+INFO       | 2017-05-11 13:06:14,097 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7f061428fb00 state=running>, <Future at 0x7f061428f518 state=finished returned dict>, <Future at 0x7f061428fa58 state=finished returned dict>}
+[work_process end] time: 1494479174.098810, pid: 10931, ppid: 10928, json_data: {'tx_id': 1, 'status': '正常'}, is_dict: 1, size: 288
+INFO       | 2017-05-11 13:06:16,099 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7f061428fb00 state=finished returned dict>, <Future at 0x7f061428f518 state=finished returned dict>, <Future at 0x7f061428fa58 state=finished returned dict>}
+INFO       | 2017-05-11 13:06:18,103 __main__             | test_process_pool              |  212  | [main_process end] pid: 10928, ppid: 2759
+mjh@mjh-Vostro-260:~/Documents/code/memo/test/rabbitmq$ 
 
+12.
+mjh@mjh-Vostro-260:~/Documents/code/memo/test/rabbitmq$ python3 ex_publisher.py INFO       | 2017-05-11 13:09:07,333 __main__             | main                           |  231  | *************************************************
+INFO       | 2017-05-11 13:09:07,333 __main__             | main                           |  232  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-11 13:09:07,333 __main__             | main                           |  233  | *************************************************
+INFO       | 2017-05-11 13:09:07,333 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-11 13:09:07,334 __main__             | test_process_pool              |  200  | [main_process start] pid: 11545, ppid: 2759
+INFO       | 2017-05-11 13:09:07,337 __main__             | test_process_pool              |  207  | [submit process] i: 0, res_future: <Future at 0x7fc5d32d54e0 state=running>, res_futures: {<Future at 0x7fc5d32d54e0 state=running>}
+INFO       | 2017-05-11 13:09:07,338 __main__             | test_process_pool              |  207  | [submit process] i: 1, res_future: <Future at 0x7fc5d32d5a20 state=pending>, res_futures: {<Future at 0x7fc5d32d5a20 state=pending>, <Future at 0x7fc5d32d54e0 state=running>}
+INFO       | 2017-05-11 13:09:07,338 __main__             | test_process_pool              |  207  | [submit process] i: 2, res_future: <Future at 0x7fc5d32d5ac8 state=pending>, res_futures: {<Future at 0x7fc5d32d5a20 state=pending>, <Future at 0x7fc5d32d5ac8 state=pending>, <Future at 0x7fc5d32d54e0 state=running>}
+INFO       | 2017-05-11 13:09:07,338 __main__             | test_process_pool              |  208  | [main_process continue] pid: 11545, ppid: 2759
+INFO       | 2017-05-11 13:09:07,338 __main__             | test_process_pool              |  210  | [monitor] res_futures: {<Future at 0x7fc5d32d5a20 state=pending>, <Future at 0x7fc5d32d5ac8 state=pending>, <Future at 0x7fc5d32d54e0 state=running>}
+[work_process start] time: 1494479347.339526, pid: 11548, ppid: 11545
+[work_process start] time: 1494479347.339807, pid: 11548, ppid: 11545
+[work_process start] time: 1494479347.340195, pid: 11548, ppid: 11545
+INFO       | 2017-05-11 13:09:09,340 __main__             | test_process_pool              |  210  | [monitor] res_futures: {<Future at 0x7fc5d32d5a20 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d5ac8 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d54e0 state=finished raised ZeroDivisionError>}
+INFO       | 2017-05-11 13:09:11,343 __main__             | test_process_pool              |  210  | [monitor] res_futures: {<Future at 0x7fc5d32d5a20 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d5ac8 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d54e0 state=finished raised ZeroDivisionError>}
+INFO       | 2017-05-11 13:09:13,345 __main__             | test_process_pool              |  210  | [monitor] res_futures: {<Future at 0x7fc5d32d5a20 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d5ac8 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d54e0 state=finished raised ZeroDivisionError>}
+INFO       | 2017-05-11 13:09:15,348 __main__             | test_process_pool              |  210  | [monitor] res_futures: {<Future at 0x7fc5d32d5a20 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d5ac8 state=finished raised ZeroDivisionError>, <Future at 0x7fc5d32d54e0 state=finished raised ZeroDivisionError>}
+INFO       | 2017-05-11 13:09:17,352 __main__             | test_process_pool              |  213  | [main_process end] pid: 11545, ppid: 2759
+mjh@mjh-Vostro-260:~/Documents/code/memo/test/rabbitmq$ 
 
+13.
+mjh@mjh-Vostro-260:~/Documents/code/memo/test/rabbitmq$ python3 ex_publisher.py INFO       | 2017-05-11 13:17:42,066 __main__             | main                           |  236  | *************************************************
+INFO       | 2017-05-11 13:17:42,067 __main__             | main                           |  237  | *               ae rabbitmq publisher           *
+INFO       | 2017-05-11 13:17:42,067 __main__             | main                           |  238  | *************************************************
+INFO       | 2017-05-11 13:17:42,067 __main__             | setup_with_connect_params      |  97   | [setup]
+INFO       | 2017-05-11 13:17:42,067 __main__             | test_process_pool              |  199  | [main_process start] pid: 13120, ppid: 2759
+INFO       | 2017-05-11 13:17:42,071 __main__             | test_process_pool              |  206  | [submit process] i: 0, res_future: <Future at 0x7fb7dee334e0 state=running>, res_futures: {<Future at 0x7fb7dee334e0 state=running>}
+INFO       | 2017-05-11 13:17:42,071 __main__             | test_process_pool              |  206  | [submit process] i: 1, res_future: <Future at 0x7fb7dee33a20 state=running>, res_futures: {<Future at 0x7fb7dee33a20 state=running>, <Future at 0x7fb7dee334e0 state=running>}
+INFO       | 2017-05-11 13:17:42,072 __main__             | test_process_pool              |  206  | [submit process] i: 2, res_future: <Future at 0x7fb7dee33ac8 state=pending>, res_futures: {<Future at 0x7fb7dee33a20 state=running>, <Future at 0x7fb7dee33ac8 state=pending>, <Future at 0x7fb7dee334e0 state=running>}
+[work_process start] time: 1494479862.072298, pid: 13123, ppid: 13120
+INFO       | 2017-05-11 13:17:42,072 __main__             | test_process_pool              |  207  | [main_process continue] pid: 13120, ppid: 2759
+INFO       | 2017-05-11 13:17:42,072 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7fb7dee33a20 state=running>, <Future at 0x7fb7dee33ac8 state=pending>, <Future at 0x7fb7dee334e0 state=running>}
+[work_process end] time: 1494479864.073290, pid: 13123, ppid: 13120, json_data: {'tx_id': 1, 'status': '正常'}, is_dict: 1, size: 288
+[work_process start] time: 1494479864.073893, pid: 13123, ppid: 13120
+INFO       | 2017-05-11 13:17:44,075 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7fb7dee33a20 state=running>, <Future at 0x7fb7dee33ac8 state=running>, <Future at 0x7fb7dee334e0 state=finished returned dict>}
+[work_process end] time: 1494479866.075968, pid: 13123, ppid: 13120, json_data: {'tx_id': 1, 'status': '正常'}, is_dict: 1, size: 288
+[work_process start] time: 1494479866.076366, pid: 13123, ppid: 13120
+INFO       | 2017-05-11 13:17:46,077 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7fb7dee33a20 state=finished returned dict>, <Future at 0x7fb7dee33ac8 state=running>}
+[work_process end] time: 1494479868.078438, pid: 13123, ppid: 13120, json_data: {'tx_id': 1, 'status': '正常'}, is_dict: 1, size: 288
+INFO       | 2017-05-11 13:17:48,079 __main__             | test_process_pool              |  209  | [monitor] res_futures: {<Future at 0x7fb7dee33ac8 state=finished returned dict>}
+INFO       | 2017-05-11 13:17:50,080 __main__             | test_process_pool              |  209  | [monitor] res_futures: set()
+INFO       | 2017-05-11 13:17:52,081 __main__             | test_process_pool              |  209  | [monitor] res_futures: set()
+INFO       | 2017-05-11 13:17:54,085 __main__             | test_process_pool              |  218  | [main_process end] pid: 13120, ppid: 2759
+mjh@mjh-Vostro-260:~/Documents/code/memo/test/rabbitmq$ 
 
 
 
