@@ -53,6 +53,34 @@ class RenderWorker(object):
         result = self.handler(*args, **kwargs)
         return result
 
+def json_loads(json_bytes):
+    """To do
+    """
+    json_data = None
+    try:
+        json_data = json.loads(s=json_bytes.decode('utf-8'), encoding='utf-8')
+    except json.JSONDecodeError as e:
+        json_data = None
+        print('[json loads error] e: %r', e)
+    return json_data
+
+def json_dumps(json_data):
+    """To do
+    """
+    json_bytes = None
+    try:
+        json_bytes = (json.dumps(obj=json_data, ensure_ascii=False)).encode('utf-8')
+    except TypeError:
+        json_bytes = None
+        print('[json dumps error] e: %r', e)
+    except ValueError:
+        json_bytes = None
+        print('[json dumps error] e: %r', e)
+    except OverflowError:
+        json_bytes = None
+        print('[json dumps error] e: %r', e)
+    return json_bytes
+
 def queue_get_nowait(q):
     """To do
     """
@@ -253,7 +281,7 @@ class ExConsumer(object):
         return True
 
     def _on_render_request(self, channel, method_frame, header_frame, body):
-        render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
+        render_request = json_loads(body)
         LOGGER.info('[consume] channel: %r, method_frame: %r, '
                     'header_frame: %r, body: %r, render_request: %r',
                     channel, method_frame, header_frame, body, render_request)
@@ -276,15 +304,20 @@ class ExConsumer(object):
         method_frame, header_frame, body = self._channel.basic_get(
             queue=self._config['render_request_q'],
             no_ack=True)
-        if body is not None:
-            render_request = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-            LOGGER.info('[basic_get] render_request: %r, render_request_size: %d',
-                        render_request, sys.getsizeof(render_request))
-            return render_request
-        return None
+        if body is None:
+            return None
+        render_request = json_loads(body)
+        if render_request is None:
+            LOGGER.error('[json loads error] render_request is None, '
+                         'body: %r', body)
+        LOGGER.info('[basic_get] render_request: %r, render_request_size: %d',
+                    render_request, sys.getsizeof(render_request))
+        return render_request
 
     def _validate_render_result(self, render_result):
         # json is a dict type in python
+        if render_result is None:
+            return False
         if isinstance(render_result, dict) and ('reply_to' in render_result):
             return True
         return False
@@ -293,10 +326,14 @@ class ExConsumer(object):
         if not self._validate_render_result(render_result):
             LOGGER.error('[validate_render_result fail] render_result: %r', render_result)
             return
-        render_response = json.dumps(obj=render_result, ensure_ascii=False)
+        render_response = json_dumps(render_result)
+        if render_response is None:
+            LOGGER.error('[json dumps error] render_response is None, '
+                        'render_result: %r', render_result)
+            return
         self._channel.basic_publish(exchange=self._config['render_ex'],
                                     routing_key=render_result['reply_to'],
-                                    body=render_response.encode('utf-8'))
+                                    body=render_response)
         LOGGER.info('[basic_publish] render_response: %r', render_response)
 
     def _create_process_pool_with_queue(self):
@@ -401,10 +438,10 @@ class ExConsumer(object):
         self._config['render_request_rk'] = 'render_request_rk'
         self._config['render_response_q'] = 'render_response_q'
         self._config['render_response_rk'] = 'render_response_rk'
-        self._config['render_max_workers'] = 2
-        self._config['pending_request_count'] = 1
+        self._config['render_max_workers'] = 3
+        self._config['pending_request_count'] = 2
         self._config['rabbitmq_pull_interval'] = 10
-        self._config['monitor_interval'] = 30
+        self._config['monitor_interval'] = 60
         self._config['render_request_q_maxsize'] = 1024 * 1024
         self._config['render_result_q_maxsize'] = 1024 * 1024
 
@@ -508,10 +545,10 @@ def main():
                       default='guest', help="set rabbitmq password")
     parser.add_option("--pending_request_count",
                       action="store", dest="pending_request_count", type="int",
-                      default=1, help="set pending_request_count")
+                      help="set pending_request_count")
     parser.add_option("-w", "--render_max_workers",
                       action="store", dest="render_max_workers", type="int",
-                      default=1, help="set render_max_workers")
+                      help="set render_max_workers")
     (options, args) = parser.parse_args()
     LOGGER.info('[cmd options] options: %r, args: %r', options, args)
     # main loop

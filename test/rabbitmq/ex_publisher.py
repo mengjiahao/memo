@@ -18,6 +18,34 @@ LOG_FORMAT = ('%(levelname) -10s | %(asctime)s %(name) -20s | %(funcName) '
               '-30s | %(lineno) -5d | %(message)s')
 LOGGER = logging.getLogger(__name__)
 
+def json_loads(json_bytes):
+    """To do
+    """
+    json_data = None
+    try:
+        json_data = json.loads(s=json_bytes.decode('utf-8'), encoding='utf-8')
+    except json.JSONDecodeError as e:
+        json_data = None
+        print('[json loads error] e: %r', e)
+    return json_data
+
+def json_dumps(json_data):
+    """To do
+    """
+    json_bytes = None
+    try:
+        json_bytes = (json.dumps(obj=json_data, ensure_ascii=False)).encode('utf-8')
+    except TypeError:
+        json_bytes = None
+        print('[json dumps error] e: %r', e)
+    except ValueError:
+        json_bytes = None
+        print('[json dumps error] e: %r', e)
+    except OverflowError:
+        json_bytes = None
+        print('[json dumps error] e: %r', e)
+    return json_bytes
+
 class ExPublisher(object):
     """To do
     """
@@ -26,8 +54,6 @@ class ExPublisher(object):
         self._closing = None
         self._connection = None
         self._channel = None
-        self._render_request = None
-        self._render_response = None
         self._delivery_tag = None
 
     def _build_render_ex_and_q(self):
@@ -70,8 +96,8 @@ class ExPublisher(object):
         LOGGER.info('[connect]')
 
     def _on_render_response(self, channel, method_frame, header_frame, body):
-        self._render_response = json.loads(s=body.decode('utf-8'), encoding='utf-8')
-        logging.info("[received] %r", self._render_response)
+        render_response = json_loads(body)
+        logging.info("[received] %r", render_response)
 
     def _default_config(self):
         self._config['host'] = 'localhost'
@@ -120,12 +146,11 @@ class ExPublisher(object):
                                     arguments=None)
 
         json_data = self._get_json_data()
-        self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
-        logging.info("[create request] %r", self._render_request)
-
+        logging.info("[create request] json_data: %r", json_data)
+        render_request = json_dumps(json_data)
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_request_rk'],
-                                                body=self._render_request.encode('utf-8'))
+                                                body=render_request)
         LOGGER.info('[publish] pb_result: %r', pb_result)
         LOGGER.info('[start consuming]')
         try:
@@ -155,16 +180,16 @@ class ExPublisher(object):
                                     arguments=None)
 
         json_data = {"reply_to": self._config['render_response_rk'], "xpath": "c:/footage/文件名.aepx"}
-        self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
-        logging.info("[create req] %r", self._render_request)
+        render_request = json_dumps(json_data)
+        logging.info("[create req] %r", render_request)
 
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_response_rk'],
-                                                body=self._render_request.encode('utf-8'))
+                                                body=render_request)
         LOGGER.info('[publish 1] %r', pb_result)
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_response_rk'],
-                                                body=self._render_request.encode('utf-8'))
+                                                body=render_request)
         LOGGER.info('[publish 2] %r', pb_result)
         LOGGER.info('[start consuming]')
         try:
