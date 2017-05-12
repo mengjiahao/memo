@@ -24,9 +24,9 @@ def json_loads(json_bytes):
     json_data = None
     try:
         json_data = json.loads(s=json_bytes.decode('utf-8'), encoding='utf-8')
-    except json.JSONDecodeError as e:
+    except ValueError as e:
         json_data = None
-        print('[json loads error] e: %r', e)
+        print('[json loads error] e: %r' % e)
     return json_data
 
 def json_dumps(json_data):
@@ -37,13 +37,13 @@ def json_dumps(json_data):
         json_bytes = (json.dumps(obj=json_data, ensure_ascii=False)).encode('utf-8')
     except TypeError:
         json_bytes = None
-        print('[json dumps error] e: %r', e)
+        print('[json dumps error] e: %r' % e)
     except ValueError:
         json_bytes = None
-        print('[json dumps error] e: %r', e)
+        print('[json dumps error] e: %r' % e)
     except OverflowError:
         json_bytes = None
-        print('[json dumps error] e: %r', e)
+        print('[json dumps error] e: %r' % e)
     return json_bytes
 
 class ExPublisher(object):
