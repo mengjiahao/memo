@@ -243,7 +243,7 @@ class ExConsumer(object):
             self.disconnect()
             time.sleep(10)
             if not self._connect():
-                ++i
+                i += 1
             else:
                 break
         if i == try_attemp:
