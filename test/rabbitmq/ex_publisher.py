@@ -2,13 +2,15 @@
 # -*- coding: utf-8 -*-
 """To do
 """
-import json
-import logging
 import os
 import sys
+import getopt
+import json
 import time
+import logging
+from optparse import OptionParser
 import multiprocessing
-import queue
+import queue  #for python3
 import concurrent.futures
 import pika
 
@@ -21,11 +23,6 @@ class ExPublisher(object):
     """
     def __init__(self):
         self._config = {}
-        self._config['host'] = 'localhost'
-        self._config['port'] = 'port'
-        self._config['virtual_host'] = '/'
-        self._config['username'] = 'guest'
-        self._config['password'] = 'guest'
         self._closing = None
         self._connection = None
         self._channel = None
@@ -61,7 +58,6 @@ class ExPublisher(object):
                                  routing_key=self._config['render_response_rk'])
 
     def _connect(self):
-        LOGGER.info('[connect]')
         cred = pika.PlainCredentials(self._config['username'],
                                      self._config['password'])
         connect_params = pika.ConnectionParameters(self._config['host'],
@@ -71,16 +67,15 @@ class ExPublisher(object):
         self._connection = pika.BlockingConnection(connect_params)
         self._channel = self._connection.channel()
         self._build_render_ex_and_q()
+        LOGGER.info('[connect]')
 
     def _on_render_response(self, channel, method_frame, header_frame, body):
         self._render_response = json.loads(s=body.decode('utf-8'), encoding='utf-8')
         logging.info("[received] %r", self._render_response)
 
-    def load_config(self):
-        """To do
-        """
+    def _default_config(self):
         self._config['host'] = 'localhost'
-        self._config['port'] = 'port'
+        self._config['port'] = 5672
         self._config['virtual_host'] = '/'
         self._config['username'] = 'guest'
         self._config['password'] = 'guest'
@@ -91,19 +86,13 @@ class ExPublisher(object):
         self._config['render_response_q'] = 'render_response_q'
         self._config['render_response_rk'] = 'render_response_rk'
 
-    def setup_with_connect_params(self, host, port, virtual_host, username, password):
+    def configure(self, options=None):
         """To do
         """
-        LOGGER.info('[setup]')
-        self._config['host'] = host
-        self._config['port'] = port
-        self._config['virtual_host'] = virtual_host
-        self._config['username'] = username
-        self._config['password'] = password
+        self._default_config()
+        LOGGER.info('[config] %r', self._config)
 
-    def stop(self):
-        """To do
-        """
+    def _stop(self):
         LOGGER.info('[stop]')
         self._closing = True
         if self._channel is not None and self._channel.is_open:
@@ -113,10 +102,15 @@ class ExPublisher(object):
             self._connection.close()
             self._connection = None
 
-    def run(self):
+    def _get_json_data(self):
+        json_data = {"status": "UnKnown", "reply_to": self._config['render_response_rk'],
+                     "xpath": "c:/footage/文件名.aepx"}
+        return json_data
+
+    def start(self):
         """To do
         """
-        LOGGER.info('[run]')
+        LOGGER.info('[running]')
         self._connect()
         self._channel.basic_consume(consumer_callback=self._on_render_response,
                                     queue=self._config['render_response_q'],
@@ -125,28 +119,27 @@ class ExPublisher(object):
                                     consumer_tag=None,
                                     arguments=None)
 
-        json_data = {"status": "UnKnown", "reply_to": self._config['render_response_rk'],
-                     "xpath": "c:/footage/文件名.aepx"}
+        json_data = self._get_json_data()
         self._render_request = json.dumps(obj=json_data, ensure_ascii=False)
-        logging.info("[json dump] %r", self._render_request)
+        logging.info("[create request] %r", self._render_request)
 
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
                                                 routing_key=self._config['render_request_rk'],
                                                 body=self._render_request.encode('utf-8'))
-        LOGGER.info('[publish] %r', pb_result)
+        LOGGER.info('[publish] pb_result: %r', pb_result)
         LOGGER.info('[start consuming]')
         try:
             self._channel.start_consuming()
         except KeyboardInterrupt:
             self._channel.stop_consuming()
-        self.stop()
+        self._stop()
 
     def _on_test_message(self, channel, method_frame, header_frame, body):
-        logging.info("[received] %r", body)
+        logging.info("[received] body: %r", body)
         time.sleep(10)
         self._delivery_tag = method_frame.delivery_tag
         self._channel.basic_ack(delivery_tag=self._delivery_tag, multiple=False)
-        logging.info("[basic_ack] %r", self._delivery_tag)
+        logging.info("[basic_ack] delivery_tag: %r", self._delivery_tag)
 
     def test_rabbitmq(self):
         """To do
@@ -238,13 +231,8 @@ def main():
     LOGGER.info('*               ae rabbitmq publisher           *')
     LOGGER.info('*************************************************')
     ex = ExPublisher()
-    ex.load_config()
-    ex.setup_with_connect_params(host='localhost',
-                                 port=5672,
-                                 virtual_host='/',
-                                 username='guest',
-                                 password='guest')
-    ex.run()
+    ex.configure()
+    ex.start()
 
 if __name__ == '__main__':
     main()
