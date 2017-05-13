@@ -34,8 +34,8 @@ def do_real_work(request):
 class RenderWorker(object):
     """To do
     """
-    def __init__(self, handler, request=None, lock=None, 
-                 render_request_q=None, render_result_q=None, 
+    def __init__(self, handler, request=None, lock=None,
+                 render_request_q=None, render_result_q=None,
                  pending_request_count=None):
         self.handler = handler
         self.request = request
@@ -43,7 +43,7 @@ class RenderWorker(object):
         self.render_request_q = render_request_q
         self.render_result_q = render_result_q
         self.pending_request_count = pending_request_count
-    
+
     def run(self, *args, **kwargs):
         """To do
         """
@@ -60,9 +60,9 @@ def json_loads(json_bytes):
     json_data = None
     try:
         json_data = json.loads(s=json_bytes.decode('utf-8'), encoding='utf-8')
-    except ValueError as e:
+    except ValueError as expt:
         json_data = None
-        print('[json loads error] e: %r' % e)
+        print('[json loads error] e: %r' % expt)
     return json_data
 
 def json_dumps(json_data):
@@ -71,37 +71,37 @@ def json_dumps(json_data):
     json_bytes = None
     try:
         json_bytes = (json.dumps(obj=json_data, ensure_ascii=False)).encode('utf-8')
-    except TypeError:
+    except TypeError as expt:
         json_bytes = None
-        print('[json dumps error] e: %r' % e)
+        print('[json dumps error] e: %r' % expt)
     except ValueError:
         json_bytes = None
-        print('[json dumps error] e: %r' % e)
+        print('[json dumps error] e: %r' % expt)
     except OverflowError:
         json_bytes = None
-        print('[json dumps error] e: %r' % e)
+        print('[json dumps error] e: %r' % expt)
     return json_bytes
 
-def queue_get_nowait(q):
+def queue_get_nowait(myqueue):
     """To do
     """
-    if q.empty():
+    if myqueue.empty():
         return None
     item = None
     try:
-        item = q.get_nowait()
-        q.task_done()
+        item = myqueue.get_nowait()
+        myqueue.task_done()
     except queue.Empty:
         return None
     return item
 
-def queue_put_nowait(q, item):
+def queue_put_nowait(myqueue, item):
     """To do
     """
-    if q.full():
+    if myqueue.full():
         return False
     try:
-        q.put_nowait(item)
+        myqueue.put_nowait(item)
     except queue.Full:
         return False
     return True
@@ -148,8 +148,8 @@ def render_processing_forever(render_worker):
             else:
                 print('[render_process_forever warn] render_result is None')
         except:
-                print('[render_process_forever exception] work handler exception')
-                continue
+            print('[render_process_forever exception] work handler exception')
+            continue
     print('[render_process_forever end] time: %f, pid: %d, ppid: %d, '
           'render_request_qsize: %d, render_result_qsize: %d' %
           (time.time(), os.getpid(), os.getppid(),
@@ -189,7 +189,6 @@ def render_processing_onetime(render_worker):
           (time.time(), os.getpid(), os.getppid(),
            render_result, sys.getsizeof(render_result)))
     return render_result
-    
 
 class ExConsumer(object):
     """To do
@@ -247,11 +246,11 @@ class ExConsumer(object):
             return False
         self._build_render_ex_and_q()
         LOGGER.info('[connect success] connect to rabbitmq, connection :%r, channel: %r, '
-                     'cred: %r, connect_params: %r',
-                     self._connection, self._channel,
-                     cred, connect_params)
+                    'cred: %r, connect_params: %r',
+                    self._connection, self._channel,
+                    cred, connect_params)
         return True
-                
+
     def _disconnect(self):
         """To do
         """
@@ -262,14 +261,14 @@ class ExConsumer(object):
             self._connection.close()
             self._connection = None
         LOGGER.info('[disconnect]')
-    
+
     def _reconnect(self):
         LOGGER.info('[reconnect]')
         # Create a new connection
         try_attemp = 3
         i = 0
         while i < try_attemp:
-            self.disconnect()
+            self._disconnect()
             time.sleep(10)
             if not self._connect():
                 i += 1
@@ -309,10 +308,11 @@ class ExConsumer(object):
             return None
         render_request = json_loads(body)
         if render_request is None:
-            LOGGER.error('[json loads error] render_request is None, '
+            LOGGER.error('[basic_get fail] render_request is None, '
                          'body: %r', body)
-        LOGGER.info('[basic_get] render_request: %r, render_request_size: %d',
-                    render_request, sys.getsizeof(render_request))
+            return None
+        LOGGER.info('[basic_get] body: %r, render_request: %r, render_request_size: %d',
+                    body, render_request, sys.getsizeof(render_request))
         return render_request
 
     def _validate_render_result(self, render_result):
@@ -330,7 +330,7 @@ class ExConsumer(object):
         render_response = json_dumps(render_result)
         if render_response is None:
             LOGGER.error('[json dumps error] render_response is None, '
-                        'render_result: %r', render_result)
+                         'render_result: %r', render_result)
             return
         self._channel.basic_publish(exchange=self._config['render_ex'],
                                     routing_key=render_result['reply_to'],
@@ -339,7 +339,7 @@ class ExConsumer(object):
 
     def _create_process_pool_with_queue(self):
         self._render_process_manager = multiprocessing.Manager()
-        self._render_process_lock = self._render_process_manager.Lock()
+        self._render_process_lock = multiprocessing.Lock()
         self._pending_request_count = self._render_process_manager.Value('i', 0, lock=True)
         self._render_request_q = self._render_process_manager.Queue()
         self._render_result_q = self._render_process_manager.Queue()
@@ -393,7 +393,8 @@ class ExConsumer(object):
         render_worker = RenderWorker(handler=do_real_work, request=render_request)
         res_future = self._render_pool_executor.submit(render_processing_onetime, render_worker)
         self._render_res_futures.add(res_future)
-        LOGGER.info('[submit process_onetime] res_future: %r, render_res_futures: %r, render_worker: %r',
+        LOGGER.info('[submit process_onetime] res_future: %r, render_res_futures: %r,'
+                    'render_worker: %r',
                     res_future, self._render_res_futures, render_worker)
 
     def _pull_render_request(self):
@@ -415,7 +416,8 @@ class ExConsumer(object):
                         render_result, sys.getsizeof(render_result))
             if render_result is not None:
                 self._basic_publish_render_result(render_result)
-        if 0 < len(res_remove_set):
+        res_remove_set_len = len(res_remove_set)
+        if res_remove_set_len > 0:
             LOGGER.info('[process after result] self._render_res_futures: %r, res_remove_set: %r',
                         self._render_res_futures, res_remove_set)
         res_remove_set.clear()
@@ -462,6 +464,11 @@ class ExConsumer(object):
             self._config['render_max_workers'] = options.render_max_workers
         if options.pending_request_count:
             self._config['pending_request_count'] = options.pending_request_count
+        self._config['host'] = '121.42.10.181'
+        self._config['port'] = 5672
+        self._config['virtual_host'] = '/'
+        self._config['username'] = 'csydmq'
+        self._config['password'] = 'mq4456'
         LOGGER.info('[config] %r', self._config)
 
     def _stop(self):
@@ -492,10 +499,10 @@ class ExConsumer(object):
                 self._monitor()
                 self._connection.sleep(self._config['rabbitmq_pull_interval'])
                 #self._connection.process_data_events(10)
-            except pika.exceptions.ChannelClosed:
-                LOGGER.exception('[exception]')
+            except pika.exceptions.ChannelClosed as expt:
+                LOGGER.exception('[exception] e: %r', expt)
             except pika.exceptions.ConnectionClosed:
-                LOGGER.exception('[exception]')
+                LOGGER.exception('[exception] e: %r', expt)
             except KeyboardInterrupt:
                 self._closing = False
                 LOGGER.exception('[exception]')
@@ -513,12 +520,14 @@ def logging_config():
                         format=LOG_FORMAT,
                         #filename='logs/ae_consumer.log',
                         #filemode='a+'
-                        )
+                       )
     #console = logging.StreamHandler()
     #console.setLevel(logging.INFO)
     #logging.getLogger('').addHandler(console)
 
 def server_run(options):
+    """To do
+    """
     LOGGER.info('*************************************************')
     LOGGER.info('*                ae rabbitmq consumer           *')
     LOGGER.info('*************************************************')

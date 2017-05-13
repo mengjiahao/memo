@@ -24,9 +24,9 @@ def json_loads(json_bytes):
     json_data = None
     try:
         json_data = json.loads(s=json_bytes.decode('utf-8'), encoding='utf-8')
-    except ValueError as e:
+    except ValueError as expt:
         json_data = None
-        print('[json loads error] e: %r' % e)
+        print('[json loads error] e: %r' % expt)
     return json_data
 
 def json_dumps(json_data):
@@ -35,15 +35,15 @@ def json_dumps(json_data):
     json_bytes = None
     try:
         json_bytes = (json.dumps(obj=json_data, ensure_ascii=False)).encode('utf-8')
-    except TypeError:
+    except TypeError as expt:
         json_bytes = None
-        print('[json dumps error] e: %r' % e)
+        print('[json dumps error] e: %r' % expt)
     except ValueError:
         json_bytes = None
-        print('[json dumps error] e: %r' % e)
+        print('[json dumps error] e: %r' % expt)
     except OverflowError:
         json_bytes = None
-        print('[json dumps error] e: %r' % e)
+        print('[json dumps error] e: %r' % expt)
     return json_bytes
 
 class ExPublisher(object):
@@ -116,6 +116,11 @@ class ExPublisher(object):
         """To do
         """
         self._default_config()
+        self._config['host'] = '121.42.10.181'
+        self._config['port'] = 5672
+        self._config['virtual_host'] = '/'
+        self._config['username'] = 'csydmq'
+        self._config['password'] = 'mq4456'
         LOGGER.info('[config] %r', self._config)
 
     def _stop(self):
@@ -196,7 +201,7 @@ class ExPublisher(object):
             self._channel.start_consuming()
         except KeyboardInterrupt:
             self._channel.stop_consuming()
-        self.stop()
+        self._stop()
 
     def _test_processing(self):
         """To do
@@ -243,7 +248,7 @@ def logging_config():
                         format=LOG_FORMAT,
                         #filename='logs/ae_publish.log',
                         #filemode='a+'
-                        )
+                       )
     #console = logging.StreamHandler()
     #console.setLevel(logging.INFO)
     #logging.getLogger('').addHandler(console)
