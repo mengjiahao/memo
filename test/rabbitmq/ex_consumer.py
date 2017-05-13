@@ -6,6 +6,7 @@
 import os
 import sys
 import getopt
+import io
 import json
 import time
 import logging
@@ -22,12 +23,16 @@ LOGGER = logging.getLogger(__name__)
 def do_real_work(request):
     """To do
     """
-    print('[work start] time: %f, pid: %d, ppid: %d, request: %r, request_size: %d' %
+    print('[mywork start] time: %f, pid: %d, ppid: %d, request: %r, request_size: %d' %
           (time.time(), os.getpid(), os.getppid(), request, sys.getsizeof(request)))
     time.sleep(10)
-    result = {"status": "OK", "reply_to": 'render_response_rk',
-              "xpath": "c:/footage/视频.mov"}
-    print('[work end] time: %f, pid: %d, ppid: %d, result: %r, result_size: %d' %
+    if not isinstance(request, dict):
+        print('[mywork error] request is not dict, request: %r', request)
+        return None
+    result = request
+    result["status"] = "OK"
+    result["xpath"] = "c:/footage/视频.mov"
+    print('[mywork end] time: %f, pid: %d, ppid: %d, result: %r, result_size: %d' %
           (time.time(), os.getpid(), os.getppid(), result, sys.getsizeof(result)))
     return result
 
@@ -311,8 +316,8 @@ class ExConsumer(object):
             LOGGER.error('[basic_get fail] render_request is None, '
                          'body: %r', body)
             return None
-        LOGGER.info('[basic_get] body: %r, render_request: %r, render_request_size: %d',
-                    body, render_request, sys.getsizeof(render_request))
+        LOGGER.info('[basic_get] body: %r, render_request_size: %d',
+                    body, sys.getsizeof(render_request))
         return render_request
 
     def _validate_render_result(self, render_result):
@@ -441,8 +446,8 @@ class ExConsumer(object):
         self._config['render_request_rk'] = 'render_request_rk'
         self._config['render_response_q'] = 'render_response_q'
         self._config['render_response_rk'] = 'render_response_rk'
-        self._config['render_max_workers'] = 3
-        self._config['pending_request_count'] = 2
+        self._config['render_max_workers'] = 1
+        self._config['pending_request_count'] = 1
         self._config['rabbitmq_pull_interval'] = 10
         self._config['monitor_interval'] = 60
         self._config['render_request_q_maxsize'] = 1024 * 1024
@@ -472,7 +477,7 @@ class ExConsumer(object):
         LOGGER.info('[config] %r', self._config)
 
     def _stop(self):
-        LOGGER.info('[stop] pid: %d, render_res_futures: %r',
+        LOGGER.info('[stoping...] pid: %d, render_res_futures: %r',
                     os.getpid(), self._render_res_futures)
         self._disconnect()
         if self._render_res_futures is not None:
@@ -483,6 +488,8 @@ class ExConsumer(object):
             self._render_pool_executor.shutdown()
         if self._render_process_manager is not None:
             self._render_process_manager.shutdown()
+        LOGGER.info('[stop success] pid: %d, render_res_futures: %r',
+                    os.getpid(), self._render_res_futures)
 
     def _run(self):
         if not self._connect():
@@ -531,9 +538,11 @@ def server_run(options):
     LOGGER.info('*************************************************')
     LOGGER.info('*                ae rabbitmq consumer           *')
     LOGGER.info('*************************************************')
+    LOGGER.info('*** Render server run, pid: %d ***', os.getpid())
     ex = ExConsumer()
     ex.configure(options)
     ex.start()
+    LOGGER.info('*** Render server terminated, pid: %d ***', os.getpid())
 
 def main():
     """To do

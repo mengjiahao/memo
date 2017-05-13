@@ -5,6 +5,7 @@
 import os
 import sys
 import getopt
+import io
 import json
 import time
 import logging
@@ -133,9 +134,9 @@ class ExPublisher(object):
             self._connection.close()
             self._connection = None
 
-    def _get_json_data(self):
-        json_data = {"status": "UnKnown", "reply_to": self._config['render_response_rk'],
-                     "xpath": "c:/footage/文件名.aepx"}
+    def _load_json_data(self):
+        json_str = io.open(file='test_json.txt', mode='r', encoding='utf-8').read()
+        json_data = json.loads(json_str, encoding='utf-8')
         return json_data
 
     def start(self):
@@ -150,7 +151,7 @@ class ExPublisher(object):
                                     consumer_tag=None,
                                     arguments=None)
 
-        json_data = self._get_json_data()
+        json_data = self._load_json_data()
         logging.info("[create request] json_data: %r", json_data)
         render_request = json_dumps(json_data)
         pb_result = self._channel.basic_publish(exchange=self._config['render_ex'],
