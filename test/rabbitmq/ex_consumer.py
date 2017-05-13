@@ -446,9 +446,9 @@ class ExConsumer(object):
         self._config['render_request_rk'] = 'render_request_rk'
         self._config['render_response_q'] = 'render_response_q'
         self._config['render_response_rk'] = 'render_response_rk'
-        self._config['render_max_workers'] = 1
-        self._config['pending_request_count'] = 1
-        self._config['rabbitmq_pull_interval'] = 10
+        self._config['render_max_workers'] = 3
+        self._config['pending_request_count'] = 2
+        self._config['rabbitmq_pull_interval'] = 30
         self._config['monitor_interval'] = 60
         self._config['render_request_q_maxsize'] = 1024 * 1024
         self._config['render_result_q_maxsize'] = 1024 * 1024
@@ -469,11 +469,6 @@ class ExConsumer(object):
             self._config['render_max_workers'] = options.render_max_workers
         if options.pending_request_count:
             self._config['pending_request_count'] = options.pending_request_count
-        self._config['host'] = '121.42.10.181'
-        self._config['port'] = 5672
-        self._config['virtual_host'] = '/'
-        self._config['username'] = 'csydmq'
-        self._config['password'] = 'mq4456'
         LOGGER.info('[config] %r', self._config)
 
     def _stop(self):

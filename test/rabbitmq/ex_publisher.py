@@ -117,11 +117,6 @@ class ExPublisher(object):
         """To do
         """
         self._default_config()
-        self._config['host'] = '121.42.10.181'
-        self._config['port'] = 5672
-        self._config['virtual_host'] = '/'
-        self._config['username'] = 'csydmq'
-        self._config['password'] = 'mq4456'
         LOGGER.info('[config] %r', self._config)
 
     def _stop(self):
