@@ -117,6 +117,11 @@ class ExPublisher(object):
         """To do
         """
         self._default_config()
+        self._config['host'] = '111.111.111.111'
+        self._config['port'] = 5672
+        self._config['virtual_host'] = '/'
+        self._config['username'] = 'root'
+        self._config['password'] = 'root'
         LOGGER.info('[config] %r', self._config)
 
     def _stop(self):

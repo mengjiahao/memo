@@ -1,0 +1,8 @@
+{
+	"host": "121.42.10.181",
+	"port": 5672,
+	"virtual_host": "/",
+	"username": "csydmq",
+	"password": "mq4456",
+	"ae_exe_path": "/"
+}

@@ -39,9 +39,9 @@ def do_real_work(request):
 class RenderWorker(object):
     """To do
     """
-    def __init__(self, handler, request=None, lock=None,
-                 render_request_q=None, render_result_q=None,
-                 pending_request_count=None):
+    def __init__(self, handler, request=None,
+                 lock=None, render_request_q=None,
+                 render_result_q=None, pending_request_count=None):
         self.handler = handler
         self.request = request
         self.lock = lock
@@ -169,8 +169,9 @@ def render_processing_onetime(render_worker):
     print('[render_process_onetime start] time: %f, pid: %d, ppid: %d' %
           (time.time(), os.getpid(), os.getppid()))
     render_request = render_worker.request
-    if render_request is None:
-        print('[render_processing_onetime warn] render_request is None')
+    if not isinstance(render_request, dict):
+        print('[render_processing_onetime warn] render_request is not dict(json)')
+    
     print('[render_process_onetime handler request] time: %f, pid: %d, ppid: %d, '
           'request: %r, request_size: %d' %
           (time.time(), os.getpid(), os.getppid(),
@@ -393,8 +394,10 @@ class ExConsumer(object):
         self._render_res_futures = set()
 
     def _submit_render_work(self, render_request):
-        if render_request is None:
+        if not isinstance(render_request, dict):
             return
+        # add request options
+        render_request["ae_exe_path"] = self._config['ae_exe_path']
         render_worker = RenderWorker(handler=do_real_work, request=render_request)
         res_future = self._render_pool_executor.submit(render_processing_onetime, render_worker)
         self._render_res_futures.add(res_future)
@@ -431,7 +434,8 @@ class ExConsumer(object):
         now_time = time.time()
         if now_time > self._monitor_timestamp:
             if self._render_res_futures is not None:
-                LOGGER.info('[monitor] render_res_futures: %r', self._render_res_futures)
+                LOGGER.info('[monitor] pid: %d, render_res_futures: %r',
+                            os.getpid(), self._render_res_futures)
             self._monitor_timestamp = now_time + self._config['monitor_interval']
 
     def _default_config(self):
@@ -440,23 +444,41 @@ class ExConsumer(object):
         self._config['virtual_host'] = '/'
         self._config['username'] = 'guest'
         self._config['password'] = 'guest'
+        self._config['ae_exe_path'] = '/'
         self._config['render_ex'] = 'render_ex'
         self._config['render_ex_type'] = 'direct'
         self._config['render_request_q'] = 'render_request_q'
         self._config['render_request_rk'] = 'render_request_rk'
         self._config['render_response_q'] = 'render_response_q'
         self._config['render_response_rk'] = 'render_response_rk'
-        self._config['render_max_workers'] = 3
-        self._config['pending_request_count'] = 2
-        self._config['rabbitmq_pull_interval'] = 30
+        self._config['render_max_workers'] = 1
+        self._config['pending_request_count'] = 1
+        self._config['rabbitmq_pull_interval'] = 15
         self._config['monitor_interval'] = 60
         self._config['render_request_q_maxsize'] = 1024 * 1024
         self._config['render_result_q_maxsize'] = 1024 * 1024
+
+    def _load_config(self):
+        config_str = io.open(file='config.json', mode='r', encoding='utf-8').read()
+        config_data = json.loads(config_str, encoding='utf-8')
+        if "host" in config_data:
+            self._config['host'] = config_data["host"]
+        if "port" in config_data:
+            self._config['port'] = config_data["port"]
+        if "virtual_host" in config_data:
+            self._config['virtual_host'] = config_data["virtual_host"]
+        if "username" in config_data:
+            self._config['username'] = config_data["username"]
+        if "password" in config_data:
+            self._config['password'] = config_data["password"]
+        if "ae_exe_path" in config_data:
+            self._config['ae_exe_path'] = config_data["ae_exe_path"]
 
     def configure(self, options=None):
         """To do
         """
         self._default_config()
+        self._load_config()
         if options.host:
             self._config['host'] = options.host
         if options.port:
@@ -547,16 +569,20 @@ def main():
     parser = OptionParser(usage=usage, version="%prog 1.0")
     parser.add_option("--host",
                       action="store", dest="host", type="string",
-                      default='localhost', help="set rabbitmq host")
+                      #default='localhost',
+                      help="set rabbitmq host")
     parser.add_option("--port",
                       action="store", dest="port", type="int",
-                      default=5672, help="set rabbitmq port")
+                      #default=5672,
+                      help="set rabbitmq port")
     parser.add_option("-u", "--username",
                       action="store", dest="username", type="string",
-                      default='guest', help="set rabbitmq username")
+                      #default='guest',
+                      help="set rabbitmq username")
     parser.add_option("-p", "--password",
                       action="store", dest="password", type="string",
-                      default='guest', help="set rabbitmq password")
+                      #default='guest',
+                      help="set rabbitmq password")
     parser.add_option("--pending_request_count",
                       action="store", dest="pending_request_count", type="int",
                       help="set pending_request_count")
