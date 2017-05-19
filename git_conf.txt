@@ -285,7 +285,273 @@ mjh@mjh-Vostro-260:~/Documents/code/test/testgit$ git branch -avv
 * master                d89fcf9 [origin/master] init test
   remotes/origin/master d89fcf9 init test
 
+(8) Fork existing folder or Git repository
+mjh@mjh-Vostro-260:~/Documents/code/gitlab-u5420$ git config --global --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+mjh@mjh-Vostro-260:~/Documents/code/gitlab-u5420$ cat ~/.ssh/id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkvha4ITr0wbIWZ98ttz3oW3VUoAc9QShNyw6NlzhBwC+zsnWlKMqDzyZ8bCmmy6hfY/dYZS/Oi16bVtPgiQU8GJHCwkU220jksFNJ0JJEvtYqQNhyelkNdoYXw9yIJA7ACoXQrfqtsFqYswM0b73+MYzNDEe6z8bRFHjnpfi4mj5NPcgiziV+/u53C1VTNRPwxPchcymv5t6Hst8L2vCKKqZ541aL6Ii/i1t6J0sxO0GMhYYPsELJ1yccazyAouK7Ok9c4xzBipWBmRK25uhZswDiYLwbCLk8tV+RCFu52LqfKONfWqVk58FnA1eypKiCG3flG5FnOVnJx7Rx9tbT 691225916@qq.com
+mjh@mjh-Vostro-260:~/Documents/code/gitlab-u5420$ cd ..
+mjh@mjh-Vostro-260:~/Documents/code$ git clone git@code.aliyun.com:middlewarerace2017/open-messaging-demo.git
+Cloning into 'open-messaging-demo'...
+The authenticity of host 'code.aliyun.com (120.55.150.20)' can't be established.
+RSA key fingerprint is 69:ab:cb:07:eb:a3:e1:f3:0b:2e:f4:23:b0:c1:c6:9a.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'code.aliyun.com,120.55.150.20' (RSA) to the list of known hosts.
+remote: Counting objects: 193, done.
+remote: Compressing objects: 100% (157/157), done.
+remote: Total 193 (delta 91), reused 16 (delta 3)
+Receiving objects: 100% (193/193), 48.41 KiB | 0 bytes/s, done.
+Resolving deltas: 100% (91/91), done.
+Checking connectivity... done.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git init
+Reinitialized existing Git repository in /home/mjh/Documents/code/open-messaging-demo/.git/
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git config --global --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote add origin git@code.aliyun.com:691225916/open-messaging-demo.git
+fatal: remote origin already exists.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                5a6a88b [origin/master] Add flush
+  remotes/origin/HEAD   -> origin/master
+  remotes/origin/master 5a6a88b Add flush
+ mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ ls
+pom.xml  README.md  src
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
 
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git add *
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote add origin git@code.aliyun.com:691225916/open-messaging-demo.git
+fatal: remote origin already exists.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git commit -m "fix README.md"
+[master 5dd4726] fix README.md
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git push origin master  
+Counting objects: 7, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 311 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+remote: GitLab: You are not allowed to push code to protected branches on this project.
+To git@code.aliyun.com:middlewarerace2017/open-messaging-demo.git
+ ! [remote rejected] master -> master (pre-receive hook declined)
+error: failed to push some refs to 'git@code.aliyun.com:middlewarerace2017/open-messaging-demo.git'
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote
+origin
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote -v
+origin	git@code.aliyun.com:middlewarerace2017/open-messaging-demo.git (fetch)
+origin	git@code.aliyun.com:middlewarerace2017/open-messaging-demo.git (push)
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote rm origin
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote -v
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ ls
+pom.xml  README.md  src
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote add origin git@code.aliyun.com:691225916/open-messaging-demo.git
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git remote -v
+origin	git@code.aliyun.com:691225916/open-messaging-demo.git (fetch)
+origin	git@code.aliyun.com:691225916/open-messaging-demo.git (push)
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git status
+On branch master
+nothing to commit, working directory clean
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ ls
+pom.xml  README.md  src
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ vim README.md 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git push origin master
+Counting objects: 196, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (72/72), done.
+Writing objects: 100% (196/196), 48.65 KiB | 0 bytes/s, done.
+Total 196 (delta 93), reused 191 (delta 91)
+remote: Resolving deltas: 100% (93/93), done.
+To git@code.aliyun.com:691225916/open-messaging-demo.git
+ * [new branch]      master -> master
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                5dd4726 fix README.md
+  remotes/origin/master 5dd4726 fix README.md
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git config --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@code.aliyun.com:691225916/open-messaging-demo.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ vim README.md 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git add *
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git commit -m "add test"
+[master 996355a] add test
+ 1 file changed, 1 insertion(+)
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git push origin master  
+Counting objects: 5, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 290 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To git@code.aliyun.com:691225916/open-messaging-demo.git
+   5dd4726..996355a  master -> master
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                996355a add test
+  remotes/origin/master 996355a add test
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                996355a add test
+  remotes/origin/master 996355a add test
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git fetch
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch --set-upstream master origin/master 
+The --set-upstream flag is deprecated and will be removed. Consider using --track or --set-upstream-to
+Branch master set up to track remote branch master from origin.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch --set-upstream-to origin/master master  
+Branch master set up to track remote branch master from origin.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                996355a [origin/master] add test
+  remotes/origin/master 996355a add test
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ vim README.md 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git add *
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git commit -m "delete test comment in README.md"
+[master 1bf5ab9] delete test comment in README.md
+ 1 file changed, 1 deletion(-)
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git push origin master Counting objects: 5, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 300 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To git@code.aliyun.com:691225916/open-messaging-demo.git
+   996355a..1bf5ab9  master -> master
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                1bf5ab9 [origin/master] delete test comment in README.md
+  remotes/origin/master 1bf5ab9 delete test comment in README.md
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git checkout -b test
+Switched to a new branch 'test'
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+  master                1bf5ab9 [origin/master] delete test comment in README.md
+* test                  1bf5ab9 delete test comment in README.md
+  remotes/origin/master 1bf5ab9 delete test comment in README.md
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git push origin test 
+Total 0 (delta 0), reused 0 (delta 0)
+To git@code.aliyun.com:691225916/open-messaging-demo.git
+ * [new branch]      test -> test
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git pull origin test 
+From code.aliyun.com:691225916/open-messaging-demo
+ * branch            test       -> FETCH_HEAD
+Already up-to-date.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch --set-upstream-to=origin/test 
+Branch test set up to track remote branch test from origin.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+  master                1bf5ab9 [origin/master] delete test comment in README.md
+* test                  1bf5ab9 [origin/test] delete test comment in README.md
+  remotes/origin/master 1bf5ab9 delete test comment in README.md
+  remotes/origin/test   1bf5ab9 delete test comment in README.md
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git config --list
+user.name=mengjiahao
+user.email=691225916@qq.com
+push.default=simple
+core.repositoryformatversion=0
+core.filemode=true
+core.bare=false
+core.logallrefupdates=true
+remote.origin.url=git@code.aliyun.com:691225916/open-messaging-demo.git
+remote.origin.fetch=+refs/heads/*:refs/remotes/origin/*
+branch.master.remote=origin
+branch.master.merge=refs/heads/master
+branch.test.remote=origin
+branch.test.merge=refs/heads/test
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ vim README.md 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git status
+On branch test
+Your branch is up-to-date with 'origin/test'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   README.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git add *
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git commit -m "add test branch"
+[test 7e94e32] add test branch
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git push
+Counting objects: 5, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 302 bytes | 0 bytes/s, done.
+Total 3 (delta 2), reused 0 (delta 0)
+To git@code.aliyun.com:691225916/open-messaging-demo.git
+   1bf5ab9..7e94e32  test -> test
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+  master                1bf5ab9 [origin/master] delete test comment in README.md
+* test                  7e94e32 [origin/test] add test branch
+  remotes/origin/master 1bf5ab9 delete test comment in README.md
+  remotes/origin/test   7e94e32 add test branch
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git checkout master 
+Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git merge test 
+Updating 1bf5ab9..7e94e32
+Fast-forward
+ README.md | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                7e94e32 [origin/master: ahead 1] add test branch
+  test                  7e94e32 [origin/test] add test branch
+  remotes/origin/master 1bf5ab9 delete test comment in README.md
+  remotes/origin/test   7e94e32 add test branch
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working directory clean
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git push
+Total 0 (delta 0), reused 0 (delta 0)
+To git@code.aliyun.com:691225916/open-messaging-demo.git
+   1bf5ab9..7e94e32  master -> master
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                7e94e32 [origin/master] add test branch
+  test                  7e94e32 [origin/test] add test branch
+  remotes/origin/master 7e94e32 add test branch
+  remotes/origin/test   7e94e32 add test branch
 
 
 
