@@ -4,5 +4,5 @@
 	"virtual_host": "/",
 	"username": "csydmq",
 	"password": "mq4456",
-	"ae_exe_path": "/"
+	"ae_exe_path": "/ae/path/to"
 }
