@@ -553,5 +553,174 @@ mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ git branch -avv
   remotes/origin/master 7e94e32 add test branch
   remotes/origin/test   7e94e32 add test branch
 
+(9)
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git status
+On branch master
+Your branch is up-to-date with 'origin/master'.
 
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
 
+	modified:   test/rabbitmq/config.json
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git fetch
+remote: Counting objects: 6, done.
+remote: Compressing objects: 100% (2/2), done.
+remote: Total 6 (delta 2), reused 4 (delta 2), pack-reused 2
+Unpacking objects: 100% (6/6), done.
+From github.com:mengjiahao/memo
+   b53262a..d24bc86  master     -> origin/master
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git rebase
+Cannot rebase: You have unstaged changes.
+Please commit or stash them.
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git status
+On branch master
+Your branch is behind 'origin/master' by 2 commits, and can be fast-forwarded.
+  (use "git pull" to update your local branch)
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git checkout -- <file>..." to discard changes in working directory)
+
+	modified:   test/rabbitmq/config.json
+
+no changes added to commit (use "git add" and/or "git commit -a")
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git add *
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git commit -m "fix json config"
+[master d5432de] fix json config
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git rebase
+First, rewinding head to replay your work on top of it...
+Applying: fix json config
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ gitk
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git status
+On branch master
+Your branch is ahead of 'origin/master' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working directory clean
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ git push
+Counting objects: 9, done.
+Delta compression using up to 4 threads.
+Compressing objects: 100% (4/4), done.
+Writing objects: 100% (5/5), 496 bytes | 0 bytes/s, done.
+Total 5 (delta 2), reused 0 (delta 0)
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To git@github.com:mengjiahao/memo.git
+   d24bc86..7d43ecd  master -> master
+mjh@mjh-Inspiron-5520:~/Documents/code/memo$ 
+
+(10)
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git branch
+* master
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git branch -avv
+* master                734abac [origin/master] Merge branch 'test' into 'master'
+  remotes/origin/HEAD   -> origin/master
+  remotes/origin/master 734abac Merge branch 'test' into 'master'
+  remotes/origin/test   6f3ca08 fix README.md
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git checkout -b test origin/test 
+Branch test set up to track remote branch test from origin.
+Switched to a new branch 'test'
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git branch -avv
+  master                734abac [origin/master] Merge branch 'test' into 'master'
+* test                  6f3ca08 [origin/test] fix README.md
+  remotes/origin/HEAD   -> origin/master
+  remotes/origin/master 734abac Merge branch 'test' into 'master'
+  remotes/origin/test   6f3ca08 fix README.md
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ gitk
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git log
+commit 6f3ca08ae782af1c57245a6dbb4114e6b503167c
+Author: Jingjun <271678682li@gmail.com>
+Date:   Fri May 19 05:38:13 2017 -0400
+
+    fix README.md
+
+commit c54b2e5d79697324cb248ab67d4cccb98fe31a51
+Author: jwma <mail@qq.com>
+Date:   Fri May 19 17:33:03 2017 +0800
+
+    test2
+
+commit 7e94e32004dac1053129a9858503ecdddf2fc9a1
+Author: mengjiahao <691225916@qq.com>
+Date:   Fri May 19 17:21:45 2017 +0800
+
+    add test branch
+
+commit 1bf5ab9fa7c676e659fbc8680247cc47d6334c70
+Author: mengjiahao <691225916@qq.com>
+Date:   Fri May 19 16:49:48 2017 +0800
+
+    delete test comment in README.md
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git checkout master Switched to branch 'master'
+Your branch is up-to-date with 'origin/master'.
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git log
+commit 734abacdd86be1105aef46488b6afd23c088aec0
+Merge: 7e94e32 6f3ca08
+Author: 691225916 <691225916@qq.com>
+Date:   Fri May 19 18:40:27 2017 +0800
+
+    Merge branch 'test' into 'master'
+    
+    merge 2 Test
+    
+    See merge request !1
+
+commit 6f3ca08ae782af1c57245a6dbb4114e6b503167c
+Author: Jingjun <271678682li@gmail.com>
+Date:   Fri May 19 05:38:13 2017 -0400
+
+    fix README.md
+
+commit c54b2e5d79697324cb248ab67d4cccb98fe31a51
+Author: jwma <mail@qq.com>
+Date:   Fri May 19 17:33:03 2017 +0800
+
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ gitk
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git merge master 
+Already up-to-date.
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ gitk
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git checkout test 
+Switched to branch 'test'
+Your branch is up-to-date with 'origin/test'.
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git merge
+fatal: No commit specified and merge.defaultToUpstream not set.
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git merge master 
+Updating 6f3ca08..734abac
+Fast-forward
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ gitk
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git status
+On branch test
+Your branch is ahead of 'origin/test' by 1 commit.
+  (use "git push" to publish your local commits)
+
+nothing to commit, working directory clean
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git push
+Total 0 (delta 0), reused 0 (delta 0)
+To git@code.aliyun.com:691225916/open-messaging-demo.git
+   6f3ca08..734abac  test -> test
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ git log
+commit 734abacdd86be1105aef46488b6afd23c088aec0
+Merge: 7e94e32 6f3ca08
+Author: 691225916 <691225916@qq.com>
+Date:   Fri May 19 18:40:27 2017 +0800
+
+    Merge branch 'test' into 'master'
+    
+    merge 2 Test
+    
+    See merge request !1
+
+commit 6f3ca08ae782af1c57245a6dbb4114e6b503167c
+Author: Jingjun <271678682li@gmail.com>
+Date:   Fri May 19 05:38:13 2017 -0400
+
+    fix README.md
+
+commit c54b2e5d79697324cb248ab67d4cccb98fe31a51
+Author: jwma <mail@qq.com>
+Date:   Fri May 19 17:33:03 2017 +0800
+
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo$ 
