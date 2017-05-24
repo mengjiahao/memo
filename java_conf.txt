@@ -256,3 +256,10 @@ Caused by: java.lang.ClassNotFoundException: org.junit.Assert
 mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo/target$ ls
 archive-tmp  maven-archiver     open-messaging-demo-1.0.jar
 classes      OpenMessagingDemo  test-classes
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo/target/OpenMessagingDemo/OpenMessagingDemo/lib$ ls
+hamcrest-core-1.3.jar  junit-4.12.jar  open-messaging-demo-1.0.jar
+
+use eclipse to export runnable jar
+mjh@mjh-Inspiron-5520:~/Documents/code/tmp/export$ java -jar openmsg-test.jar 
+Team1 cost:13 ms tps:157 q/ms
+Team2 cost:9 ms tps:227 q/ms
