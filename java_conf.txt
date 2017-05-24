@@ -252,3 +252,7 @@ Caused by: java.lang.ClassNotFoundException: org.junit.Assert
     at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:331)
     at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
     ... 1 more
+
+mjh@mjh-Inspiron-5520:~/Documents/code/open-messaging-demo/target$ ls
+archive-tmp  maven-archiver     open-messaging-demo-1.0.jar
+classes      OpenMessagingDemo  test-classes
