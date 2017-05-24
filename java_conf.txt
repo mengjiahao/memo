@@ -1,0 +1,254 @@
+(1)
+# JAVA environment settings
+export JAVA_HOME=/home/mjh/Public/jdk1.8.0_111
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/lib
+export MAVEN_HOME=/home/mjh/Documents/app/apache-maven-3.5.0
+
+export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$PATH
+
+mjh@mjh-Vostro-260:~/Documents/app$ source etc/profile
+mjh@mjh-Vostro-260:~/Documents/app$ java -version
+java version "1.8.0_111"
+Java(TM) SE Runtime Environment (build 1.8.0_111-b14)
+Java HotSpot(TM) 64-Bit Server VM (build 25.111-b14, mixed mode)
+mjh@mjh-Vostro-260:~/Documents/app$ 
+mjh@mjh-Vostro-260:~/Documents/app$ mvn -v
+Apache Maven 3.5.0 (ff8f5e7444045639af65f6095c62210b5713f426; 2017-04-04T03:39:06+08:00)
+Maven home: /home/mjh/Documents/app/apache-maven-3.5.0
+Java version: 1.8.0_111, vendor: Oracle Corporation
+Java home: /home/mjh/Public/jdk1.8.0_111/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "3.13.0-74-generic", arch: "amd64", family: "unix"
+mjh@mjh-Vostro-260:~/Documents/app/eclipse-installer$ ls
+artifacts.xml  eclipse-inst      features  p2       readme
+configuration  eclipse-inst.ini  icon.xpm  plugins
+mjh@mjh-Vostro-260:~/Documents/app/eclipse-installer$ "run eclipse-inst"
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ ls
+pom.xml  README.md  src
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ cat pom.xml 
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>io.openmessaging</groupId>
+    <artifactId>open-messaging-demo</artifactId>
+    <version>1.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>utf-8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <version>2.2.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven</groupId>
+                        <artifactId>maven-core</artifactId>
+                        <version>2.2.1</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <finalName>OpenMessagingDemo</finalName>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <descriptors>
+                        <descriptor>src/main/resources/package.xml</descriptor>
+                    </descriptors>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ mvn -v
+The program 'mvn' can be found in the following packages:
+ * maven
+ * maven2
+Try: sudo apt-get install <selected package>
+# set maven environment
+export MAVEN_HOME=/home/mjh/Documents/app/apache-maven-3.5.0
+export PATH=$MAVEN_HOME/bin:$PATH
+
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ source .bashrc
+bash: .bashrc: No such file or directory
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ source ~/.bashrc
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ mvn -v
+Apache Maven 3.5.0 (ff8f5e7444045639af65f6095c62210b5713f426; 2017-04-04T03:39:06+08:00)
+Maven home: /home/mjh/Documents/app/apache-maven-3.5.0
+Java version: 1.8.0_111, vendor: Oracle Corporation
+Java home: /home/mjh/Public/jdk1.8.0_111/jre
+Default locale: en_US, platform encoding: UTF-8
+OS name: "linux", version: "3.13.0-74-generic", arch: "amd64", family: "unix"
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ mvn compile
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building open-messaging-demo 1.0
+[INFO] ------------------------------------------------------------------------
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-resources-plugin/2.6/maven-resources-plugin-2.6.pom
+Downloading: https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.pom
+Downloaded: https://repo.maven.apache.org/maven2/junit/junit/4.12/junit-4.12.pom (24 kB at 65 kB/s)
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/maven-core/2.0.6/maven-core-2.0.6.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/maven-core/2.0.6/maven-core-2.0.6.pom (6.7 kB at 20 kB/s)
+Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/2.0.5/plexus-utils-2.0.5.jar (223 kB at 93 kB/s)
+Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-interpolation/1.13/plexus-interpolation-1.13.jar (61 kB at 25 kB/s)
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ open-messaging-demo ---
+......
+Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-compiler-javac/1.8.1/plexus-compiler-javac-1.8.1.jar (13 kB at 35 kB/s)
+[INFO] Compiling 40 source files to /home/mjh/Documents/code/open-messaging-demo/target/classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /home/mjh/Documents/code/open-messaging-demo/src/main/java/io/openmessaging/demo/DefaultProducer.java:[12,7] error: DefaultProducer is not abstract and does not override abstract method flush() in Producer
+[INFO] 1 error
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 33.963 s
+[INFO] Finished at: 2017-05-24T11:26:16+08:00
+[INFO] Final Memory: 14M/74M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:2.3.2:compile (default-compile) on project open-messaging-demo: Compilation failure
+[ERROR] /home/mjh/Documents/code/open-messaging-demo/src/main/java/io/openmessaging/demo/DefaultProducer.java:[12,7] error: DefaultProducer is not abstract and does not override abstract method flush() in Producer
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ ls
+pom.xml  README.md  src  target
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo/target$ ls
+classes  generated-sources
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo/target/classes/io/openmessaging/demo$ ls
+ClientOMSException.class   DefaultMessageFactory.class  MessageStore.class
+DefaultBytesMessage.class  DefaultPullConsumer.class
+DefaultKeyValue.class      DemoTester.class
+
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ mvn clean package -U assembly:assembly -Dmaven.test.skip=true
+[INFO] Scanning for projects...
+Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-assembly-plugin/2.2.1/maven-assembly-plugin-2.2.1.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/plexus/plexus-utils/3.0/plexus-utils-3.0.jar (226 kB at 525 kB/s)
+[INFO] Deleting /home/mjh/Documents/code/open-messaging-demo/target
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ open-messaging-demo ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ open-messaging-demo ---
+[INFO] Compiling 40 source files to /home/mjh/Documents/code/open-messaging-demo/target/classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /home/mjh/Documents/code/open-messaging-demo/src/main/java/io/openmessaging/demo/DefaultProducer.java:[12,7] error: DefaultProducer is not abstract and does not override abstract method flush() in Producer
+[INFO] 1 error
+[INFO] -------------------------------------------------------------
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Skipping open-messaging-demo
+[INFO] This project has been banned from the build due to previous failures.
+[INFO] ------------------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 10.417 s
+[INFO] Finished at: 2017-05-24T11:32:05+08:00
+[INFO] Final Memory: 16M/129M
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:2.3.2:compile (default-compile) on project open-messaging-demo: Compilation failure
+[ERROR] /home/mjh/Documents/code/open-messaging-demo/src/main/java/io/openmessaging/demo/DefaultProducer.java:[12,7] error: DefaultProducer is not abstract and does not override abstract method flush() in Producer
+[ERROR] 
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+
+[INFO] Reading assembly descriptor: src/main/resources/package.xml
+[INFO] Copying files to /home/mjh/Documents/code/open-messaging-demo/target/OpenMessagingDemo
+[WARNING] Assembly file: /home/mjh/Documents/code/open-messaging-demo/target/OpenMessagingDemo is not a regular file (it may be a directory). It cannot be attached to the project build for installation or deployment.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 37.892 s
+[INFO] Finished at: 2017-05-24T11:49:46+08:00
+[INFO] Final Memory: 20M/150M
+[INFO] ------------------------------------------------------------------------
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ mvn test
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Building open-messaging-demo 1.0
+[INFO] ------------------------------------------------------------------------
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ open-messaging-demo ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] Copying 1 resource
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:compile (default-compile) @ open-messaging-demo ---
+[INFO] Nothing to compile - all classes are up to date
+[INFO] 
+[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ open-messaging-demo ---
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+[INFO] skip non existing resourceDirectory /home/mjh/Documents/code/open-messaging-demo/src/test/resources
+[INFO] 
+[INFO] --- maven-compiler-plugin:2.3.2:testCompile (default-testCompile) @ open-messaging-demo ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ open-messaging-demo ---
+[INFO] No tests to run.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 0.897 s
+[INFO] Finished at: 2017-05-24T11:52:45+08:00
+[INFO] Final Memory: 14M/93M
+[INFO] ------------------------------------------------------------------------
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ 
+
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ java -jar target/open-messaging-demo-1.0.jar openmessage
+no main manifest attribute, in target/open-messaging-demo-1.0.jar
+mjh@mjh-Vostro-260:~/Documents/code/open-messaging-demo$ java -cp target/open-messaging-demo-1.0.jar io.openmessaging.demo.DemoTester
+Exception in thread "main" java.lang.NoClassDefFoundError: org/junit/Assert
+    at io.openmessaging.demo.DemoTester.main(DemoTester.java:77)
+Caused by: java.lang.ClassNotFoundException: org.junit.Assert
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:331)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+    ... 1 more
