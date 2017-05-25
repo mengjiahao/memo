@@ -263,3 +263,29 @@ use eclipse to export runnable jar
 mjh@mjh-Inspiron-5520:~/Documents/code/tmp/export$ java -jar openmsg-test.jar 
 Team1 cost:13 ms tps:157 q/ms
 Team2 cost:9 ms tps:227 q/ms
+
+mjh@mjh-Vostro-260:~$ ls -a
+.              Documents         .local             .ssh
+..             Downloads         .m2                .swt
+.bash_history  .eclipse          .mozilla           Templates
+.bash_logout   .erlang.cookie    Music              .thunderbird
+.bashrc        examples.desktop  .oracle_jre_usage  .tooling
+.byteexec      .gconf            .p2                Videos
+.cache         .gitconfig        Pictures           .viminfo
+.codeblocks    .gnome            .pip               .vscode
+.codeintel     .gnome2           .pki               .wireshark
+.compiz        .gnome2_private   .profile           .Xauthority
+.config        .gvfs             Public             .xsession-errors
+.dbus          .ICEauthority     .pylint.d          .xsession-errors.old
+Desktop        .kingsoft         .python_history
+.dmrc          .lantern          .qd
+mjh@mjh-Vostro-260:~$ cd .m2
+mjh@mjh-Vostro-260:~/.m2$ ls
+repository
+mjh@mjh-Vostro-260:~/.m2$ cd repository/
+mjh@mjh-Vostro-260:~/.m2/repository$ ls
+asm                       commons-beanutils    commons-io         junit  xml-apis
+backport-util-concurrent  commons-cli          commons-lang       log4j
+classworlds               commons-collections  commons-logging    org
+com                       commons-digester     commons-validator  oro
+mjh@mjh-Vostro-260:~/.m2/repository$ 
