@@ -283,5 +283,184 @@ make[1]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0'
 mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ thrift --version
 Thrift version 0.10.0
 
+(3) grpc
+mjh@mjh-Vostro-260:~/Documents/code/tmp/testboost/libtest$ sudo apt-get install build-essential autoconf libtool
+mjh@mjh-Vostro-260:~/Documents/code/tmp/testboost/libtest$ sudo apt-get install libgflags-dev libgtest-dev
+mjh@mjh-Vostro-260:~/Documents/code/tmp/testboost/libtest$ sudo apt-get install clang libc++-dev
+mjh@mjh-Vostro-260:~/Documents/code$ git clone https://github.com/grpc/grpc.git
+Cloning into 'grpc'...
+remote: Counting objects: 297323, done.
+remote: Compressing objects: 100% (71/71), done.
+remote: Total 297323 (delta 21), reused 10 (delta 3), pack-reused 297249
+Receiving objects: 100% (297323/297323), 123.24 MiB | 1.64 MiB/s, done.
+Resolving deltas: 100% (226308/226308), done.
+Checking connectivity... done.
+Checking out files: 100% (9203/9203), done.
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc$ git submodule update --init
+Submodule 'third_party/benchmark' (https://github.com/google/benchmark) registered for path 'third_party/benchmark'
+Submodule 'third_party/boringssl' (https://github.com/google/boringssl.git) registered for path 'third_party/boringssl'
+Submodule 'third_party/boringssl-with-bazel' (https://boringssl.googlesource.com/boringssl) registered for path 'third_party/boringssl-with-bazel'
+Submodule 'third_party/cares/cares' (https://github.com/c-ares/c-ares.git) registered for path 'third_party/cares/cares'
+Submodule 'third_party/gflags' (https://github.com/gflags/gflags.git) registered for path 'third_party/gflags'
+Submodule 'third_party/googletest' (https://github.com/google/googletest.git) registered for path 'third_party/googletest'
+Submodule 'third_party/protobuf' (https://github.com/google/protobuf.git) registered for path 'third_party/protobuf'
+Submodule 'third_party/zlib' (https://github.com/madler/zlib) registered for path 'third_party/zlib'
+Cloning into 'third_party/benchmark'...
+remote: Counting objects: 3685, done.
+remote: Compressing objects: 100% (17/17), done.
+remote: Total 3685 (delta 3), reused 6 (delta 1), pack-reused 3666
+Receiving objects: 100% (3685/3685), 980.98 KiB | 679.00 KiB/s, done.
+Resolving deltas: 100% (2412/2412), done.
+Checking connectivity... done.
+Submodule path 'third_party/benchmark': checked out '44c25c892a6229b20db7cd9dc05584ea865896de'
+Cloning into 'third_party/boringssl'...
+remote: Counting objects: 45992, done.
+remote: Compressing objects: 100% (331/331), done.
+remote: Total 45992 (delta 260), reused 294 (delta 159), pack-reused 45482
+Receiving objects: 100% (45992/45992), 56.22 MiB | 1.64 MiB/s, done.
+Resolving deltas: 100% (31727/31727), done.
+Checking connectivity... done.
+Submodule path 'third_party/boringssl': checked out '78684e5b222645828ca302e56b40b9daff2b2d27'
+Cloning into 'third_party/boringssl-with-bazel'...
+remote: Sending approximately 63.10 MiB ...
+remote: Counting objects: 9, done
+remote: Total 45994 (delta 28909), reused 45994 (delta 28909)
+Receiving objects: 100% (45994/45994), 63.10 MiB | 10.61 MiB/s, done.
+Resolving deltas: 100% (28909/28909), done.
+Checking connectivity... done.
+Submodule path 'third_party/boringssl-with-bazel': checked out '886e7d75368e3f4fab3f4d0d3584e4abfc557755'
+Cloning into 'third_party/cares/cares'...
+remote: Counting objects: 8539, done.
+remote: Compressing objects: 100% (21/21), done.
+remote: Total 8539 (delta 9), reused 21 (delta 7), pack-reused 8510
+Receiving objects: 100% (8539/8539), 4.85 MiB | 1.05 MiB/s, done.
+Resolving deltas: 100% (4831/4831), done.
+Checking connectivity... done.
+Submodule path 'third_party/cares/cares': checked out '7691f773af79bf75a62d1863fd0f13ebf9dc51b1'
+Cloning into 'third_party/gflags'...
+remote: Counting objects: 2166, done.
+remote: Total 2166 (delta 0), reused 0 (delta 0), pack-reused 2165
+Receiving objects: 100% (2166/2166), 1.43 MiB | 702.00 KiB/s, done.
+Resolving deltas: 100% (1252/1252), done.
+Checking connectivity... done.
+Submodule path 'third_party/gflags': checked out '30dbc81fb5ffdc98ea9b14b1918bfe4e8779b26e'
+Cloning into 'third_party/googletest'...
+remote: Counting objects: 7683, done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 7683 (delta 0), reused 2 (delta 0), pack-reused 7678
+Receiving objects: 100% (7683/7683), 2.58 MiB | 794.00 KiB/s, done.
+Resolving deltas: 100% (5698/5698), done.
+Checking connectivity... done.
+Submodule path 'third_party/googletest': checked out 'ec44c6c1675c25b9827aacd08c02433cccde7780'
+Cloning into 'third_party/protobuf'...
+remote: Counting objects: 43796, done.
+remote: Compressing objects: 100% (36/36), done.
+remote: Total 43796 (delta 8), reused 16 (delta 2), pack-reused 43756
+Receiving objects: 100% (43796/43796), 38.91 MiB | 1.64 MiB/s, done.
+Resolving deltas: 100% (29309/29309), done.
+Checking connectivity... done.
+Submodule path 'third_party/protobuf': checked out 'a6189acd18b00611c1dc7042299ad75486f08a1a'
+Cloning into 'third_party/zlib'...
+remote: Counting objects: 5016, done.
+remote: Total 5016 (delta 0), reused 0 (delta 0), pack-reused 5016
+Receiving objects: 100% (5016/5016), 2.55 MiB | 418.00 KiB/s, done.
+Resolving deltas: 100% (3532/3532), done.
+Checking connectivity... done.
+Submodule path 'third_party/zlib': checked out 'cacf7f1d4e3d44d871b605da3b647f07d718623f'
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc$ sudo make
+CXX]     Compiling /home/mjh/Documents/code/grpc/gens/src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.cc
+[AR]      Creating /home/mjh/Documents/code/grpc/libs/opt/libgrpc++_reflection.a
+[AR]      Creating /home/mjh/Documents/code/grpc/libs/opt/libgrpc++_unsecure.a
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgpr.so.4.0.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc.so.4.0.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc_cronet.so.4.0.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc_unsecure.so.4.0.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc++.so.1.5.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc++_cronet.so.1.5.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc++_error_details.so.1.5.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc++_reflection.so.1.5.0-dev
+[LD]      Linking /home/mjh/Documents/code/grpc/libs/opt/libgrpc++_unsecure.so.1.5.0-dev
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc$ sudo make install
+[INSTALL] Installing public C headers
+[MAKE]    Generating cache.mk
+[STRIP]   Stripping libgpr.a
+[STRIP]   Stripping libgrpc.a
+[STRIP]   Stripping libgrpc_cronet.a
+[STRIP]   Stripping libgrpc_unsecure.a
+[INSTALL] Installing C pkg-config files
+[INSTALL] Installing libgpr.a
+[INSTALL] Installing libgrpc.a
+[INSTALL] Installing libgrpc_cronet.a
+[INSTALL] Installing libgrpc_unsecure.a
+[STRIP]   Stripping libgpr.so.4.0.0-dev
+[STRIP]   Stripping libgrpc.so.4.0.0-dev
+[STRIP]   Stripping libgrpc_cronet.so.4.0.0-dev
+[STRIP]   Stripping libgrpc_unsecure.so.4.0.0-dev
+[INSTALL] Installing libgpr.so.4.0.0-dev
+[INSTALL] Installing libgrpc.so.4.0.0-dev
+[INSTALL] Installing libgrpc_cronet.so.4.0.0-dev
+[INSTALL] Installing libgrpc_unsecure.so.4.0.0-dev
+[INSTALL] Installing public C++ headers
+[STRIP]   Stripping libgrpc++.a
+[STRIP]   Stripping libgrpc++_cronet.a
+[STRIP]   Stripping libgrpc++_error_details.a
+[STRIP]   Stripping libgrpc++_reflection.a
+[STRIP]   Stripping libgrpc++_unsecure.a
+[INSTALL] Installing C++ pkg-config files
+[INSTALL] Installing libgrpc++.a
+[INSTALL] Installing libgrpc++_cronet.a
+[INSTALL] Installing libgrpc++_error_details.a
+[INSTALL] Installing libgrpc++_reflection.a
+[INSTALL] Installing libgrpc++_unsecure.a
+[STRIP]   Stripping libgrpc++.so.1.5.0-dev
+[STRIP]   Stripping libgrpc++_cronet.so.1.5.0-dev
+[STRIP]   Stripping libgrpc++_error_details.so.1.5.0-dev
+[STRIP]   Stripping libgrpc++_reflection.so.1.5.0-dev
+[STRIP]   Stripping libgrpc++_unsecure.so.1.5.0-dev
+[INSTALL] Installing libgrpc++.so.1.5.0-dev
+[INSTALL] Installing libgrpc++_cronet.so.1.5.0-dev
+[INSTALL] Installing libgrpc++_error_details.so.1.5.0-dev
+[INSTALL] Installing libgrpc++_reflection.so.1.5.0-dev
+[INSTALL] Installing libgrpc++_unsecure.so.1.5.0-dev
+[INSTALL] Installing grpc protoc plugins
+[INSTALL] Installing root certificates
+mjh@mjh-Vostro-260:~/Documents/code/grpc$ 
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc/third_party/protobuf$ sudo make
+mjh@mjh-Vostro-260:~/Documents/code/grpc/third_party/protobuf$ sudo make install
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc$ sudo ldconfig
+mjh@mjh-Vostro-260:/usr/local/include$ ls
+boost  google  grpc  grpc++  thrift
+mjh@mjh-Vostro-260:/usr/local/include$ cd google/
+mjh@mjh-Vostro-260:/usr/local/include/google$ ls
+protobuf
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc/examples/cpp/helloworld$ make
+protoc -I ../../protos --cpp_out=. ../../protos/helloworld.proto
+g++ -std=c++11 `pkg-config --cflags protobuf grpc`  -c -o helloworld.pb.o helloworld.pb.cc
+protoc -I ../../protos --grpc_out=. --plugin=protoc-gen-grpc=`which grpc_cpp_plugin` ../../protos/helloworld.proto
+g++ -std=c++11 `pkg-config --cflags protobuf grpc`  -c -o helloworld.grpc.pb.o helloworld.grpc.pb.cc
+g++ -std=c++11 `pkg-config --cflags protobuf grpc`  -c -o greeter_client.o greeter_client.cc
+g++ helloworld.pb.o helloworld.grpc.pb.o greeter_client.o -L/usr/local/lib `pkg-config --libs protobuf grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -ldl -o greeter_client
+g++ -std=c++11 `pkg-config --cflags protobuf grpc`  -c -o greeter_server.o greeter_server.cc
+g++ helloworld.pb.o helloworld.grpc.pb.o greeter_server.o -L/usr/local/lib `pkg-config --libs protobuf grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -ldl -o greeter_server
+g++ -std=c++11 `pkg-config --cflags protobuf grpc`  -c -o greeter_async_client.o greeter_async_client.cc
+g++ helloworld.pb.o helloworld.grpc.pb.o greeter_async_client.o -L/usr/local/lib `pkg-config --libs protobuf grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -ldl -o greeter_async_client
+g++ -std=c++11 `pkg-config --cflags protobuf grpc`  -c -o greeter_async_client2.o greeter_async_client2.cc
+g++ helloworld.pb.o helloworld.grpc.pb.o greeter_async_client2.o -L/usr/local/lib `pkg-config --libs protobuf grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -ldl -o greeter_async_client2
+g++ -std=c++11 `pkg-config --cflags protobuf grpc`  -c -o greeter_async_server.o greeter_async_server.cc
+g++ helloworld.pb.o helloworld.grpc.pb.o greeter_async_server.o -L/usr/local/lib `pkg-config --libs protobuf grpc++ grpc` -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed -ldl -o greeter_async_server
+mjh@mjh-Vostro-260:~/Documents/code/grpc/examples/cpp/helloworld$ ./greeter_server 
+I0620 16:48:52.613286637    2118 server_builder.cc:254]      Synchronous server. Num CQs: 4, Min pollers: 1, Max Pollers: 2, CQ timeout (msec): 10000
+Server listening on 0.0.0.0:50051
+
+
+
+
+
 
 
