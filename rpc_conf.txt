@@ -1,0 +1,287 @@
+(0) boost
+mjh@mjh-Vostro-260:~/Documents/app$ tar -zxvf boost_1_64_0.tar.gz 
+mjh@mjh-Vostro-260:~/Documents/app/boost_1_64_0$ sudo apt-get install build-essential g++ python-dev autotools-dev libicu-dev build-essential libbz2-dev libboost-all-dev
+Reading package lists... Done
+
+mjh@mjh-Vostro-260:~/Documents/app/boost_1_64_0$ sudo ./bootstrap.sh 
+Building Boost.Build engine with toolset gcc... tools/build/src/engine/bin.linuxx86_64/b2
+Detecting Python version... 2.7
+Detecting Python root... /usr
+Unicode/ICU support for Boost.Regex?... not found.
+Generating Boost.Build configuration in project-config.jam...
+Bootstrapping is done. To build, run:
+    ./b2
+To adjust configuration, edit 'project-config.jam'.
+Further information:
+   - Command line help:
+     ./b2 --help
+   - Getting started guide: 
+     http://www.boost.org/more/getting_started/unix-variants.html
+   - Boost.Build documentation:
+     http://www.boost.org/build/doc/html/index.html
+mjh@mjh-Vostro-260:~/Documents/app/boost_1_64_0$ 
+
+mjh@mjh-Vostro-260:~/Documents/app/boost_1_64_0$ sudo ./b2
+mjh@mjh-Vostro-260:~/Documents/app/boost_1_64_0$ sudo ./b2 install
+
+mjh@mjh-Vostro-260:/usr/local/include$ ls
+boost  thrift
+mjh@mjh-Vostro-260:/usr/local/include$ cd /usr/local/lib
+mjh@mjh-Vostro-260:/usr/local/lib$ ls
+commons-codec-1.9.jar                libboost_python.so.1.64.0
+commons-logging-1.2.jar              libboost_random.a
+httpclient-4.4.1.jar                 libboost_random.so
+httpcore-4.4.1.jar                   libboost_random.so.1.64.0
+junit-4.4.jar                        libboost_regex.a
+libboost_atomic.a                    libboost_regex.so
+libboost_atomic.so                   libboost_regex.so.1.64.0
+libboost_atomic.so.1.64.0            libboost_serialization.a
+libboost_chrono.a                    libboost_serialization.so
+libboost_chrono.so                   libboost_serialization.so.1.64.0
+libboost_chrono.so.1.64.0            libboost_signals.a
+libboost_container.a                 libboost_signals.so
+libboost_container.so                libboost_signals.so.1.64.0
+libboost_container.so.1.64.0         libboost_system.a
+libboost_context.a                   libboost_system.so
+libboost_context.so                  libboost_system.so.1.64.0
+libboost_context.so.1.64.0           libboost_test_exec_monitor.a
+libboost_coroutine.a                 libboost_thread.a
+libboost_coroutine.so                libboost_thread.so
+libboost_coroutine.so.1.64.0         libboost_thread.so.1.64.0
+libboost_date_time.a                 libboost_timer.a
+libboost_date_time.so                libboost_timer.so
+libboost_date_time.so.1.64.0         libboost_timer.so.1.64.0
+libboost_exception.a                 libboost_type_erasure.a
+libboost_filesystem.a                libboost_type_erasure.so
+libboost_filesystem.so               libboost_type_erasure.so.1.64.0
+libboost_filesystem.so.1.64.0        libboost_unit_test_framework.a
+libboost_graph.a                     libboost_unit_test_framework.so
+libboost_graph.so                    libboost_unit_test_framework.so.1.64.0
+libboost_graph.so.1.64.0             libboost_wave.a
+libboost_iostreams.a                 libboost_wave.so
+libboost_iostreams.so                libboost_wave.so.1.64.0
+libboost_iostreams.so.1.64.0         libboost_wserialization.a
+libboost_locale.a                    libboost_wserialization.so
+libboost_locale.so                   libboost_wserialization.so.1.64.0
+libboost_locale.so.1.64.0            libthrift-0.10.0.jar
+libboost_log.a                       libthrift-0.10.0-javadoc.jar
+libboost_log_setup.a                 libthrift-0.10.0.so
+libboost_log_setup.so                libthrift.a
+libboost_log_setup.so.1.64.0         libthriftc.a
+libboost_log.so                      libthriftc.la
+libboost_log.so.1.64.0               libthriftc.so
+libboost_math_c99.a                  libthriftc.so.0
+libboost_math_c99f.a                 libthriftc.so.0.0.0
+libboost_math_c99f.so                libthrift.la
+libboost_math_c99f.so.1.64.0         libthriftnb-0.10.0.so
+libboost_math_c99l.a                 libthriftnb.a
+libboost_math_c99l.so                libthriftnb.la
+libboost_math_c99l.so.1.64.0         libthriftnb.so
+libboost_math_c99.so                 libthriftqt-0.10.0.so
+libboost_math_c99.so.1.64.0          libthriftqt.a
+libboost_math_tr1.a                  libthriftqt.la
+libboost_math_tr1f.a                 libthriftqt.so
+libboost_math_tr1f.so                libthrift.so
+libboost_math_tr1f.so.1.64.0         libthriftz-0.10.0.so
+libboost_math_tr1l.a                 libthriftz.a
+libboost_math_tr1l.so                libthriftz.la
+libboost_math_tr1l.so.1.64.0         libthriftz.so
+libboost_math_tr1.so                 log4j-1.2.17.jar
+libboost_math_tr1.so.1.64.0          pkgconfig
+libboost_prg_exec_monitor.a          python2.7
+libboost_prg_exec_monitor.so         python3.4
+libboost_prg_exec_monitor.so.1.64.0  redis-3.2.8
+libboost_program_options.a           redis-3.2.8.tar.gz
+libboost_program_options.so          servlet-api-2.5.jar
+libboost_program_options.so.1.64.0   site_ruby
+libboost_python.a                    slf4j-api-1.7.12.jar
+libboost_python.so                   slf4j-log4j12-1.7.12.jar
+
+
+(1) thrift 
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ sudo apt-get install libboost-dev libboost-test-dev libboost-program-options-dev libevent-dev automake libtool flex bison pkg-config g++ libssl-dev 
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ sudo apt-get install libboost-dev libboost-test-dev libboost-program-options-dev libboost-system-dev libboost-filesystem-dev libevent-dev automake libtool flex bison pkg-config g++ libssl-dev
+mjh@mjh-Vostro-260: sudo apt-get install openjdk-7-jdk ant maven
+... ...
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+automake is already the newest version.
+bison is already the newest version.
+g++ is already the newest version.
+libboost-dev is already the newest version.
+libboost-program-options-dev is already the newest version.
+libboost-test-dev is already the newest version.
+libtool is already the newest version.
+pkg-config is already the newest version.
+libevent-dev is already the newest version.
+libssl-dev is already the newest version.
+flex is already the newest version.
+0 upgraded, 0 newly installed, 0 to remove and 27 not upgraded.
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ 
+
+mjh@mjh-Vostro-260:/usr/local/lib$ ls
+libthrift-0.10.0.so    libthriftnb.a          libthriftz.a
+libthrift.a            libthriftnb.la         libthriftz.la
+libthriftc.a           libthriftnb.so         libthriftz.so
+libthriftc.la          libthriftqt-0.10.0.so  pkgconfig
+libthriftc.so          libthriftqt.a          python2.7
+libthriftc.so.0        libthriftqt.la         python3.4
+libthriftc.so.0.0.0    libthriftqt.so         redis-3.2.8
+libthrift.la           libthrift.so           redis-3.2.8.tar.gz
+libthriftnb-0.10.0.so  libthriftz-0.10.0.so   site_ruby
+
+mjh@mjh-Vostro-260:/usr/local/include/thrift$ ls
+async            logging.h   qt                       TLogging.h
+common.h         main.h      server                   TOutput.h
+concurrency      parse       TApplicationException.h  TProcessor.h
+config.h         platform.h  TBase.h                  transport
+cxxfunctional.h  plugin      TDispatchProcessor.h     TToString.h
+generate         processor   thrift-config.h          version.h
+globals.h        protocol    Thrift.h                 windows
+mjh@mjh-Vostro-260:/usr/local/include/thrift$ 
+
+/usr/share/doc/libboost-system1.54.0
+/usr/share/doc/libboost-program-options1.54-dev
+/usr/share/lintian/overrides/libboost1.54-dev
+/usr/share/lintian/overrides/libboost-program-options1.54.0
+/usr/share/lintian/overrides/libboost-date-time1.54.0
+/usr/share/lintian/overrides/libboost1.54-doc
+/usr/share/lintian/overrides/libboost-test1.54.0
+/usr/share/lintian/overrides/libboost1.54-dbg
+/usr/share/lintian/overrides/libboost-system1.54.0
+/usr/lib/x86_64-linux-gnu/libboost_program_options.so.1.54.0
+/usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so.1.54.0
+/usr/lib/x86_64-linux-gnu/libboost_prg_exec_monitor.so.1.54.0
+/usr/lib/x86_64-linux-gnu/libboost_prg_exec_monitor.so
+/usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.so
+/usr/lib/x86_64-linux-gnu/libboost_program_options.a
+/usr/lib/x86_64-linux-gnu/libboost_program_options.so
+/usr/lib/x86_64-linux-gnu/libboost_unit_test_framework.a
+/usr/lib/x86_64-linux-gnu/libboost_date_time.so.1.54.0
+/usr/lib/x86_64-linux-gnu/libboost_system.so.1.54.0
+/usr/lib/x86_64-linux-gnu/libboost_test_exec_monitor.a
+/usr/lib/x86_64-linux-gnu/libboost_prg_exec_monitor.a
+mjh@mjh-Vostro-260:/usr/lib$ cd x86_64-linux-gnu/
+
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ sudo ./configure
+checking for a BSD-compatible install... /usr/bin/install -c
+checking whether build environment is sane... yes
+checking for a thread-safe mkdir -p... /bin/mkdir -p
+checking for gawk... no
+checking for mawk... mawk
+checking whether make sets $(MAKE)... yes
+checking whether make supports nested variables... yes
+checking whether UID '1000' is supported by ustar format... yes
+checking whether GID '1000' is supported by ustar format... yes
+checking how to create a ustar tar archive... gnutar
+checking for pkg-config... /usr/bin/pkg-config
+checking pkg-config is at least version 0.9.0... yes
+checking for gcc... gcc
+checking whether the C compiler works... yes
+configure: creating ./config.status
+config.status: creating Makefile
+config.status: creating compiler/cpp/Makefile
+config.status: creating compiler/cpp/src/Makefile
+config.status: creating compiler/cpp/src/thrift/plugin/Makefile
+... ...
+thrift 0.10.0
+Building Plugin Support ...... : yes
+Building C++ Library ......... : yes
+Building C (GLib) Library .... : no
+Building Java Library ........ : yes
+Building C# Library .......... : no
+Building Python Library ...... : yes
+Building Ruby Library ........ : no
+Building Haxe Library ........ : no
+Building Haskell Library ..... : no
+Building Perl Library ........ : no
+Building PHP Library ......... : no
+Building Dart Library ........ : no
+Building Erlang Library ...... : no
+Building Go Library .......... : no
+Building D Library ........... : no
+Building NodeJS Library ...... : no
+Building Lua Library ......... : no
+C++ Library:
+   Build TZlibTransport ...... : yes
+   Build TNonblockingServer .. : yes
+   Build TQTcpServer (Qt4) .... : yes
+   Build TQTcpServer (Qt5) .... : no
+Java Library:
+   Using javac ............... : /home/mjh/Public/jdk1.8.0_111/bin/javac
+   Using java ................ : java
+   Using ant ................. : /usr/bin/ant
+Python Library:
+   Using Python .............. : /usr/bin/python
+   Using Python3 ............. : /usr/bin/python3
+   Using trial ............... : /usr/bin/trial
+If something is missing that you think should be present,
+please skim the output of configure to find the missing
+component.  Details are present in config.log.
+
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ sudo make
+make  all-recursive
+make[1]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0'
+Making all in lib/cpp
+Making all in java
+make[3]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/java'
+/usr/bin/ant  compile
+Buildfile: /home/mjh/Documents/app/thrift-0.10.0/tutorial/java/build.xml
+init:
+generate:
+compile:
+    [javac] Compiling 7 source files to /home/mjh/Documents/app/thrift-0.10.0/tutorial/java/build
+BUILD SUCCESSFUL
+Total time: 2 seconds
+make[3]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/java'
+Making all in js
+make[3]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/js'
+/usr/bin/ant  compile
+Buildfile: /home/mjh/Documents/app/thrift-0.10.0/tutorial/js/build.xml
+init:
+compile:
+    [javac] Compiling 7 source files to /home/mjh/Documents/app/thrift-0.10.0/tutorial/js/build
+BUILD SUCCESSFUL
+Total time: 2 seconds
+make[3]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/js'
+Making all in py
+make[3]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/py'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/py'
+Making all in py.twisted
+make[3]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/py.twisted'
+../../compiler/cpp/thrift --gen py:twisted -r ../../tutorial/tutorial.thrift
+make[3]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/py.twisted'
+Making all in py.tornado
+make[3]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/py.tornado'
+make[3]: Nothing to be done for `all'.
+make[3]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial/py.tornado'
+make[3]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial'
+../compiler/cpp/thrift --gen html -r ../tutorial/tutorial.thrift
+make[3]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial'
+make[2]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial'
+make[2]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0'
+make[2]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0'
+make[1]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0'
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ 
+
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ sudo make install
+make[3]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial'
+make[3]: Nothing to be done for `install-exec-am'.
+make[3]: Nothing to be done for `install-data-am'.
+make[3]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial'
+make[2]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial'
+make[1]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0/tutorial'
+make[1]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0'
+make[2]: Entering directory `/home/mjh/Documents/app/thrift-0.10.0'
+make[2]: Nothing to be done for `install-exec-am'.
+make[2]: Nothing to be done for `install-data-am'.
+make[2]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0'
+make[1]: Leaving directory `/home/mjh/Documents/app/thrift-0.10.0'
+
+mjh@mjh-Vostro-260:~/Documents/app/thrift-0.10.0$ thrift --version
+Thrift version 0.10.0
+
+
+
