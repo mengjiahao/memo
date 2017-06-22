@@ -1,8 +1,131 @@
+(0)
+(1)
+mjh@mjh-Inspiron-5520:~$ ssh -R 2345:localhost:22 zc@115.156.209.249
+zc@115.156.209.249's password: 
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-24-generic x86_64)
+ * Documentation:  https://help.ubuntu.com/
+  System information as of Tue May 23 02:59:48 HKT 2017
+  System load:  0.01                Processes:           187
+  Usage of /:   47.3% of 427.07GB   Users logged in:     2
+  Memory usage: 3%                  IP address for p4p1: 192.168.0.240
+  Swap usage:   0%                  IP address for p5p1: 115.156.209.249
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+90 packages can be updated.
+72 updates are security updates.
+New release '16.04.2 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+Last login: Tue May 23 02:59:48 2017 from 10.14.112.34
+zc@river:~$ netstat -anpol | grep ssh
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 192.168.0.240:56074     192.168.0.171:22        ESTABLISHED 15123/ssh        keepalive (286.38/0/0)
+
+zc@river:~$ netstat -anpol | grep 2345
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 127.0.0.1:23456         0.0.0.0:*               LISTEN      -                off (0.00/0/0)
+tcp        0      0 127.0.0.1:2345          0.0.0.0:*               LISTEN      -                off (0.00/0/0)
+tcp6       0      0 ::1:23456               :::*                    LISTEN      -                off (0.00/0/0)
+tcp6       0      0 ::1:2345                :::*                    LISTEN      -                off (0.00/0/0)
+zc@river:~$ 
+
+mjh@mjh-Inspiron-5520:~$ netstat -anpol | grep ssh
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 10.14.112.34:47350      115.156.209.249:22      ESTABLISHED 5910/ssh         keepalive (7125.56/0/0)
+unix  2      [ ACC ]     STREAM     LISTENING     13312    -                   /run/user/118/keyring-11BvDO/ssh
+unix  2      [ ACC ]     STREAM     LISTENING     18380    -                   /run/user/1000/keyring-2Y0xt0/ssh
+zc@river:~$ ssh -L *:3456:localhost:2345 localhost
+zc@localhost's password: 
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-24-generic x86_64)
+ * Documentation:  https://help.ubuntu.com/
+  System information as of Tue May 23 03:03:17 HKT 2017
+
+  System load:  0.0                 Processes:           176
+  Usage of /:   47.3% of 427.07GB   Users logged in:     2
+  Memory usage: 3%                  IP address for p4p1: 192.168.0.240
+  Swap usage:   0%                  IP address for p5p1: 115.156.209.249
+  Graph this data and manage this system at:
+    https://landscape.canonical.com/
+90 packages can be updated.
+72 updates are security updates.
+New release '16.04.2 LTS' available.
+Run 'do-release-upgrade' to upgrade to it.
+Last login: Tue May 23 03:03:17 2017 from 10.14.112.34
+zc@river:~$ 
+
+zc@river:~$ netstat -anpol | grep ssh
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 0.0.0.0:3456            0.0.0.0:*               LISTEN      16624/ssh        off (0.00/0/0)
+tcp        0      0 192.168.0.240:56074     192.168.0.171:22        ESTABLISHED 15123/ssh        keepalive (84.63/0/0)
+tcp6       0      0 :::3456                 :::*                    LISTEN      16624/ssh        off (0.00/0/0)
+tcp6       0      0 ::1:58143               ::1:22                  ESTABLISHED 16624/ssh        keepalive (7195.28/0/0)
+zc@river:~$ netstat -anpol | grep 3456
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 0.0.0.0:3456            0.0.0.0:*               LISTEN      16624/ssh        off (0.00/0/0)
+tcp        0      0 127.0.0.1:23456         0.0.0.0:*               LISTEN      -                off (0.00/0/0)
+tcp6       0      0 :::3456                 :::*                    LISTEN      16624/ssh        off (0.00/0/0)
+tcp6       0      0 ::1:23456               :::*                    LISTEN      -                off (0.00/0/0)
+zc@river:~$ 
+
+zc@river:~$ ssh ubuntu@192.168.0.171
+ubuntu@192.168.0.171's password: 
+Welcome to Ubuntu 16.04 LTS (GNU/Linux 4.4.0-75-generic x86_64)
+ * Documentation:  https://help.ubuntu.com/
+117 packages can be updated.
+0 updates are security updates.
+*** System restart required ***
+Last login: Mon May 22 06:57:36 2017 from 192.168.0.240
+ubuntu@ubuntu:~$ 
+mjh@mjh-Inspiron-5520:~$ netstat -anpol | grep ssh
+(Not all processes could be identified, non-owned process info
+ will not be shown, you would have to be root to see it all.)
+tcp        0      0 10.14.112.34:47350      115.156.209.249:22      ESTABLISHED 5910/ssh         keepalive (6901.67/0/0)
+tcp        0      0 10.14.112.34:47360      115.156.209.249:22      ESTABLISHED 5996/ssh         keepalive (7163.81/0/0)
+unix  2      [ ACC ]     STREAM     LISTENING     13312    -                   /run/user/118/keyring-11BvDO/ssh
+unix  2      [ ACC ]     STREAM     LISTENING     18380    -                   /run/user/1000/keyring-2Y0xt0/ssh
+mjh@mjh-Inspiron-5520:~$ 
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc/examples/cpp/helloworld$ which ssh
+/usr/bin/ssh
+mjh@mjh-Vostro-260:~/Documents/code/grpc/examples/cpp/helloworld$ which sshd
+/usr/sbin/sshd
+mjh@mjh-Vostro-260:~/Documents/code/grpc/examples/cpp/helloworld$ which ssh-keygen
+/usr/bin/ssh-keygen
+
+mjh@mjh-Vostro-260:~/Documents/code/grpc/examples/cpp/helloworld$ ssh localhost
+mjh@localhost's password: 
+Permission denied, please try again.
+mjh@localhost's password: 
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-74-generic x86_64)
+ * Documentation:  https://help.ubuntu.com/
+Last login: Mon May 22 16:43:15 2017 from localhost
+mjh@mjh-Vostro-260:~$ exit
+logout
+Connection to localhost closed.
+mjh@mjh-Vostro-260:~/Documents/code/grpc/examples/cpp/helloworld$ 
+
+mjh@mjh-Vostro-260:~/.ssh$ cat id_rsa.pub >> authorized_keys
+mjh@mjh-Vostro-260:~/.ssh$ ssh localhost
+Welcome to Ubuntu 14.04.5 LTS (GNU/Linux 3.13.0-74-generic x86_64)
+ * Documentation:  https://help.ubuntu.com/
+*** System restart required ***
+Last login: Wed Jun 21 14:47:26 2017 from localhost
+mjh@mjh-Vostro-260:~$ exit
+logout
+Connection to localhost closed.
+mjh@mjh-Vostro-260:~/.ssh$ 
+
+
+
 1. gen ssh-key
 http://blog.csdn.net/alexander_phper/article/details/52871191
 (1)
 MJH@DESKTOP-4T5KT7O MINGW32 ~/.ssh
-$ ssh-keygen -t rsa -C "mjh@691225916@qq.com"
+$ ssh-keygen -t rsa -C "mjh@691225916@qq.com" (-f /path)
 Generating public/private rsa key pair.
 Enter file in which to save the key (/c/Users/MJH/.ssh/id_rsa): f103
 Enter passphrase (empty for no passphrase):
