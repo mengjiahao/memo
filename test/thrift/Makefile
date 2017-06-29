@@ -3,7 +3,7 @@ USR_DIR    =/usr/local
 INCS_DIRS  =-I${USR_DIR}/include
 LIBS_DIRS  =-L${USR_DIR}/lib
 CPP_DEFS   =
-CPP_OPTS   =-Wall -O2
+CPP_OPTS   =-Wall -O2 -std=c++11
 LIBS       =-lthrift
 
 GEN_SRC    = ./gen-cpp/SharedService.cpp  \
