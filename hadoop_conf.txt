@@ -144,7 +144,6 @@ drwxr-xr-x 14 root   root   4096 11月  2 21:14 ..
 drwxr-xr-x 10 hadoop hadoop 4096  8月  1 09:09 hadoop-2.7.4
 
 hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$
-
 # JAVA environment settings
 export JAVA_HOME=/home/mjh/Public/jdk1.8.0_111
 export JRE_HOME=$JAVA_HOME/jre
