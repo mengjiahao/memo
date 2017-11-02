@@ -1,0 +1,167 @@
+1.
+cat@cataliar:~/Downloads$ sudo addgroup hadoop
+正在添加组"hadoop" (GID 1001)...
+完成。
+cat@cataliar:~/Downloads$ 
+cat@cataliar:~/Downloads$ 
+cat@cataliar:~/Downloads$ 
+cat@cataliar:~/Downloads$ sudo adduser -ingroup hadoop hadoop
+正在添加用户"hadoop"...
+正在添加新用户"hadoop" (1001) 到组"hadoop"...
+创建主目录"/home/hadoop"...
+正在从"/etc/skel"复制文件...
+输入新的 UNIX 密码： 
+重新输入新的 UNIX 密码： 
+passwd：已成功更新密码
+正在改变 hadoop 的用户信息
+请输入新值，或直接敲回车键以使用默认值
+	全名 []: 
+	房间号码 []: 
+	工作电话 []: 
+	家庭电话 []: 
+	其它 []: 
+这些信息是否正确？ [Y/n] 
+cat@cataliar:~/Downloads$ 
+cat@cataliar:~/Downloads$ 
+cat@cataliar:~/Downloads$ 
+cat@cataliar:~/Downloads$ 
+cat@cataliar:~/Downloads$ sudo vim /etc/sudoers
+cat@cataliar:~/Downloads$ cat /etc/sudoers
+cat: /etc/sudoers: 权限不够
+cat@cataliar:~/Downloads$ sudo cat /etc/sudoers
+#
+# This file MUST be edited with the 'visudo' command as root.
+#
+# Please consider adding local content in /etc/sudoers.d/ instead of
+# directly modifying this file.
+#
+# See the man page for details on how to write a sudoers file.
+#
+Defaults	env_reset
+Defaults	mail_badpass
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin"
+
+# Host alias specification
+
+# User alias specification
+
+# Cmnd alias specification
+
+# User privilege specification
+root	ALL=(ALL:ALL) ALL
+hadoop ALL=(ALL:ALL) ALL
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) ALL
+
+# Allow members of group sudo to execute any command
+%sudo	ALL=(ALL:ALL) ALL
+
+# See sudoers(5) for more information on "#include" directives:
+
+#includedir /etc/sudoers.d
+cat@cataliar:~/Downloads$ 
+
+2.
+hadoop@cataliar:~$ ssh-keygen -t rsa -P ""
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/hadoop/.ssh/id_rsa):    
+Created directory '/home/hadoop/.ssh'.
+Your identification has been saved in /home/hadoop/.ssh/id_rsa.
+Your public key has been saved in /home/hadoop/.ssh/id_rsa.pub.
+The key fingerprint is:
+fb:db:26:b5:4f:3e:8a:cd:65:7b:90:ee:0e:9d:49:e6 hadoop@cataliar
+The key's randomart image is:
++--[ RSA 2048]----+
+|                 |
+|                 |
+|                 |
+|                 |
+|        S     o. |
+|         .  .=oo |
+|        .  ..oE. |
+|         ..=o*o..|
+|          ++==*o |
++-----------------+
+hadoop@cataliar:~$ 
+hadoop@cataliar:~/.ssh$ cp id_rsa.pub authorized_keys
+hadoop@cataliar:~/.ssh$ cat mjh_103_hadoop_rsa.pub >> authorized_keys 
+hadoop@cataliar:~/.ssh$ cat authorized_keys 
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDf4uBJyMK4YDgVPgKumFJ7aXbXcLYkyFcrmvGzxUHQaem8wtUpf0OnfT8nYU925a3TpA67U5N+45ghD4SwE5xLWckGChHF6qdhojf76cNEfU9sXU/OMoxAgvYVdVDrVObarniJS8gkGl9Tib9LtiZSn1ULb9VzRwsazmM0u8UXVrMUz8atezEmL7uk436Gr1OZkilfAgWNYzUXYsXfRZh2OOkACPNXZQv58Vt1NuuEpzJzBlDjXPXd9r9eE6PBb0htUJrI1wpG30hv767rGbCzZjnUjeB4CksqOE2WqMKnIBRqMMcJmuLQYHRlfIOqL6cXXYL5vX+jLxIEjhYeuxQH hadoop@cataliar
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCkoGJJcte29BRC/LpvMz08bURhYxCMgMcK1nhQB42ym3E0iVTKDxhim9GrebE2tTOoppye9ZdEyP/+y7GECTgPEsm+0WAxwC9L6s9EqarOrU9+6ZfZCoWq1vOBUYR9P04Z4h+e6Zs4s73bTemVVRF7mpI0aG/pZeZOG9Ic0wh7noaPMcgehBSLyFWD861AuwR2ldXrc0sZwJ25ePPYClqj0p8X9z+qRVGrEx/7Cj+dQmuiGIqGzCrukm1UHbaarpE7Io3Q5LICNnYVhhJ6uzutuXzb1dxZjpz1fK390KWGbVXDCkGXFAYEUEh94XbE1pYkgkCAdwee5RCFmPJOt9pJ hadoop@mjh-Vostro-260
+hadoop@cataliar:~/.ssh$ 
+
+hadoop@mjh-Vostro-260:~/.ssh$ ls
+authorized_keys  id_rsa  id_rsa.pub  known_hosts
+
+3.
+hadoop@cataliar:/usr/local/jvm$ sudo tar zxvf jdk-8u151-linux-x64.tar.gz 
+hadoop@cataliar:~$ sudo vim /etc/profile
+export JAVA_HOME=/usr/local/jvm/jdk1.8.0_151
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
+export PATH=${JAVA_HOME}/bin:${PATH}
+
+hadoop@cataliar:~$ source /etc/profile
+hadoop@cataliar:~$ java -version
+java version "1.8.0_151"
+Java(TM) SE Runtime Environment (build 1.8.0_151-b12)
+Java HotSpot(TM) 64-Bit Server VM (build 25.151-b12, mixed mode)
+
+4.
+mjh@mjh-Vostro-260:~/Downloads/pkgs$ ifconfig
+eth0      Link encap:Ethernet  HWaddr 78:45:c4:13:3d:2f  
+          inet addr:115.156.132.71  Bcast:115.156.135.255  Mask:255.255.252.0
+hadoop@cataliar:/usr/local/jvm$ ifconfig
+eth0      Link encap:以太网  硬件地址 78:45:c4:27:d2:f1  
+          inet 地址:115.156.135.59  广播:115.156.135.255  掩码:255.255.252.0
+
+hadoop@mjh-Vostro-260:~/.ssh$ cat /etc/hosts
+127.0.0.1	localhost
+127.0.1.1	mjh-Vostro-260
+115.156.132.71  namenode
+115.156.135.59  datanode1
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+hadoop@mjh-Vostro-260:/home/mjh/Downloads/pkgs$ scp hadoop-2.7.4.tar.gz hadoop@datanode1:/home/hadoop
+The authenticity of host 'datanode1 (115.156.135.59)' can't be established.
+ECDSA key fingerprint is f8:d0:3a:54:85:c6:6c:99:40:2f:5c:b1:13:93:73:d6.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'datanode1' (ECDSA) to the list of known hosts.
+hadoop-2.7.4.tar.gz                           100%
+
+hadoop@mjh-Vostro-260:/usr/local/hadoop$ sudo chown -R hadoop:hadoop hadoop-2.7.4/
+hadoop@mjh-Vostro-260:/usr/local/hadoop$ ls -al
+total 12
+drwxr-xr-x  3 root   root   4096 11月  2 11:29 .
+drwxr-xr-x 14 root   root   4096 11月  2 21:14 ..
+drwxr-xr-x 10 hadoop hadoop 4096  8月  1 09:09 hadoop-2.7.4
+
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$
+
+# JAVA environment settings
+export JAVA_HOME=/home/mjh/Public/jdk1.8.0_111
+export JRE_HOME=$JAVA_HOME/jre
+export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
+export MAVEN_HOME=/home/mjh/Documents/app/apache-maven-3.5.0
+export HADOOP_HOME=/usr/local/hadoop/hadoop-2.7.4
+
+export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$PATH
+export PATH=/usr/local/go/bin:$HADOOP_HOME/sbin:$HADOOP_HOME:bin/$PATH
+
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$ 
+
+5.
+
+
+
+
+
+
+
