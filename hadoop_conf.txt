@@ -154,8 +154,6 @@ export HADOOP_HOME=/usr/local/hadoop/hadoop-2.7.4
 export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:$PATH
 export PATH=/usr/local/go/bin:$HADOOP_HOME/sbin:$HADOOP_HOME:bin/$PATH
 
-hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$ 
-
 5.
 
 
