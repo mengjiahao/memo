@@ -356,6 +356,147 @@ localhost: stopping datanode
 Stopping secondary namenodes [0.0.0.0]
 0.0.0.0: stopping secondarynamenode
 
+6.
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$ cat /etc/hosts
+127.0.0.1	localhost
+127.0.1.1	mjh-Vostro-260
+115.156.132.71  hadoop-namenode
+115.156.135.59  hadoop-datanode1
+
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$ cat slaves 
+hadoop-datanode1
+
+hadoop@mjh-Vostro-260:~$ hadoop namenode -format
+DEPRECATED: Use of this script to execute hdfs command is deprecated.
+Instead use the hdfs command for it.
+
+17/11/06 13:47:20 INFO namenode.NameNode: STARTUP_MSG: 
+17/11/06 13:47:20 INFO namenode.NameNode: registered UNIX signal handlers for [TERM, HUP, INT]
+17/11/06 13:47:20 INFO namenode.NameNode: createNameNode [-format]
+Formatting using clusterid: CID-f1c1d5b7-473c-41b9-89c2-f2fa65e8c533
+17/11/06 13:47:21 INFO namenode.FSNamesystem: No KeyProvider found.
+17/11/06 13:47:21 INFO namenode.FSNamesystem: fsLock is fair: true
+17/11/06 13:47:21 INFO namenode.FSNamesystem: Detailed lock hold time metrics enabled: false
+17/11/06 13:47:21 INFO blockmanagement.DatanodeManager: dfs.block.invalidate.limit=1000
+17/11/06 13:47:21 INFO blockmanagement.DatanodeManager: dfs.namenode.datanode.registration.ip-hostname-check=true
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: dfs.namenode.startup.delay.block.deletion.sec is set to 000:00:00:00.000
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: The block deletion will start around 2017 Nov 06 13:47:21
+17/11/06 13:47:21 INFO util.GSet: Computing capacity for map BlocksMap
+17/11/06 13:47:21 INFO util.GSet: VM type       = 64-bit
+17/11/06 13:47:21 INFO util.GSet: 2.0% max memory 889 MB = 17.8 MB
+17/11/06 13:47:21 INFO util.GSet: capacity      = 2^21 = 2097152 entries
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: dfs.block.access.token.enable=false
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: defaultReplication         = 1
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: maxReplication             = 512
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: minReplication             = 1
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: maxReplicationStreams      = 2
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: replicationRecheckInterval = 3000
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: encryptDataTransfer        = false
+17/11/06 13:47:21 INFO blockmanagement.BlockManager: maxNumBlocksToLog          = 1000
+17/11/06 13:47:21 INFO namenode.FSNamesystem: fsOwner             = hadoop (auth:SIMPLE)
+17/11/06 13:47:21 INFO namenode.FSNamesystem: supergroup          = supergroup
+17/11/06 13:47:21 INFO namenode.FSNamesystem: isPermissionEnabled = true
+17/11/06 13:47:21 INFO namenode.FSNamesystem: HA Enabled: false
+17/11/06 13:47:21 INFO namenode.FSNamesystem: Append Enabled: true
+17/11/06 13:47:22 INFO util.GSet: Computing capacity for map INodeMap
+17/11/06 13:47:22 INFO util.GSet: VM type       = 64-bit
+17/11/06 13:47:22 INFO util.GSet: 1.0% max memory 889 MB = 8.9 MB
+17/11/06 13:47:22 INFO util.GSet: capacity      = 2^20 = 1048576 entries
+17/11/06 13:47:22 INFO namenode.FSDirectory: ACLs enabled? false
+17/11/06 13:47:22 INFO namenode.FSDirectory: XAttrs enabled? true
+17/11/06 13:47:22 INFO namenode.FSDirectory: Maximum size of an xattr: 16384
+17/11/06 13:47:22 INFO namenode.NameNode: Caching file names occuring more than 10 times
+17/11/06 13:47:22 INFO util.GSet: Computing capacity for map cachedBlocks
+17/11/06 13:47:22 INFO util.GSet: VM type       = 64-bit
+17/11/06 13:47:22 INFO util.GSet: 0.25% max memory 889 MB = 2.2 MB
+17/11/06 13:47:22 INFO util.GSet: capacity      = 2^18 = 262144 entries
+17/11/06 13:47:22 INFO namenode.FSNamesystem: dfs.namenode.safemode.threshold-pct = 0.9990000128746033
+17/11/06 13:47:22 INFO namenode.FSNamesystem: dfs.namenode.safemode.min.datanodes = 0
+17/11/06 13:47:22 INFO namenode.FSNamesystem: dfs.namenode.safemode.extension     = 30000
+17/11/06 13:47:22 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.window.num.buckets = 10
+17/11/06 13:47:22 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.num.users = 10
+17/11/06 13:47:22 INFO metrics.TopMetrics: NNTop conf: dfs.namenode.top.windows.minutes = 1,5,25
+17/11/06 13:47:22 INFO namenode.FSNamesystem: Retry cache on namenode is enabled
+17/11/06 13:47:22 INFO namenode.FSNamesystem: Retry cache will use 0.03 of total heap and retry cache entry expiry time is 600000 millis
+17/11/06 13:47:22 INFO util.GSet: Computing capacity for map NameNodeRetryCache
+17/11/06 13:47:22 INFO util.GSet: VM type       = 64-bit
+17/11/06 13:47:22 INFO util.GSet: 0.029999999329447746% max memory 889 MB = 273.1 KB
+17/11/06 13:47:22 INFO util.GSet: capacity      = 2^15 = 32768 entries
+17/11/06 13:47:22 INFO namenode.FSImage: Allocated new BlockPoolId: BP-264204118-127.0.1.1-1509947242301
+17/11/06 13:47:22 INFO common.Storage: Storage directory /home/hadoop/hadoop/dfs/name has been successfully formatted.
+17/11/06 13:47:22 INFO namenode.FSImageFormatProtobuf: Saving image file /home/hadoop/hadoop/dfs/name/current/fsimage.ckpt_0000000000000000000 using no compression
+17/11/06 13:47:22 INFO namenode.FSImageFormatProtobuf: Image file /home/hadoop/hadoop/dfs/name/current/fsimage.ckpt_0000000000000000000 of size 322 bytes saved in 0 seconds.
+17/11/06 13:47:22 INFO namenode.NNStorageRetentionManager: Going to retain 1 images with txid >= 0
+17/11/06 13:47:22 INFO util.ExitUtil: Exiting with status 0
+17/11/06 13:47:22 INFO namenode.NameNode: SHUTDOWN_MSG: 
+/************************************************************
+SHUTDOWN_MSG: Shutting down NameNode at mjh-Vostro-260/127.0.1.1
+************************************************************/
+
+hadoop@mjh-Vostro-260:~$ start-dfs.sh
+Starting namenodes on [hadoop-namenode]
+The authenticity of host 'hadoop-namenode (115.156.132.71)' can't be established.
+ECDSA key fingerprint is c3:6a:35:ab:16:6f:00:87:d1:7b:e5:db:6c:01:5b:99.
+Are you sure you want to continue connecting (yes/no)? yes
+hadoop-namenode: Warning: Permanently added 'hadoop-namenode,115.156.132.71' (ECDSA) to the list of known hosts.
+hadoop-namenode: starting namenode, logging to /usr/local/hadoop/hadoop-2.7.4/logs/hadoop-hadoop-namenode-mjh-Vostro-260.out
+hadoop-datanode1: starting datanode, logging to /usr/local/hadoop/hadoop-2.7.4/logs/hadoop-hadoop-datanode-cataliar.out
+Starting secondary namenodes [0.0.0.0]
+0.0.0.0: starting secondarynamenode, logging to /usr/local/hadoop/hadoop-2.7.4/logs/hadoop-hadoop-secondarynamenode-mjh-Vostro-260.out
+hadoop@mjh-Vostro-260:~$ jps
+6394 Jps
+6269 SecondaryNameNode
+6031 NameNode
+hadoop@mjh-Vostro-260:~$ 
+
+hadoop@cataliar:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$ jps
+5031 Jps
+4952 DataNode
+
+http://hadoop-namenode:50070/dfshealth.html#tab-overview
+
+7.
+hadoop@mjh-Vostro-260:~$ hadoop fs -mkdir -p /usr
+hadoop@mjh-Vostro-260:~/hadoop/dfs$ hadoop fs -ls /
+Found 1 items
+drwxr-xr-x   - hadoop supergroup          0 2017-11-06 14:01 /usr
+hadoop@mjh-Vostro-260:~/hadoop/dfs$ 
+hadoop@mjh-Vostro-260:~$ hadoop fs -mkdir -p /usr/docs
+hadoop@mjh-Vostro-260:~$ hadoop fs -put hadoop-2.7.4.tar.gz /usr/docs/
+hadoop@mjh-Vostro-260:~/hadoop/dfs$ hadoop fs -ls /usr/docs
+Found 1 items
+-rw-r--r--   1 hadoop supergroup  266688029 2017-11-06 14:01 /usr/docs/hadoop-2.7.4.tar.gz
+hadoop@mjh-Vostro-260:~/hadoop/dfs/name/current$ ls
+edits_0000000000000000001-0000000000000000002  fsimage_0000000000000000002
+edits_inprogress_0000000000000000003           fsimage_0000000000000000002.md5
+fsimage_0000000000000000000                    seen_txid
+fsimage_0000000000000000000.md5                VERSION
+
+hadoop@cataliar:~/hadoop/dfs/data/current/BP-264204118-127.0.1.1-1509947242301/current/finalized/subdir0/subdir0$ ls -al
+总用量 262496
+drwxrwxr-x 2 hadoop hadoop      4096 11月  6 14:01 .
+drwxrwxr-x 3 hadoop hadoop      4096 11月  6 14:01 ..
+-rw-rw-r-- 1 hadoop hadoop 134217728 11月  6 14:01 blk_1073741825
+-rw-rw-r-- 1 hadoop hadoop   1048583 11月  6 14:01 blk_1073741825_1001.meta
+-rw-rw-r-- 1 hadoop hadoop 132470301 11月  6 14:01 blk_1073741826
+-rw-rw-r-- 1 hadoop hadoop   1034935 11月  6 14:01 blk_1073741826_1002.meta
+hadoop@cataliar:~/hadoop/dfs/data/current/BP-264204118-127.0.1.1-1509947242301/current/finalized/subdir0/subdir0$ ls
+blk_1073741825            blk_1073741826
+blk_1073741825_1001.meta  blk_1073741826_1002.meta
+
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/sbin$ stop-dfs.sh
+Stopping namenodes on [hadoop-namenode]
+hadoop-namenode: stopping namenode
+hadoop-datanode1: stopping datanode
+Stopping secondary namenodes [0.0.0.0]
+0.0.0.0: stopping secondarynamenode
+
+hadoop@cataliar:/usr/local/hadoop/hadoop-2.7.4/logs$ jps
+5224 Jps
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/sbin$ jps
+7552 Jps
+
+
 
 
 
