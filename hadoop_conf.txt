@@ -108,7 +108,7 @@ java version "1.8.0_151"
 Java(TM) SE Runtime Environment (build 1.8.0_151-b12)
 Java HotSpot(TM) 64-Bit Server VM (build 25.151-b12, mixed mode)
 
-4.
+4. StandAlone Mode
 hadoop@mjh-Vostro-260:/home/mjh/Downloads/pkgs$ scp hadoop-2.7.4.tar.gz hadoop@datanode1:/home/hadoop
 The authenticity of host 'datanode1 (115.156.135.59)' can't be established.
 ECDSA key fingerprint is f8:d0:3a:54:85:c6:6c:99:40:2f:5c:b1:13:93:73:d6.
@@ -123,6 +123,11 @@ drwxr-xr-x 14 root   root    4096 11月  2 21:14 .
 drwxr-xr-x 10 root   root    4096  7月 23  2014 ..
 drwxr-xr-x  3 hadoop hadoop  4096 11月  2 11:29 hadoop
 
+hadoop@mjh-Vostro-260:~$ cat /etc/environment 
+PATH="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games"
+socks_proxy="socks://127.0.0.1:1080/"
+hadoop@mjh-Vostro-260:~$ 
+
 hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$
 # JAVA environment settings
 export JAVA_HOME=/home/mjh/Public/jdk1.8.0_111
@@ -131,7 +136,8 @@ export CLASSPATH=.:$CLASSPATH:$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
 export MAVEN_HOME=/home/mjh/Documents/app/apache-maven-3.5.0
 export HADOOP_HOME=/usr/local/hadoop/hadoop-2.7.4
 
-export PATH=$JAVA_HOME/bin:$JRE_HOME/bin:$MAVEN_HOME/bin:/usr/local/go/bin:$HADOOP_HOME/sbin:$HADOOP_HOME/bin:$PATH
+hadoop@mjh-Vostro-260:~$ cat .bashrc
+export PATH=${JAVA_HOME}/bin:${JRE_HOME}/bin:${MAVEN_HOME}/bin:${HADOOP_HOME}/sbin:${HADOOP_HOME}/bin:/usr/local/go/bin:${PATH}
 
 hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/share/hadoop/mapreduce/sources$ hadoop jar hadoop-mapreduce-examples-2.7.4-sources.jar org.apache.hadoop.examples.WordCount /home/hadoop/hadoop/mapred/input /home/hadoop/hadoop/mapred/output
 17/11/03 13:22:14 INFO Configuration.deprecation: session.id is deprecated. Instead, use dfs.metrics.session-id
@@ -203,7 +209,7 @@ hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/share/hadoop/mapreduce/sour
 	File Output Format Counters 
 		Bytes Written=8
 
-5.
+5. Pesudo Distributed FS Mode
 mjh@mjh-Vostro-260:~/Downloads/pkgs$ ifconfig
 eth0      Link encap:Ethernet  HWaddr 78:45:c4:13:3d:2f  
           inet addr:115.156.132.71  Bcast:115.156.135.255  Mask:255.255.252.0
@@ -335,7 +341,22 @@ Are you sure you want to continue connecting (yes/no)? yes
 0.0.0.0: starting secondarynamenode, logging to /usr/local/hadoop/hadoop-2.7.4/logs/hadoop-hadoop-secondarynamenode-mjh-Vostro-260.out
 hadoop@mjh-Vostro-260:~$ 
 
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/etc/hadoop$ jps
+4400 NameNode
+4569 DataNode
+6234 Jps
+4847 SecondaryNameNode
+
  pesudo-dis filesystem: http://localhost:50070 
+
+hadoop@mjh-Vostro-260:/usr/local/hadoop/hadoop-2.7.4/sbin$ stop-dfs.sh
+Stopping namenodes on [localhost]
+localhost: stopping namenode
+localhost: stopping datanode
+Stopping secondary namenodes [0.0.0.0]
+0.0.0.0: stopping secondarynamenode
+
+
 
 
 
