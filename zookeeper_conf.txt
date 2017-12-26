@@ -1,0 +1,133 @@
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper-3.4.11$ cd conf
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper-3.4.11/conf$ ls
+configuration.xsl  log4j.properties  zoo_sample.cfg
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper-3.4.11/conf$ cp zoo_sample.cfg zoo.cfg
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper-3.4.11/conf$ ls
+configuration.xsl  log4j.properties  zoo.cfg  zoo_sample.cfg
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper-3.4.11/conf$ vim zoo.cfg 
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/conf$ cat zoo.cfg 
+# The number of milliseconds of each tick
+tickTime=2000
+# The number of ticks that the initial 
+# synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between 
+# sending a request and getting an acknowledgement
+syncLimit=5
+# the directory where the snapshot is stored.
+# do not use /tmp for storage, /tmp here is just 
+# example sakes.
+dataDir=/home/mjh/Documents/code/zookeeper/workspace/data
+dataLogDir=/home/mjh/Documents/code/zookeeper/workspace/logs
+# the port at which the clients will connect
+clientPort=2181
+server.1=127.0.0.1:2888:3888
+# the maximum number of client connections.
+# increase this if you need to handle more clients
+#maxClientCnxns=60
+#
+# Be sure to read the maintenance section of the 
+# administrator guide before turning on autopurge.
+#
+# http://zookeeper.apache.org/doc/current/zookeeperAdmin.html#sc_maintenance
+#
+# The number of snapshots to retain in dataDir
+#autopurge.snapRetainCount=3
+# Purge task interval in hours
+# Set to "0" to disable auto purge feature
+#autopurge.purgeInterval=1
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/conf$ 
+
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/bin$ ls
+README.txt    zkCli.cmd  zkEnv.cmd  zkServer.cmd
+zkCleanup.sh  zkCli.sh   zkEnv.sh   zkServer.sh
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/bin$ ./zkServer.sh start
+ZooKeeper JMX enabled by default
+Using config: /home/mjh/Documents/code/zookeeper/bin/../conf/zoo.cfg
+Starting zookeeper ... STARTED
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/bin$ ./zkServer.sh status
+ZooKeeper JMX enabled by default
+Using config: /home/mjh/Documents/code/zookeeper/bin/../conf/zoo.cfg
+Mode: standalone
+
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/bin$ ./zkCli.sh -server 127.0.0.1:2181
+Connecting to 127.0.0.1:2181
+2017-12-26 16:42:35,721 [myid:] - INFO  [main:Environment@100] - Client environment:zookeeper.version=3.4.11-37e277162d567b55a07d1755f0b31c32e93c01a0, built on 11/01/2017 18:06 GMT
+2017-12-26 16:42:35,735 [myid:] - INFO  [main:Environment@100] - Client environment:host.name=mjh-Vostro-260
+2017-12-26 16:42:35,736 [myid:] - INFO  [main:Environment@100] - Client environment:java.version=1.8.0_111
+2017-12-26 16:42:35,740 [myid:] - INFO  [main:Environment@100] - Client environment:java.vendor=Oracle Corporation
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:java.home=/home/mjh/Public/jdk1.8.0_111/jre
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:java.class.path=/home/mjh/Documents/code/zookeeper/bin/../build/classes:/home/mjh/Documents/code/zookeeper/bin/../build/lib/*.jar:/home/mjh/Documents/code/zookeeper/bin/../lib/slf4j-log4j12-1.6.1.jar:/home/mjh/Documents/code/zookeeper/bin/../lib/slf4j-api-1.6.1.jar:/home/mjh/Documents/code/zookeeper/bin/../lib/netty-3.10.5.Final.jar:/home/mjh/Documents/code/zookeeper/bin/../lib/log4j-1.2.16.jar:/home/mjh/Documents/code/zookeeper/bin/../lib/jline-0.9.94.jar:/home/mjh/Documents/code/zookeeper/bin/../lib/audience-annotations-0.5.0.jar:/home/mjh/Documents/code/zookeeper/bin/../zookeeper-3.4.11.jar:/home/mjh/Documents/code/zookeeper/bin/../src/java/lib/*.jar:/home/mjh/Documents/code/zookeeper/bin/../conf:.::/home/mjh/Public/jdk1.8.0_111/lib:/home/mjh/Public/jdk1.8.0_111/jre/lib
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:java.library.path=/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:java.io.tmpdir=/tmp
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:java.compiler=<NA>
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:os.name=Linux
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:os.arch=amd64
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:os.version=3.13.0-133-generic
+2017-12-26 16:42:35,741 [myid:] - INFO  [main:Environment@100] - Client environment:user.name=mjh
+2017-12-26 16:42:35,742 [myid:] - INFO  [main:Environment@100] - Client environment:user.home=/home/mjh
+2017-12-26 16:42:35,742 [myid:] - INFO  [main:Environment@100] - Client environment:user.dir=/home/mjh/Documents/code/zookeeper/bin
+2017-12-26 16:42:35,744 [myid:] - INFO  [main:ZooKeeper@441] - Initiating client connection, connectString=127.0.0.1:2181 sessionTimeout=30000 watcher=org.apache.zookeeper.ZooKeeperMain$MyWatcher@446cdf90
+Welcome to ZooKeeper!
+2017-12-26 16:42:35,978 [myid:] - INFO  [main-SendThread(127.0.0.1:2181):ClientCnxn$SendThread@1035] - Opening socket connection to server 127.0.0.1/127.0.0.1:2181. Will not attempt to authenticate using SASL (unknown error)
+JLine support is enabled
+2017-12-26 16:42:36,265 [myid:] - INFO  [main-SendThread(127.0.0.1:2181):ClientCnxn$SendThread@877] - Socket connection established to 127.0.0.1/127.0.0.1:2181, initiating session
+2017-12-26 16:42:36,394 [myid:] - INFO  [main-SendThread(127.0.0.1:2181):ClientCnxn$SendThread@1302] - Session establishment complete on server 127.0.0.1/127.0.0.1:2181, sessionid = 0x10000e21db60001, negotiated timeout = 30000
+
+WATCHER::
+
+WatchedEvent state:SyncConnected type:None path:null
+[zk: 127.0.0.1:2181(CONNECTED) 0] 
+[zk: 127.0.0.1:2181(CONNECTED) 0] ls
+[zk: 127.0.0.1:2181(CONNECTED) 1] create /zk mydata
+Created /zk
+[zk: 127.0.0.1:2181(CONNECTED) 2] ls /
+[zk, zookeeper]
+[zk: 127.0.0.1:2181(CONNECTED) 3] get /zk
+mydata
+cZxid = 0x4
+ctime = Tue Dec 26 16:43:45 CST 2017
+mZxid = 0x4
+mtime = Tue Dec 26 16:43:45 CST 2017
+pZxid = 0x4
+cversion = 0
+dataVersion = 0
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 6
+numChildren = 0
+[zk: 127.0.0.1:2181(CONNECTED) 4] set /zk mydata2
+cZxid = 0x4
+ctime = Tue Dec 26 16:43:45 CST 2017
+mZxid = 0x5
+mtime = Tue Dec 26 16:44:41 CST 2017
+pZxid = 0x4
+cversion = 0
+dataVersion = 1
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 7
+numChildren = 0
+[zk: 127.0.0.1:2181(CONNECTED) 5] get /zk
+mydata2
+cZxid = 0x4
+ctime = Tue Dec 26 16:43:45 CST 2017
+mZxid = 0x5
+mtime = Tue Dec 26 16:44:41 CST 2017
+pZxid = 0x4
+cversion = 0
+dataVersion = 1
+aclVersion = 0
+ephemeralOwner = 0x0
+dataLength = 7
+numChildren = 0
+[zk: 127.0.0.1:2181(CONNECTED) 6] delete /zk
+[zk: 127.0.0.1:2181(CONNECTED) 7] ls /
+[zookeeper]
+[zk: 127.0.0.1:2181(CONNECTED) 8] 
+
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/bin$ ./zkServer.sh stop
+ZooKeeper JMX enabled by default
+Using config: /home/mjh/Documents/code/zookeeper/bin/../conf/zoo.cfg
+Stopping zookeeper ... STOPPED
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/bin$ 
