@@ -131,3 +131,6 @@ ZooKeeper JMX enabled by default
 Using config: /home/mjh/Documents/code/zookeeper/bin/../conf/zoo.cfg
 Stopping zookeeper ... STOPPED
 mjh@mjh-Vostro-260:~/Documents/code/zookeeper/bin$ 
+
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/src/c$ ./configure
+mjh@mjh-Vostro-260:~/Documents/code/zookeeper/src/c$ make && sudo make install
